@@ -1,0 +1,61 @@
+﻿<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>MRDB Decision Support Tools</Name>
+  <AddInID>{6b9879fe-52c5-479d-b895-bcc98954177d}</AddInID>
+  <Description>Decision Support tools for the Murrumbidgee Relational Database.</Description>
+  <Version>1.0</Version>
+  <Image>Images\MRDBTools.png</Image>
+  <Author>Lindsay Bradford</Author>
+  <Company>Griffith Univresity</Company>
+  <Date>15/04/2014</Date>
+  <Targets>
+    <Target name="Desktop" version="10.0" />
+  </Targets>
+  <AddIn language="CLR" library="MRDBTools.dll" namespace="MRDBTools">
+    <ArcMap>
+      <Toolbars>
+        <Toolbar caption="MRDB Decision Support Toolbar" id="MRDBToolsToolbar" showInitially="true">
+          <Items>
+            <Button refID="MRDBTools_CommenceToFillButton"/>
+            <Button refID="MRDBTools_ThreatenedSpeciesButton"/>
+            <Button refID="MRDBTools_AdministrationButton"/>
+          </Items>
+        </Toolbar>
+      </Toolbars>
+      <Commands>
+        <Button id="MRDBTools_CommenceToFillButton"
+                class="CommenceToFillButton"
+                caption="Commence To Fill"
+                category="MRDBTools"
+                image="Images\tap.png"
+                tip="Launch the Commence to Fill Tool"
+                message="Launch the Commence to Fill Tool">
+          <Help heading="Commence To Fill Tool">
+            This tool allows you to identify wetlands that would be inundated as a result of key upstream gauge flows. 
+          </Help>
+        </Button>
+        <Button id="MRDBTools_ThreatenedSpeciesButton"
+                class="ThreatenedSpeciesButton"
+                caption="Threatened Species"
+                category="MRDBTools"
+                image="Images\frog.png"
+                tip="Launch the Threatened Species Tool"
+                message="Launch the Threatened Species Tool">
+          <Help heading="Threatened Species Tool">
+            This tool allows you to idenfity threatened species that reside in a given wetland, or wetlands containing particular threatened species.
+          </Help>
+        </Button>
+        <Button id="MRDBTools_AdministrationButton"
+                class="AdministrationButton"
+                caption="Adminstration"
+                category="MRDBTools"
+                image="Images\tools.png"
+                tip="Launch the Adminstration Tool"
+                message="Launch the Adminstration Tool">
+          <Help heading="Administration Tool">
+            This tool allows you to manage data-sets within the MRDB by importing new content.
+          </Help>
+        </Button>
+      </Commands>     
+    </ArcMap>
+  </AddIn>
+</ESRI.Configuration>
