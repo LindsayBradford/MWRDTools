@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MRDBTools", "MRDBTools\MRDBTools.csproj", "{BCA85445-08A2-47D4-8C97-9EAA5F82D442}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MWRDTools", "MWRDTools\MWRDTools.csproj", "{BCA85445-08A2-47D4-8C97-9EAA5F82D442}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,28 +1,28 @@
 ﻿<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Name>MRDB Decision Support Tools</Name>
+  <Name>MWRD Decision Support Tools</Name>
   <AddInID>{6b9879fe-52c5-479d-b895-bcc98954177d}</AddInID>
-  <Description>Decision Support tools for the Murrumbidgee Relational Database.</Description>
+  <Description>Decision Support tools for the Murrumbidgee Wetlands Relational Database.</Description>
   <Version>1.0</Version>
-  <Image>Images\MRDBTools.png</Image>
+  <Image>Images\MWRDTools.png</Image>
   <Author>Lindsay Bradford</Author>
   <Company>Griffith Univresity</Company>
   <Date>15/04/2014</Date>
   <Targets>
     <Target name="Desktop" version="10.0" />
   </Targets>
-  <AddIn language="CLR" library="MRDBTools.dll" namespace="MRDBTools">
+  <AddIn language="CLR" library="MWRDTools.dll" namespace="MWRDTools">
     <ArcMap>
       <Toolbars>
-        <Toolbar caption="MRDB Decision Support Toolbar" id="MRDBToolsToolbar" showInitially="true">
+        <Toolbar caption="MWRD Decision Support Toolbar" id="MWRDToolsToolbar" showInitially="true">
           <Items>
-            <Button refID="MRDBTools_CommenceToFillButton"/>
-            <Button refID="MRDBTools_ThreatenedSpeciesButton"/>
-            <Button refID="MRDBTools_AdministrationButton"/>
+            <Button refID="MWRDTools_CommenceToFillButton"/>
+            <Button refID="MWRDTools_ThreatenedSpeciesButton"/>
+            <Button refID="MWRDTools_AdministrationButton"/>
           </Items>
         </Toolbar>
       </Toolbars>
       <Commands>
-        <Button id="MRDBTools_CommenceToFillButton"
+        <Button id="MWRDTools_CommenceToFillButton"
                 class="CommenceToFillButton"
                 caption="Commence To Fill"
                 category="MRDBTools"
@@ -33,7 +33,7 @@
             This tool allows you to identify wetlands that would be inundated as a result of key upstream gauge flows. 
           </Help>
         </Button>
-        <Button id="MRDBTools_ThreatenedSpeciesButton"
+        <Button id="MWRDTools_ThreatenedSpeciesButton"
                 class="ThreatenedSpeciesButton"
                 caption="Threatened Species"
                 category="MRDBTools"
@@ -44,7 +44,7 @@
             This tool allows you to idenfity threatened species that reside in a given wetland, or wetlands containing particular threatened species.
           </Help>
         </Button>
-        <Button id="MRDBTools_AdministrationButton"
+        <Button id="MWRDTools_AdministrationButton"
                 class="AdministrationButton"
                 caption="Adminstration"
                 category="MRDBTools"

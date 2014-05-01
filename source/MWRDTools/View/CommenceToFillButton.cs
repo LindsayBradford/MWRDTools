@@ -7,9 +7,9 @@ using System.Windows.Forms;
 using ESRI.ArcGIS.Desktop.AddIns;
 using ESRI.ArcGIS.Framework;
 
-namespace MRDBTools
+namespace MWRDTools
 {
-  class AdministrationButton : AbstractFormLaunchButton
+  class CommenceToFillButton : AbstractFormLaunchButton
   {
     protected override void OnClick()
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{BCA85445-08A2-47D4-8C97-9EAA5F82D442}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MRDBTools</RootNamespace>
-    <AssemblyName>MRDBTools</AssemblyName>
+    <RootNamespace>MWRDTools</RootNamespace>
+    <AssemblyName>MWRDTools</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -103,7 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="View\CommenceToFillButton.cs" />
-    <Compile Include="MRDBToolsToolbar.cs" />
+    <Compile Include="MWRDToolsToolbar.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Config.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -157,7 +157,7 @@
     </AddInContent>
   </ItemGroup>
   <ItemGroup>
-    <AddInContent Include="Images\MRDBTools.png" />
+    <AddInContent Include="Images\MWRDTools.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ESRI.ArcGIS.ArcMapUI">

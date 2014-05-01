@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MRDB Decision Support Tools")]
-[assembly: AssemblyDescription("MRDB Decision Support Tools")]
+[assembly: AssemblyTitle("MWRD Decision Support Tools")]
+[assembly: AssemblyDescription("MWRD Decision Support Tools")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Riverina Local Land Services")]
-[assembly: AssemblyProduct("MRDTools")]
+[assembly: AssemblyProduct("MWRDTools")]
 [assembly: AssemblyCopyright("Copyright ©  2014, Riverina Local Land Services")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

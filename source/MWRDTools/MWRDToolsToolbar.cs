@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using ESRI.ArcGIS.ADF.CATIDs;
 using ESRI.ArcGIS.ADF.BaseClasses;
 
-namespace MRDBTools
+namespace MWRDTools
 {
   /// <summary>
   /// Summary description for MRDBToolsToolbar.
@@ -13,7 +13,7 @@ namespace MRDBTools
   [Guid("950af1a9-9710-4a12-b227-a3ad43cf95f8")]
   [ClassInterface(ClassInterfaceType.None)]
   [ProgId("MRDBTools.MRDBToolsToolbar")]
-  public sealed class MRDBToolsToolbar : BaseToolbar
+  public sealed class MWRDToolsToolbar : BaseToolbar
   {
     #region COM Registration Function(s)
     [ComRegisterFunction()]
@@ -63,7 +63,7 @@ namespace MRDBTools
     #endregion
     #endregion
 
-    public MRDBToolsToolbar()
+    public MWRDToolsToolbar()
     {
       //
       // TODO: Define your toolbar here by adding items
