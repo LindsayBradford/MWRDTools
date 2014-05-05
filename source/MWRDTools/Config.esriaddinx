@@ -10,7 +10,7 @@
   <Targets>
     <Target name="Desktop" version="10.0" />
   </Targets>
-  <AddIn language="CLR" library="MWRDTools.dll" namespace="MWRDTools">
+  <AddIn language="CLR" library="MWRDTools.dll" namespace="MWRDTools.View">
     <ArcMap>
       <Toolbars>
         <Toolbar caption="MWRD Decision Support Toolbar" id="MWRDToolsToolbar" showInitially="true">
@@ -27,6 +27,7 @@
                 caption="Commence To Fill"
                 category="MRDBTools"
                 image="Images\tap.png"
+                onDemand="false"
                 tip="Launch the Commence to Fill Tool"
                 message="Launch the Commence to Fill Tool">
           <Help heading="Commence To Fill Tool">
@@ -38,6 +39,7 @@
                 caption="Threatened Species"
                 category="MRDBTools"
                 image="Images\frog.png"
+                onDemand="false"
                 tip="Launch the Threatened Species Tool"
                 message="Launch the Threatened Species Tool">
           <Help heading="Threatened Species Tool">
@@ -49,6 +51,7 @@
                 caption="Adminstration"
                 category="MRDBTools"
                 image="Images\tools.png"
+                onDemand="false"
                 tip="Launch the Adminstration Tool"
                 message="Launch the Adminstration Tool">
           <Help heading="Administration Tool">

@@ -139,5 +139,11 @@ public class DataAccess
         pFeatureCursor = wetlandsFC.Search(pSpatialFilter, false);
         return pFeatureCursor;
     }
+
+  public static void DeleteTableContents(IFeatureWorkspace workspace, String tableName) {
+    ITable table = workspace.OpenTable(tableName);
+    table.DeleteSearchedRows(null);
+  }
+
 }
 

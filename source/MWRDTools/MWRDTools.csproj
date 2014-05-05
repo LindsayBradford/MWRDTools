@@ -37,7 +37,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -55,39 +55,44 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ESRI.ArcGIS.ADF.Connection.Local, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="ESRI.ArcGIS.ADF.Local, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+    </Reference>
+    <Reference Include="ESRI.ArcGIS.ArcMapUI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Carto, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.Desktop.AddIns">
+    <Reference Include="ESRI.ArcGIS.Desktop.AddIns, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Display, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.Framework">
-      <Private>False</Private>
+    <Reference Include="ESRI.ArcGIS.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Geodatabase, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <Private>False</Private>
     </Reference>
     <Reference Include="ESRI.ArcGIS.Geometry, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="ESRI.ArcGIS.System">
-      <Private>False</Private>
+    <Reference Include="ESRI.ArcGIS.System, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="ESRI.ArcGIS.SystemUI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -102,7 +107,26 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="View\CommenceToFillButton.cs" />
+    <Compile Include="Model\AbstractMWRDModel.cs" />
+    <Compile Include="Model\CARMScenarioModel.cs" />
+    <Compile Include="Model\FileGeodatabaseBridge.cs" />
+    <Compile Include="Model\FileSystemBridge.cs" />
+    <Compile Include="Model\ICARMScenarioModel.cs" />
+    <Compile Include="Model\IFileSystemBridge.cs" />
+    <Compile Include="Model\IGeodatabaseBridge.cs" />
+    <Compile Include="Model\IThreatenedSpeciesModel.cs" />
+    <Compile Include="Model\ModelStatusEventArgs.cs" />
+    <Compile Include="Model\ThreatenedSpeciesModel.cs" />
+    <Compile Include="Presenter\Administration\AtlasImportPresenter.cs" />
+    <Compile Include="Presenter\Administration\CARMImportPresenter.cs" />
+    <Compile Include="Presenter\Administration\IFileImportPresenter.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Administration\AdministrationFormBuilder.cs" />
+    <Compile Include="View\CommenceToFill\CommenceToFillButton.cs" />
     <Compile Include="MWRDToolsToolbar.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Config.Designer.cs">
@@ -146,8 +170,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpatialDataAccess.cs" />
     <Compile Include="View\AbstractLaunchButton.cs" />
-    <Compile Include="View\AdmnistrationButton.cs" />
-    <Compile Include="View\ThreatenedSpeciesButton.cs" />
+    <Compile Include="View\Administration\AdmnistrationButton.cs" />
+    <Compile Include="View\Administration\AdministrationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Administration\AdministrationForm.Designer.cs">
+      <DependentUpon>AdministrationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Administration\IFileImportView.cs" />
+    <Compile Include="View\ThreatenedSpecies\ThreatenedSpeciesButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Config.esriaddinx">
@@ -158,11 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <AddInContent Include="Images\MWRDTools.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="ESRI.ArcGIS.ArcMapUI">
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -202,17 +228,26 @@
       <DependentUpon>frmThreatenedSpecies.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Administration\AdministrationForm.resx">
+      <DependentUpon>AdministrationForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\cma.ico" />
     <Content Include="Images\excel.gif" />
     <Content Include="Images\find.png" />
     <AddInContent Include="Images\frog.png" />
+    <EmbeddedResource Include="Images\openfolderHS.png" />
     <Content Include="Images\selection_1.bmp" />
     <AddInContent Include="Images\tap.png" />
     <AddInContent Include="Images\tools.png" />
     <Content Include="Images\zoom-in.png" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <ZipFileExtension>esriAddIn</ZipFileExtension>
     <AddInTargetProduct>Desktop</AddInTargetProduct>

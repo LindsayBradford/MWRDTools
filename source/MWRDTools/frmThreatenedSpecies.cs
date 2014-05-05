@@ -80,7 +80,7 @@ public partial class frmThreatenedSpecies : Form
     private bool SetFeatureWorkspace()
     {
         _featureWorkspace = Common.GetFeatureWorkspace(Constants.LayerName.WetLands, _map, ref _wetlandsFL);
-        _threatenedSpeciesFL = Common.GetFeatureLayer(_map, "ThreatenedSpecies");
+        _threatenedSpeciesFL = Common.GetFeatureLayer(_map, Constants.LayerName.ThreatenedSpecies);
         return (_featureWorkspace != null);
     }
 

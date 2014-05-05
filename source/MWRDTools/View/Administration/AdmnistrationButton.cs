@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using ESRI.ArcGIS.Desktop.AddIns;
-using ESRI.ArcGIS.Framework;
-
-namespace MWRDTools
+namespace MWRDTools.View
 {
   class AdministrationButton : AbstractFormLaunchButton
   {
+    private AdministrationForm form;
+
+    public AdministrationButton() : base()
+    {
+      form = AdministrationFormBuilder.build(getAppHook());
+    }
+
     protected override void OnClick()
     {
-      frmCommenceToFill form = new frmCommenceToFill(getAppHook());
       form.Show(
         getParentWindow()
       );

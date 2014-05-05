@@ -3,10 +3,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files (x86)\ArcGIS\Desktop10.0\Bin\ArcMap.exe</StartProgram>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <StartArguments>"C:\Data\ARI Senior Software Engineer\MWCIT\06.SoftwareDevelopment\MWRD\DeployData\MWRD_Decision_Support_Tool.mxd"</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files (x86)\ArcGIS\Desktop10.0\Bin\ArcMap.exe</StartProgram>
+    <StartArguments>"C:\Data\ARI Senior Software Engineer\MWCIT\06.SoftwareDevelopment\MWRD\DeployData\MWRD_Decision_Support_Tool.mxd"</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory />

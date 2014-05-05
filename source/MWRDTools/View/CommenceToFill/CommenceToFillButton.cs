@@ -7,7 +7,9 @@ using System.Windows.Forms;
 using ESRI.ArcGIS.Desktop.AddIns;
 using ESRI.ArcGIS.Framework;
 
-namespace MWRDTools
+using MWRDTools;
+
+namespace MWRDTools.View
 {
   class CommenceToFillButton : AbstractFormLaunchButton
   {

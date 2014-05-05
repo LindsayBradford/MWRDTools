@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using ESRI.ArcGIS.Desktop.AddIns;
 using ESRI.ArcGIS.Framework;
 
-namespace MWRDTools
+namespace MWRDTools.View
 {
   /// <summary>
   /// A abstract extension of ESRI.ArcGIS.Desktop.AddIns.Button that

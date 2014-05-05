@@ -42,6 +42,22 @@ class Common
       return null;
   }
 
+
+  public static IMap GetFocusMap(IApplication application) {
+    return (application.Document as IMxDocument).FocusMap;
+  }
+
+  public static IActiveView GetActiveView(IApplication application) {
+    return (GetFocusMap(application) as IActiveView);
+  }
+
+  public static IFeatureLayer GetFeatureLayer(IApplication application, string layerName) {
+    return GetFeatureLayer(
+      GetFocusMap(application), 
+      layerName
+    );
+  }
+
   public static IFeatureLayer GetFeatureLayer(IMap pMap, string layerName)
   {
       IEnumLayer pEnumLayer = GetLayers(pMap);
@@ -59,6 +75,14 @@ class Common
           return pLayer as IFeatureLayer;
       }
       return null;
+  }
+
+  public static void RefreshFeatureLayer(IApplication application, ILayer layer) {
+    GetActiveView(application).PartialRefresh(
+      esriViewDrawPhase.esriViewGeography,
+      layer,
+      null
+    );
   }
 
   public static IEnumLayer GetLayers(IMap pMap)
