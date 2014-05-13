@@ -32,7 +32,7 @@ public class DataAccess
                 }
             case "NONE":
                 {
-                    sql = "FLOW = 'NONE";
+                    sql = "FLOW = 'NONE'";
                     break;
                 }
         }

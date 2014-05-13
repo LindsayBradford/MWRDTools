@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 using ESRI.ArcGIS.Framework;
 using ESRI.ArcGIS.ArcMapUI;
@@ -20,8 +21,6 @@ namespace MWRDTools.View
   
   public partial class AdministrationForm : Form, INSWAtlasWildlifeImportView, ICARMScenarioImportView
   {
-    private static int ATLAS_STATUS_STEP = 3;
-    private static int CARM_STATUS_STEP = 6;
 
     private IApplication application;
 
@@ -32,7 +31,18 @@ namespace MWRDTools.View
     public AdministrationForm() : base()
     {
       InitializeComponent();
+      // initialiseThread();
     }
+
+    //private void initialiseThread() {
+    //  importAtlasThread = new Thread(new ThreadStart(this.doAtlasImport));
+    //  // Force single apartment state. Required by ArcGIS.
+    //  importAtlasThread.SetApartmentState(ApartmentState.STA);
+
+    //  importCARMThread = new Thread(new ThreadStart(this.doCARMImport));
+    //  // Force single apartment state. Required by ArcGIS.
+    //  importCARMThread.SetApartmentState(ApartmentState.STA);
+    //}
 
     public IApplication Application {
       get { return this.application; }
@@ -42,11 +52,13 @@ namespace MWRDTools.View
     public void setCarmImportPresenter(ICARMScenarioImportPresenter presenter)
     {
       carmImportPresenter = presenter;
+      presenter.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.StatusChangedHandler);
     }
 
     public void setAtlasImportPresenter(INSWAtlasWildlifeImportPresenter presenter)
     {
       atlasImportPresenter = presenter;
+      presenter.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.StatusChangedHandler);
     }
 
     new public void Show() {
@@ -76,26 +88,16 @@ namespace MWRDTools.View
       layer.Visible = true;
     }
 
-    void ICARMScenarioImportView.ShowStatusString(String statusString, Boolean progressesStatus)
-    {
-      if (progressesStatus) {
-        this.AdminStripProgressBar.Value = this.AdminStripProgressBar.Value + CARM_STATUS_STEP;
-      }
-      showStatusString(statusString);
-    }
-
-    void INSWAtlasWildlifeImportView.ShowStatusString(String statusString, Boolean progressesStatus)
-    {
-      if (progressesStatus) {
-        this.AdminStripProgressBar.Value = this.AdminStripProgressBar.Value + ATLAS_STATUS_STEP;
-      }
-      showStatusString(statusString);
-    }
-
     private void showStatusString(String status)
     {
       this.AdminStripLabel.Invalidate();
       this.AdminStripLabel.Text = status;
+      this.Refresh();
+    }
+
+    private void showPercentComplete(int percentComplete) {
+      this.AdminStripProgressBar.Invalidate();
+      this.AdminStripProgressBar.Value = percentComplete;
       this.Refresh();
     }
 #endregion
@@ -137,14 +139,13 @@ namespace MWRDTools.View
       AtlasFaunaTextBox.Text = OpenFaunaFileDialog.FileName;
     }
 
-    private void AtlasImportButton_Click(object sender, EventArgs e)
-    {
-      this.AdminStripProgressBar.Value = 0;
-
-      string[] importFiles = { AtlasFaunaTextBox.Text, AtlasFloraTextBox.Text };
-      this.CarmImportButton.Enabled = false;
-      (this as INSWAtlasWildlifeImportView).ImportFiles(importFiles);
-      this.CarmImportButton.Enabled = true;
+    private void AtlasImportButton_Click(object sender, EventArgs e) {
+      this.showPercentComplete(0);
+      this.AtlasImportButton.Enabled = false;
+      (this as INSWAtlasWildlifeImportView).ImportFiles(
+        AtlasFaunaTextBox.Text, AtlasFloraTextBox.Text
+      );
+      this.AtlasImportButton.Enabled = true;
     }
 
     private void AtlasFloraTextBox_TextChanged(object sender, EventArgs e)
@@ -192,6 +193,11 @@ namespace MWRDTools.View
       e.Cancel = true;
       this.Hide();
     }
-}
+
+    public void StatusChangedHandler(object sender, ProgressChangedEventArgs args) {
+      this.showStatusString(args.UserState as string);
+      this.showPercentComplete(args.ProgressPercentage);
+    }
+  }
 #endregion
 }

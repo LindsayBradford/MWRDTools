@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 
 using ESRI.ArcGIS.Framework;
@@ -16,6 +17,8 @@ namespace MWRDTools.Presenter
 
   public interface ICARMScenarioImportPresenter
   {
+    event EventHandler<ProgressChangedEventArgs> StatusChanged;
+    
     void ImportDirectory(string directoryPath);
     void WriteImportedData(params DataTable[] scenarioTables);
 
@@ -26,6 +29,7 @@ namespace MWRDTools.Presenter
 
   public interface INSWAtlasWildlifeImportPresenter
   {
+    event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
     void setView(INSWAtlasWildlifeImportView view);
     void setFileBridge(IFileSystemBridge bridge);

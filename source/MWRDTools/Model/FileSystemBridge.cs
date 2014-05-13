@@ -35,7 +35,7 @@ namespace MWRDTools.Model
         {
           setDataTableHeaders(
             table,
-            currentLine.Split(delimiter)
+            smartSplit(currentLine, delimiter)
           );
           headerLoaded = true;
         } // adding columns
@@ -43,7 +43,7 @@ namespace MWRDTools.Model
         {
           addDataTableRow(
             table,
-            currentLine.Split(delimiter)
+            smartSplit(currentLine,delimiter)
           );
         } // adding row
       }  // while there's a new line to read
@@ -52,7 +52,7 @@ namespace MWRDTools.Model
       return table;
     }
 
-    private void setDataTableHeaders(DataTable table, params string[] headerNames)
+    private static void setDataTableHeaders(DataTable table, params string[] headerNames)
     {
       foreach (string header in headerNames)
       {
@@ -60,11 +60,22 @@ namespace MWRDTools.Model
       }
     }
 
-    private void addDataTableRow(DataTable table, params string[] rowValues)
+    private static void addDataTableRow(DataTable table, params string[] rowValues)
     {
       DataRow row = table.NewRow();
       row.ItemArray = rowValues;
       table.Rows.Add(row);
+    }
+
+    private static string[] smartSplit(string textToSplit, char delimiter) {
+      string[] splitText = textToSplit.Split(delimiter);
+
+      for (int i = 0; i < splitText.Length; i++) {
+        splitText[i] = splitText[i].TrimStart('\"');
+        splitText[i] = splitText[i].TrimEnd('\"');
+      }
+
+      return splitText;
     }
   }
 }

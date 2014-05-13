@@ -17,26 +17,32 @@ namespace MWRDTools.View
 
     public static AdministrationForm build(IApplication appHook)
     {
-      bootstrapDatabaseBridge(appHook);
       
       AdministrationForm form = new AdministrationForm();
       form.Application = appHook;
 
       FileSystemBridge fileBridge = new FileSystemBridge();
+      IGeodatabaseBridge dbBridge = buildDatabaseBridge(appHook);
+
+      ICARMScenarioModel carmModel = new CARMScenarioModel();
+      carmModel.setDatabaseBridge(dbBridge);
 
       form.setCarmImportPresenter(
         buildCarmPresenter(
           form,
           fileBridge,
-          new CARMScenarioModel()
+          carmModel
         )
       );
+
+      IThreatenedSpeciesModel speciesModel = new ThreatenedSpeciesModel();
+      speciesModel.setDatabaseBridge(dbBridge);
 
       form.setAtlasImportPresenter(
         buildAtlasPresenter(
           form,
           fileBridge,
-          new ThreatenedSpeciesModel()
+          speciesModel
         )
       );
 
@@ -67,14 +73,18 @@ namespace MWRDTools.View
       return presenter;
     }
 
-    private static void bootstrapDatabaseBridge(IApplication appHook) {
+    private static IGeodatabaseBridge buildDatabaseBridge(IApplication appHook) {
       string documentPath = Path.GetDirectoryName(getDocumentPath(appHook));
 
       string relativeDBPath = "MWRD_File_Geodatabase\\MWRD.gdb";
 
-      string databasePath = Path.Combine(documentPath, relativeDBPath); 
+      string databasePath = Path.Combine(documentPath, relativeDBPath);
 
-      FileGeodatabaseBridge.getInstance().DatabasePath = databasePath;
+      FileGeodatabaseBridge bridge = new FileGeodatabaseBridge();
+
+      bridge.DatabasePath = databasePath;
+
+      return bridge as IGeodatabaseBridge;
     }
 
     private static string getDocumentPath(IApplication appHook) {

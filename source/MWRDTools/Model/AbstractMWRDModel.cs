@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
 namespace MWRDTools.Model {
   class AbstractMWRDModel {
 
-    public event EventHandler<ModelStatusEventArgs> StatusChanged;
+    public event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
-    protected IGeodatabaseBridge bridge = FileGeodatabaseBridge.getInstance();
+    protected IGeodatabaseBridge bridge;
 
-    public AbstractMWRDModel() {
-      bridge.StatusChanged += new EventHandler<ModelStatusEventArgs>(this.HandleBridgeStatusEvent);
+    public void setDatabaseBridge(IGeodatabaseBridge bridge) {
+      this.bridge = bridge;
+      bridge.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.HandleBridgeStatusEvent);
     }
 
     protected void raiseStatusEvent(string status) {
-      ModelStatusEventArgs statusArgs = new ModelStatusEventArgs();
-      statusArgs.Status = status;
-      statusArgs.progressesStatus = true;
+      ProgressChangedEventArgs statusArgs = new ProgressChangedEventArgs(0, status);
 
       if (StatusChanged != null) {
         StatusChanged(this, statusArgs);
       }
     }
 
-    public void HandleBridgeStatusEvent(object sender, ModelStatusEventArgs args) {
+    public void HandleBridgeStatusEvent(object sender, ProgressChangedEventArgs args) {
       if (StatusChanged != null) {
         StatusChanged(this, args);
       }

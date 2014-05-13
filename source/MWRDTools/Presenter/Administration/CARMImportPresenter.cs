@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.IO;
 
@@ -9,6 +10,10 @@ namespace MWRDTools.Presenter
 {
   class CARMImportPresenter : ICARMScenarioImportPresenter
   {
+    public event EventHandler<ProgressChangedEventArgs> StatusChanged;
+
+    private int percentComplete = 0;
+    
     private ICARMScenarioImportView view;
     private IFileSystemBridge bridge;
     private ICARMScenarioModel model;
@@ -27,19 +32,19 @@ namespace MWRDTools.Presenter
     private CARMFileDetail[] CARMFileDetails = new CARMFileDetail[]{
       new CARMFileDetail() { 
         baseFileName = "time_series_group.csv",
-        tableName = "CARM_time_series_grpup"
+        tableName = Constants.TableName.CARM_time_series_group
       },
       new CARMFileDetail() { 
         baseFileName = "time_series.csv",
-        tableName = "CARM_time_series"
+        tableName = Constants.TableName.CARM_time_series
       },
       new CARMFileDetail() { 
         baseFileName = "time_series_value.csv",
-        tableName = "CARM_time_series_value"
+        tableName = Constants.TableName.CARM_time_series_value
       }
     };
 
-    private const char CARM_DELIMITER_CHAR = '\t';
+    private const char CARM_DELIMITER_CHAR = ',';
 
     public void setView(ICARMScenarioImportView view)
     {
@@ -49,6 +54,7 @@ namespace MWRDTools.Presenter
     public void setModel(ICARMScenarioModel model)
     {
       this.model = model;
+      model.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.HandleModelStatusEvent);
     }
 
     public void setFileBridge(IFileSystemBridge bridge)
@@ -71,24 +77,24 @@ namespace MWRDTools.Presenter
 
       buildScenarioFiles(directoryPath);
       
-      view.ShowStatusString("Loading CARM TImeseries Group file...");
+     this.raiseStatusEvent(20," Loading CARM Timeseries Group file...");
 
       buildDataTable(
-        CARMFileDetails[TIME_SERIES_GROUP_INDEX],
+        ref CARMFileDetails[TIME_SERIES_GROUP_INDEX],
         TIME_SERIES_GROUP_INDEX
       );
 
-      view.ShowStatusString("Loading CARM TImeseries file...");
+      this.raiseStatusEvent(40," Loading CARM Timeseries file...");
 
       buildDataTable(
-        CARMFileDetails[TIME_SERIES_INDEX],
+        ref CARMFileDetails[TIME_SERIES_INDEX],
         TIME_SERIES_INDEX
       );
 
-      view.ShowStatusString("Loading CARM TImeseries Values file...");
+      this.raiseStatusEvent(60, " Loading CARM Timeseries Values file...");
 
       buildDataTable(
-        CARMFileDetails[TIME_SERIES_VALUE_INDEX],
+        ref CARMFileDetails[TIME_SERIES_VALUE_INDEX],
         TIME_SERIES_VALUE_INDEX
       );
 
@@ -105,7 +111,7 @@ namespace MWRDTools.Presenter
       }
     }
 
-    private void buildDataTable(CARMFileDetail detail, int index) {
+    private void buildDataTable(ref CARMFileDetail detail, int index) {
       detail.table = 
         bridge.CSVtoDataTable(
           detail.fullFilePath,
@@ -117,12 +123,27 @@ namespace MWRDTools.Presenter
 
     public void WriteImportedData(params DataTable[] scenarioTables)
     {
-      view.ShowStatusString("Writing CARM Scenario data to database...");
+      this.raiseStatusEvent(80, " Writing CARM Scenario data to database...");
 
       model.WriteScenarioData(scenarioTables);
 
-      view.ShowStatusString("CARM Scenario data written to database.");
+      raiseStatusEvent(100, " CARM Scenario data written to database.");
+    }
+
+    protected void raiseStatusEvent(int percentComplete, string status) {
+      this.percentComplete = percentComplete;
+      ProgressChangedEventArgs statusArgs = new ProgressChangedEventArgs(percentComplete, status);
+
+      if (StatusChanged != null) {
+        StatusChanged(this, statusArgs);
+      }
+    }
+
+    public void HandleModelStatusEvent(object sender, ProgressChangedEventArgs args) {
+      if (StatusChanged != null) {
+        ProgressChangedEventArgs updatedArgs = new ProgressChangedEventArgs(percentComplete, args.UserState);
+        StatusChanged(this, updatedArgs);
+      }
     }
   }
-
 }

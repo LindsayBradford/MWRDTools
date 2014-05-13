@@ -48,6 +48,8 @@
       this.AdminStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
       this.OpenFloraFileDialog = new System.Windows.Forms.OpenFileDialog();
       this.OpenFaunaFileDialog = new System.Windows.Forms.OpenFileDialog();
+      this.AtlasImportBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+      this.CARMImportBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.AdminTabControl.SuspendLayout();
       this.AtlasNSWWildlifeTabPage.SuspendLayout();
       this.CarmImportTabPage.SuspendLayout();
@@ -183,7 +185,7 @@
       // 
       this.CarmScenarioSelectButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
       this.CarmScenarioSelectButton.Image = global::MWRDTools.Properties.Resources.openfolderHS;
-      this.CarmScenarioSelectButton.Location = new System.Drawing.Point(303, 48);
+      this.CarmScenarioSelectButton.Location = new System.Drawing.Point(364, 48);
       this.CarmScenarioSelectButton.Name = "CarmScenarioSelectButton";
       this.CarmScenarioSelectButton.Size = new System.Drawing.Size(29, 26);
       this.CarmScenarioSelectButton.TabIndex = 1;
@@ -197,7 +199,7 @@
       this.CarmScenarioPathTextBox.Location = new System.Drawing.Point(119, 52);
       this.CarmScenarioPathTextBox.Name = "CarmScenarioPathTextBox";
       this.CarmScenarioPathTextBox.ReadOnly = true;
-      this.CarmScenarioPathTextBox.Size = new System.Drawing.Size(178, 20);
+      this.CarmScenarioPathTextBox.Size = new System.Drawing.Size(239, 20);
       this.CarmScenarioPathTextBox.TabIndex = 0;
       this.CarmScenarioPathTextBox.TabStop = false;
       this.CarmScenarioPathTextBox.TextChanged += new System.EventHandler(this.CarmScenarioPathTextBox_TextChanged);
@@ -217,7 +219,7 @@
       // 
       this.CarmImportButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
       this.CarmImportButton.Enabled = false;
-      this.CarmImportButton.Location = new System.Drawing.Point(138, 110);
+      this.CarmImportButton.Location = new System.Drawing.Point(165, 111);
       this.CarmImportButton.Name = "CarmImportButton";
       this.CarmImportButton.Size = new System.Drawing.Size(75, 23);
       this.CarmImportButton.TabIndex = 2;
@@ -254,7 +256,6 @@
       // 
       // AdminStripProgressBar
       // 
-      this.AdminStripProgressBar.Maximum = 30;
       this.AdminStripProgressBar.Name = "AdminStripProgressBar";
       this.AdminStripProgressBar.Size = new System.Drawing.Size(100, 16);
       this.AdminStripProgressBar.Step = 1;
@@ -267,6 +268,14 @@
       // 
       this.OpenFaunaFileDialog.DefaultExt = "txt";
       this.OpenFaunaFileDialog.Filter = "Text files|*.txt";
+      // 
+      // AtlasImportBackgroundWorker
+      // 
+      this.AtlasImportBackgroundWorker.WorkerReportsProgress = true;
+      // 
+      // CARMImportBackgroundWorker
+      // 
+      this.CARMImportBackgroundWorker.WorkerReportsProgress = true;
       // 
       // AdministrationForm
       // 
@@ -320,5 +329,7 @@
     private System.Windows.Forms.Button AtlasFloraFileButton;
     private System.Windows.Forms.OpenFileDialog OpenFloraFileDialog;
     private System.Windows.Forms.OpenFileDialog OpenFaunaFileDialog;
+    private System.ComponentModel.BackgroundWorker AtlasImportBackgroundWorker;
+    private System.ComponentModel.BackgroundWorker CARMImportBackgroundWorker;
   }
 }

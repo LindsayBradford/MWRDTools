@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -12,7 +13,7 @@ using ESRI.ArcGIS.esriSystem;
 namespace MWRDTools.Model {
   class FileGeodatabaseBridge : IGeodatabaseBridge {
 
-    public event EventHandler<ModelStatusEventArgs> StatusChanged;
+    public event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
     private const int STATUS_UPDATE_FREQUENCY = 500;
 
@@ -22,17 +23,6 @@ namespace MWRDTools.Model {
 
     private IWorkspace workspace;
     private string databasePath;
-
-    private static FileGeodatabaseBridge instance;
-
-    protected FileGeodatabaseBridge() {}
-    
-    public static FileGeodatabaseBridge getInstance() {
-      if (instance == null) {
-        instance = new FileGeodatabaseBridge();
-      }
-      return instance;
-    }
 
     public string DatabasePath {
       get { return this.databasePath; }
@@ -62,14 +52,48 @@ namespace MWRDTools.Model {
       edit.StopEditing(true);
     }
 
+    public T GetValueForRowColumnName<T>(IRow row, string columnName) {
+      int index = row.Table.FindField(columnName);
+      return (T) row.get_Value(index);
+    }
+
+    public int GetIndexForTableColumnName(string tableName, string columnName) {
+      return getTable(tableName).FindField(columnName);
+    }
+
+    public ICursor GetCursorForTableQuery(string tableName, string whereClause) {
+      return GetCursorForTableQuery(
+        getTable(tableName),
+        whereClause
+      );
+    }
+
+    private ICursor GetCursorForTableQuery(ITable table, string whereClause) {
+      IQueryFilter filter = new QueryFilter();
+      filter.WhereClause = whereClause;
+      return table.Search(filter, false);
+    }
+
+    private ITable getTable(string tableName) {
+      return (Workspace as IFeatureWorkspace).OpenTable(tableName);
+    }
+
     public void DeleteTableContent(string tableName) {
-      ITable table = (Workspace as IFeatureWorkspace).OpenTable(tableName);
-      table.DeleteSearchedRows(null);
+      //getTable(tableName).DeleteSearchedRows(null);
+      // much faster, less "safe", consider context of each call.
+
+      (getTable(tableName) as ITableWrite2).Truncate();
+    }
+
+    public void DeleteTableContent(string tableName, string whereClause) {
+      IQueryFilter filter = new QueryFilter();
+      filter.WhereClause = whereClause;
+      getTable(tableName).DeleteSearchedRows(filter);
     }
 
     public void WriteDataTable(string tableName, DataTable dataTable) {
 
-      ITable esriTable = (Workspace as IFeatureWorkspace).OpenTable(tableName);
+      ITable esriTable = getTable(tableName);
       IFeatureClassLoad esriTableLoad = esriTable as IFeatureClassLoad;
 
       try {
@@ -249,10 +273,7 @@ namespace MWRDTools.Model {
     }
 
     private void raiseStatusEvent(string status) {
-
-      ModelStatusEventArgs statusArgs = new ModelStatusEventArgs();
-      statusArgs.Status = status;
-
+      ProgressChangedEventArgs statusArgs = new ProgressChangedEventArgs(0, status);
       if (StatusChanged != null) {
         StatusChanged(this, statusArgs);
       }

@@ -15,7 +15,6 @@ namespace MWRDTools.View
     IApplication Application { get; set; }
 
     void ImportDirectory(string directoryPath);
-    void ShowStatusString(string statusString, Boolean progresesStatus = true);
   }
 
   public interface INSWAtlasWildlifeImportView {
@@ -23,6 +22,5 @@ namespace MWRDTools.View
     IApplication Application { get; set; }
 
     void ImportFiles(params string[] files);
-    void ShowStatusString(string statusString, Boolean progressesStatus = true);
   }
 }

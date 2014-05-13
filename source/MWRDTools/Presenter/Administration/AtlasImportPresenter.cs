@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 using MWRDTools.View;
 using MWRDTools.Model;
@@ -12,6 +13,8 @@ namespace MWRDTools.Presenter
 {
   class AtlasImportPresenter : INSWAtlasWildlifeImportPresenter
   {
+
+    public event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
     private const int FLORA_INDEX = 0;
     private const int FAUNA_INDEX = 1;
@@ -25,6 +28,8 @@ namespace MWRDTools.Presenter
     private IFileSystemBridge bridge;
     private IThreatenedSpeciesModel model;
 
+    private int percentComplete = 0;
+
     public void setView(INSWAtlasWildlifeImportView view) {
       this.view = view;
     }
@@ -32,7 +37,7 @@ namespace MWRDTools.Presenter
     public void setModel(IThreatenedSpeciesModel model) {
       this.model = model;
 
-      model.StatusChanged += new EventHandler<ModelStatusEventArgs>(this.HandleModelStatusEvent);
+      model.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.HandleModelStatusEvent);
     }
 
     public void setFileBridge(IFileSystemBridge bridge) {
@@ -51,7 +56,7 @@ namespace MWRDTools.Presenter
     }
 
     private DataTable importFloraFile(string floraFile) {
-      view.ShowStatusString(" Loading NSW Atlas of Wildlife flora file...");
+      this.raiseStatusEvent(16, " Loading NSW Atlas of Wildlife flora file...");
 
       DataTable floraSightings = bridge.CSVtoDataTable(
         floraFile, 
@@ -63,7 +68,7 @@ namespace MWRDTools.Presenter
     }
 
     private DataTable importFaunaFile(string faunaFile) {
-      view.ShowStatusString(" Loading NSW Atlas of Wildlife fauna file...");
+      this.raiseStatusEvent(32, " Loading NSW Atlas of Wildlife fauna file...");
 
       DataTable faunaSightings = bridge.CSVtoDataTable(
         faunaFile, 
@@ -76,17 +81,19 @@ namespace MWRDTools.Presenter
 
     public void WriteImportedData(params DataTable[] sightingTables) {
 
-      view.ShowStatusString(" Merging flora and fauna species sightings...");
+      this.raiseStatusEvent(48, " Merging flora and fauna species sightings...");
 
       DataTable allSightings = mergeSightings(sightingTables);
 
-      view.ShowStatusString(" Removing Exotic species sightings...");
+      this.raiseStatusEvent(64, " Removing Exotic species sightings...");
 
       removeSightingsWithNoNSWStatus(allSightings);
 
+      this.raiseStatusEvent(80, " Replacing Sighting data...");
+
       model.OverwriteSightingData(allSightings);
 
-      view.ShowStatusString(" Threatened species sightings written to database.");
+      this.raiseStatusEvent(100, " Threatened species sightings written to database.");
     }
 
     private DataTable mergeSightings(params DataTable[] sightingTables) {
@@ -118,8 +125,21 @@ namespace MWRDTools.Presenter
       sightings.AcceptChanges();
     }
 
-    public void HandleModelStatusEvent(object sender, ModelStatusEventArgs args) {
-      view.ShowStatusString(args.Status, args.progressesStatus);
+    protected void raiseStatusEvent(int percentComplete, string status) {
+      this.percentComplete = percentComplete;
+      ProgressChangedEventArgs statusArgs = new ProgressChangedEventArgs(percentComplete, status);
+
+      if (StatusChanged != null) {
+        StatusChanged(this, statusArgs);
+      }
     }
+
+    public void HandleModelStatusEvent(object sender, ProgressChangedEventArgs args) {
+      if (StatusChanged != null) {
+        ProgressChangedEventArgs updatedArgs = new ProgressChangedEventArgs(percentComplete, args.UserState);
+        StatusChanged(this, updatedArgs);
+      }
+    }
+
   }
 }

@@ -15,6 +15,15 @@ using ESRI.ArcGIS.Geometry;
 
 class Common
 {
+
+  public static IMap GetFocusMap(IApplication application) {
+    return (application.Document as IMxDocument).FocusMap;
+  }
+
+  public static IActiveView GetActiveView(IApplication application) {
+    return (GetFocusMap(application) as IActiveView);
+  }
+  
   public static IFeatureWorkspace GetFeatureWorkspace(string layerName, IMap pMap, ref IFeatureLayer pFeatureLayer)
   {
       IEnumLayer pEnumLayer = GetLayers(pMap);
@@ -42,14 +51,6 @@ class Common
       return null;
   }
 
-
-  public static IMap GetFocusMap(IApplication application) {
-    return (application.Document as IMxDocument).FocusMap;
-  }
-
-  public static IActiveView GetActiveView(IApplication application) {
-    return (GetFocusMap(application) as IActiveView);
-  }
 
   public static IFeatureLayer GetFeatureLayer(IApplication application, string layerName) {
     return GetFeatureLayer(
