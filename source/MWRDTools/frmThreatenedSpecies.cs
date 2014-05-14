@@ -180,7 +180,7 @@ public partial class frmThreatenedSpecies : Form
                 {
                     oid[i] = Convert.ToInt32(lv.SelectedItems[i].Tag.ToString());
                 }
-                Common.SelectFeatures(oid, pFeatureLayer, _map);
+                Common.HighlightFeatures(oid, pFeatureLayer, _map);
             }
         }
     }

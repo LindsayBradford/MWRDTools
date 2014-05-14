@@ -53,11 +53,25 @@ namespace MWRDTools.Model {
       edit.StopEditing(true);
     }
 
+    public T GetFirstColValueForQuery<T>(string tableName, string whereClause, string columnName) {
+      T value = default(T);
+      using (ComReleaser comReleaser = new ComReleaser()) {
+        ICursor cursor = GetCursorForQuery(tableName, whereClause);
+        comReleaser.ManageLifetime(cursor);
+
+        IRow firstRow = cursor.NextRow();
+        if (firstRow != null) {
+          value = GetValueForRowColumnName<T>(firstRow, columnName);
+        }
+      }
+      return value;
+    }
+
     public List<T> GetColValuesForQuery<T>(string tableName,string whereClause, string columnName) {
       List<T> valueList = new List<T>();
 
       using (ComReleaser comReleaser = new ComReleaser()) {
-        ICursor cursor = GetCursorForTableQuery(tableName, whereClause);
+        ICursor cursor = GetCursorForQuery(tableName, whereClause);
         comReleaser.ManageLifetime(cursor);
 
         IRow currentRow;
@@ -79,16 +93,47 @@ namespace MWRDTools.Model {
       return getTable(tableName).FindField(columnName);
     }
 
-    public ICursor GetCursorForTableQuery(string tableName, string whereClause) {
+    public ICursor GetCursorForQuery(string tableList, string whereClause) {
+      return GetCursorForQuery(tableList, whereClause, "*");
+    }
+
+    public ICursor GetCursorForQuery(string tableList, string whereClause, string subFields) {
+      if (tableList.Contains(",")) {
+        return GetCursorForMultiTableQuery(
+          tableList,
+          whereClause,
+          subFields
+        );
+      } else {
+        return GetCursorForTableQuery(
+          getTable(tableList),
+          whereClause,
+          subFields
+        );
+      }
+    }
+
+    public ICursor GetCursorForMultiTableQuery(string tableList, string whereClause, string subFields) {
+      IQueryDef query = (Workspace as IFeatureWorkspace).CreateQueryDef();
+      query.Tables = tableList;
+      query.SubFields = subFields;
+      query.WhereClause = whereClause;
+     
+      return query.Evaluate();
+    }
+
+    public ICursor GetCursorForTableQuery(string tableName, string whereClause, string subFields) {
       return GetCursorForTableQuery(
         getTable(tableName),
-        whereClause
+        whereClause,
+        subFields
       );
     }
 
-    private ICursor GetCursorForTableQuery(ITable table, string whereClause) {
+    private ICursor GetCursorForTableQuery(ITable table, string whereClause, string subFields) {
       IQueryFilter filter = new QueryFilter();
       filter.WhereClause = whereClause;
+      filter.SubFields = subFields;
       return table.Search(filter, false);
     }
 

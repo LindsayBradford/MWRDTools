@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 namespace MWRDTools.Model {
-  class AbstractMWRDModel {
+  public class AbstractMWRDModel {
 
     public event EventHandler<ProgressChangedEventArgs> StatusChanged;
 

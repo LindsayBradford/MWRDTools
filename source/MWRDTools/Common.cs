@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -249,7 +250,7 @@ class Common
       pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, null, null);
   }
 
-  public static void SelectFeatures(int[] oid, IFeatureLayer pFeatureLayer, IMap pMap)
+  public static void HighlightFeatures(int[] oid, IFeatureLayer pFeatureLayer, IMap pMap)
   {
       IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
       IQueryFilter pQueryFilter = new QueryFilterClass();
@@ -577,5 +578,67 @@ class Common
       pScreenDisplay.DrawPolygon(pFeature.Shape);
 
       pScreenDisplay.FinishDrawing();
+  }
+
+  public static DataTable CursorToDataTable(ICursor cursor) {
+
+    IRow row = cursor.NextRow();
+    if (row == null) {
+      return null;
+    }
+
+    DataTable table = new DataTable();
+
+    addFieldsToDataTable(row.Fields, table);
+    addIRowToDataTable(row, table);
+
+    while ((row = cursor.NextRow()) != null) {
+      addIRowToDataTable(row, table);
+    }
+
+    table.AcceptChanges();
+
+    return table;
+  }
+
+
+  private static void addFieldsToDataTable(IFields fields, DataTable table) {
+    table.Columns.Add(Constants.OID);
+
+    for (int i = 0; i < fields.FieldCount; i++) {
+      IField field = fields.get_Field(i);
+
+      if (field.Type == esriFieldType.esriFieldTypeGeometry ||
+          field.Type == esriFieldType.esriFieldTypeGlobalID) {
+        continue;
+      }
+
+      if (field.AliasName.Equals("OBJECTID")) {
+        continue;
+      }
+
+      table.Columns.Add(
+        field.AliasName
+      );
+    }
+ }
+
+  private static void addIRowToDataTable(IRow esriRow, DataTable table) {
+    DataRow newRow = table.NewRow();
+
+    foreach (DataColumn column in table.Columns) {
+      try {
+        if (column.ColumnName.Equals(Constants.OID)) {
+          int oidIndex = esriRow.Fields.FindFieldByAliasName("OBJECTID");
+          newRow[column.ColumnName] = esriRow.get_Value(oidIndex).ToString();
+          continue;
+        }
+        int fieldIndex = esriRow.Fields.FindFieldByAliasName(column.ColumnName);
+        newRow[column.ColumnName] = esriRow.get_Value(fieldIndex).ToString();
+      } catch (Exception e) {
+        MessageBox.Show("[" + column.ColumnName + "]" + e.Message);
+      }
+    }
+    table.Rows.Add(newRow);
   }
 }

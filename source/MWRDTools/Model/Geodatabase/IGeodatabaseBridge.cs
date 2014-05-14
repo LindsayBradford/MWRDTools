@@ -19,9 +19,21 @@ namespace MWRDTools.Model {
       string columnName
     );
 
-    ICursor GetCursorForTableQuery(
-      string tableName, 
+    ICursor GetCursorForQuery(
+      string tableNames,
+      string whereClause,
+      string fields
+    );
+
+    ICursor GetCursorForQuery(
+      string tableNames,
       string whereClause
+    );
+
+    T GetFirstColValueForQuery<T>(
+      string tableName,
+      string whereClause,
+      string columnName
     );
 
     List<T> GetColValuesForQuery<T>(

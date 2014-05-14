@@ -13,12 +13,8 @@ namespace MWRDTools.View
 {
   class CommenceToFillButton : AbstractFormLaunchButton
   {
-    protected override void OnClick()
-    {
-      frmCommenceToFill form = new frmCommenceToFill(getAppHook());
-      form.Show(
-        getParentWindow()
-      );
+    public CommenceToFillButton() : base() {
+      form = CommenceToFillFormBuilder.build(getAppHook());
     }
   }
 }

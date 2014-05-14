@@ -10,57 +10,6 @@ using ESRI.ArcGIS.Geometry;
 
 public class DataAccess
 {
-    public static IFeatureCursor GetWetlandsByFlow(IFeatureLayer pFeatureLayer, string flowParameter)
-    {
-        string sql = "";
-        switch (flowParameter)
-        {
-            case "> 47,000":
-                {
-                    sql = "FLOW = '> 47000' OR FLOW = '47000' OR FLOW = '35000'";
-                    break;
-                }
-            case "47,000":
-                {
-                    sql = "FLOW = '47000' OR FLOW = '35000'";
-                    break;
-                }
-            case "35,000":
-                {
-                    sql = "FLOW = '35000'";
-                    break;
-                }
-            case "NONE":
-                {
-                    sql = "FLOW = 'NONE'";
-                    break;
-                }
-        }
-        IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
-        IQueryFilter pQueryFilter = new QueryFilterClass();
-        pQueryFilter.WhereClause = sql;
-        IFeatureCursor pFeatureCursor = pFeatureClass.Search(pQueryFilter, false);
-        return pFeatureCursor;
-    }
-
-    public static ICursor GetGauges(IFeatureWorkspace pFeatureWorkspace)
-    {
-        ITable pTable = pFeatureWorkspace.OpenTable(Constants.LayerName.Gauge);
-        ICursor pCursor = pTable.Search(null, false);
-        return pCursor;
-    }
-
-    public static ICursor GetWetlandsByFlowAndGauge(IFeatureWorkspace pFeatureWorkspace, IFeatureLayer pFeatureLayer, string gauge, double flow)
-    {
-        string sql = string.Format("Flow_mL < {0} AND GaugeName ='{1}'", flow.ToString(), gauge);
-        IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
-        IQueryDef pQueryDef = pFeatureWorkspace.CreateQueryDef();
-        pQueryDef.Tables = string.Format("CommenceToFill, {0}", pFeatureClass.AliasName);
-        pQueryDef.SubFields = "CommenceToFill.*, MCMAWetlands.*";
-        pQueryDef.WhereClause = string.Format("{0}.WetlandsID = CommenceToFill.WetlandsID AND {1}", pFeatureClass.AliasName, sql);
-        ICursor pFeatureCursor = pQueryDef.Evaluate();
-        return pFeatureCursor;
-    }
 
     public static ICursor GetSpeciesNames(IFeatureWorkspace pFeatureWorkspace)
     {
@@ -139,11 +88,6 @@ public class DataAccess
         pFeatureCursor = wetlandsFC.Search(pSpatialFilter, false);
         return pFeatureCursor;
     }
-
-  public static void DeleteTableContents(IFeatureWorkspace workspace, String tableName) {
-    ITable table = workspace.OpenTable(tableName);
-    table.DeleteSearchedRows(null);
-  }
 
 }
 

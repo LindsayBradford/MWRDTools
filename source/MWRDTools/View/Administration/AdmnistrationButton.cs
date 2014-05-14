@@ -8,18 +8,8 @@ namespace MWRDTools.View
 {
   class AdministrationButton : AbstractFormLaunchButton
   {
-    private AdministrationForm form;
-
-    public AdministrationButton() : base()
-    {
+    public AdministrationButton() : base() {
       form = AdministrationFormBuilder.build(getAppHook());
-    }
-
-    protected override void OnClick()
-    {
-      form.Show(
-        getParentWindow()
-      );
     }
   }
 }

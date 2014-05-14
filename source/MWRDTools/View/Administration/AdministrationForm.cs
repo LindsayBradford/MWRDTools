@@ -31,18 +31,7 @@ namespace MWRDTools.View
     public AdministrationForm() : base()
     {
       InitializeComponent();
-      // initialiseThread();
     }
-
-    //private void initialiseThread() {
-    //  importAtlasThread = new Thread(new ThreadStart(this.doAtlasImport));
-    //  // Force single apartment state. Required by ArcGIS.
-    //  importAtlasThread.SetApartmentState(ApartmentState.STA);
-
-    //  importCARMThread = new Thread(new ThreadStart(this.doCARMImport));
-    //  // Force single apartment state. Required by ArcGIS.
-    //  importCARMThread.SetApartmentState(ApartmentState.STA);
-    //}
 
     public IApplication Application {
       get { return this.application; }

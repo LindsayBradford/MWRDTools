@@ -16,11 +16,11 @@ namespace MWRDTools.View
   /// </summary>
   public abstract class AbstractFormLaunchButton : ESRI.ArcGIS.Desktop.AddIns.Button
   {
-    private IWin32Window _parentWindow;
+    private IWin32Window parentWindow;
+    protected Form form;
 
-    public AbstractFormLaunchButton()
-    {
-      _parentWindow =  new ArcMapFormWrapper(
+    public AbstractFormLaunchButton() {
+      parentWindow =  new ArcMapFormWrapper(
         getAppHook().hWnd
       );
     }
@@ -28,20 +28,22 @@ namespace MWRDTools.View
     /// <summary>
     /// A WIn32 HWND handle to the parent-form of this button.
     /// </summary>
-    protected IWin32Window getParentWindow()
-    {
-      return _parentWindow;
+    protected IWin32Window getParentWindow() {
+      return parentWindow;
     }
 
     /// <summary>
     /// Returns the hook of this button as an instance of ESRI.ArcGIS.Framework.IApplication.
     /// </summary>
-    protected IApplication getAppHook()
-    {
-      return (IApplication) this.Hook;
+    protected IApplication getAppHook() {
+      return this.Hook as IApplication;
     }
 
-    abstract protected override void OnClick();
+    protected override void OnClick() {
+      form.Show(
+        getParentWindow()
+      );
+    }
   }
   /// <summary>
   ///  Wrapper class for ArcMap Desktop Window handle that makes it appear as a

@@ -12,17 +12,16 @@ using MWRDTools.Model;
 
 namespace MWRDTools.View
 {
-  class AdministrationFormBuilder
+  class AdministrationFormBuilder : AbstractFormBuilder
   {
 
-    public static AdministrationForm build(IApplication appHook)
-    {
+    public static AdministrationForm build(IApplication appHook) {
       
       AdministrationForm form = new AdministrationForm();
       form.Application = appHook;
 
       FileSystemBridge fileBridge = new FileSystemBridge();
-      IGeodatabaseBridge dbBridge = buildDatabaseBridge(appHook);
+      IGeodatabaseBridge dbBridge = AbstractFormBuilder.buildDatabaseBridge(appHook);
 
       ICARMScenarioModel carmModel = new CARMScenarioModel();
       carmModel.setDatabaseBridge(dbBridge);
@@ -71,29 +70,6 @@ namespace MWRDTools.View
       presenter.setModel(model);
 
       return presenter;
-    }
-
-    private static IGeodatabaseBridge buildDatabaseBridge(IApplication appHook) {
-      string documentPath = Path.GetDirectoryName(getDocumentPath(appHook));
-
-      string relativeDBPath = "MWRD_File_Geodatabase\\MWRD.gdb";
-
-      string databasePath = Path.Combine(documentPath, relativeDBPath);
-
-      FileGeodatabaseBridge bridge = new FileGeodatabaseBridge();
-
-      bridge.DatabasePath = databasePath;
-
-      return bridge as IGeodatabaseBridge;
-    }
-
-    private static string getDocumentPath(IApplication appHook) {
-      // Apparently, the last template is always the document's path.
-      // http://help.arcgis.com/en/sdk/10.0/arcobjects_net/componenthelp/index.html#/Get_Document_Path_Snippet/00490000009n000000/
-
-      ITemplates templates = appHook.Templates;
-      return templates.get_Item(templates.Count - 1);
-
     }
   }
 }
