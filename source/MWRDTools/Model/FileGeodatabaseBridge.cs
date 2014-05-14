@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -50,6 +51,23 @@ namespace MWRDTools.Model {
       IWorkspaceEdit edit = (Workspace as IWorkspaceEdit);
       edit.StopEditOperation();
       edit.StopEditing(true);
+    }
+
+    public List<T> GetColValuesForQuery<T>(string tableName,string whereClause, string columnName) {
+      List<T> valueList = new List<T>();
+
+      using (ComReleaser comReleaser = new ComReleaser()) {
+        ICursor cursor = GetCursorForTableQuery(tableName, whereClause);
+        comReleaser.ManageLifetime(cursor);
+
+        IRow currentRow;
+        while ((currentRow = cursor.NextRow()) != null) {
+          T rowValue = GetValueForRowColumnName<T>(currentRow, columnName);
+          valueList.Add(rowValue);
+        }
+      }
+
+      return valueList;
     }
 
     public T GetValueForRowColumnName<T>(IRow row, string columnName) {

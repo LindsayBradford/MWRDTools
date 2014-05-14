@@ -66,77 +66,58 @@ namespace MWRDTools.Model
       }
     }
 
-    private void deleteScenariosWithPredjudice(string[] scenarioNames) {
-      bridge.DeleteTableContent(
-        Constants.TableName.CARM_time_series_group
-      );
-      bridge.DeleteTableContent(
-        Constants.TableName.CARM_time_series
-      );
-      bridge.DeleteTableContent(
-        Constants.TableName.CARM_time_series_value
-      );
-    }
-
     private void deleteScenario(string scenarioName) {
-      List<string> idListToDelete = new List<string>();
+      List<string> groupIdList, scenarioChildIdList, timeSeriesList;
 
-      ICursor cursor = getGroupTableCursorForScenario(scenarioName);
-
-      IRow groupRow = cursor.NextRow();
-
-      idListToDelete.Add(
-        bridge.GetValueForRowColumnName<string>(
-          groupRow, 
-          "id"
-        )
-      );
-
-      string childWhereClause = String.Format("parent_id = '{0}'", idListToDelete[0]);
-
-      ICursor childRows = bridge.GetCursorForTableQuery(
+      groupIdList = bridge.GetColValuesForQuery<string>(
         Constants.TableName.CARM_time_series_group,
-        childWhereClause
+         String.Format("name = '{0}'", scenarioName),
+         "id"
       );
 
-      IRow childRow;
-      while((childRow = childRows.NextRow()) != null) {
-        idListToDelete.Add(
-          bridge.GetValueForRowColumnName<string>(
-            childRow,
-            "id"
-          )
-        );
-      } // while there are more childRows
+      scenarioChildIdList = bridge.GetColValuesForQuery<string>(
+        Constants.TableName.CARM_time_series_group,
+        String.Format("parent_id = '{0}'", groupIdList[0]),
+        "id"
+      );
+
+      groupIdList.AddRange(scenarioChildIdList);
 
       raiseStatusEvent(
         String.Format(" Deleting scenario '{0}' from CARM time-series tables...", scenarioName)  
       ); 
 
-      foreach (string id in idListToDelete) {
-        string deleteGroupClause = String.Format("id = '{0}'", id);
-
+      foreach (string groupId in groupIdList) {
         bridge.DeleteTableContent(
           Constants.TableName.CARM_time_series_group,
-          deleteGroupClause
+          String.Format("id = '{0}'", groupId)
+        );
+      }
+
+      timeSeriesList = new List<string>();      
+
+      foreach (string childId in scenarioChildIdList) {
+
+        List<string> currChildList = bridge.GetColValuesForQuery<string>(
+          Constants.TableName.CARM_time_series,
+          String.Format("group_id = '{0}'", childId),
+          "id"
         );
 
-        string deleteTimeSeriesClause = String.Format("group_id = '{0}'", id);
+        timeSeriesList.AddRange(currChildList);
 
         bridge.DeleteTableContent(
           Constants.TableName.CARM_time_series,
-          deleteTimeSeriesClause
+          String.Format("group_id = '{0}'", childId)
         );
+      }
 
-        string deleteValueClause = String.Format("time_series_id = '{0}'", id);
-
+      foreach (string timeSeriesId in timeSeriesList) {
         bridge.DeleteTableContent(
           Constants.TableName.CARM_time_series_value,
-          deleteValueClause
+          String.Format("time_series_id = '{0}'", timeSeriesId)
         );
-
-      } // for each id to delete
-
+      }
     }
 
     public bool scenarioExistsInDatabase(string scenarioName)
@@ -150,11 +131,9 @@ namespace MWRDTools.Model
     }
 
     private ICursor getGroupTableCursorForScenario(string scenarioName) {
-      string whereClause = String.Format("name = '{0}'", scenarioName);
-
       return bridge.GetCursorForTableQuery(
         Constants.TableName.CARM_time_series_group, 
-        whereClause
+        String.Format("name = '{0}'", scenarioName)
       );
     }
 
