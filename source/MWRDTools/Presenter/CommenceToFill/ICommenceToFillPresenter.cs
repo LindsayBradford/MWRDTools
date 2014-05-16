@@ -1,10 +1,20 @@
 ﻿using MWRDTools.View;
 using MWRDTools.Model;
 
+using ESRI.ArcGIS.Framework;
+using ESRI.ArcGIS.Carto;
+
 namespace MWRDTools.Presenter {
   public interface ICommenceToFillPresenter {
 
+    IApplication Application {get; set;}
+    IMap Map { get; }
+
     void setView(ICommenceToFillView view);
+
+    void HigilightWetlands(int[] wetlandIDs);
+    void ZoomToWetlands(int[] wetlandIDs);
+    void FlashWetlands(int[] wetlandIDs);
 
     void WaggaGaugeThresholdSelected(string flowThreshold);
     void GaugeAndFlowSelected(string gaugeName, double flow);
@@ -14,8 +24,8 @@ namespace MWRDTools.Presenter {
     string[] GetScenarios();
     string[] GetWaggaFlowThresholds();
     
-    
     string[] GetGaugeNames();
     void setCARMScenarioModel(ICARMScenarioModel model);
+
   }
 }

@@ -8,13 +8,11 @@ namespace MWRDTools.Model
 {
   class FileSystemBridge : IFileSystemBridge
   {
-    public DataTable CSVtoDataTable(string filePath, char delimiter)
-    {
+    public DataTable CSVtoDataTable(string filePath, char delimiter) {
       return CSVtoDataTable(filePath, delimiter, 0);
     }
 
-    public DataTable CSVtoDataTable(string filePath, char delimiter, int linesToSkip)
-    {
+    public DataTable CSVtoDataTable(string filePath, char delimiter, int linesToSkip) {
       if (!File.Exists(filePath)) {
         return null;
       }
@@ -52,16 +50,13 @@ namespace MWRDTools.Model
       return table;
     }
 
-    private static void setDataTableHeaders(DataTable table, params string[] headerNames)
-    {
-      foreach (string header in headerNames)
-      {
+    private static void setDataTableHeaders(DataTable table, params string[] headerNames) {
+      foreach (string header in headerNames) {
         table.Columns.Add(header);
       }
     }
 
-    private static void addDataTableRow(DataTable table, params string[] rowValues)
-    {
+    private static void addDataTableRow(DataTable table, params string[] rowValues) {
       DataRow row = table.NewRow();
       row.ItemArray = rowValues;
       table.Rows.Add(row);

@@ -52,7 +52,6 @@ class Common
       return null;
   }
 
-
   public static IFeatureLayer GetFeatureLayer(IApplication application, string layerName) {
     return GetFeatureLayer(
       GetFocusMap(application), 
@@ -231,9 +230,6 @@ class Common
           pActiveView.Extent = pEnvelope;
           pActiveView.Refresh();
       }
-
-            
-
   }
 
   public static void SelectFeature(int oid, IFeatureLayer pFeatureLayer, IMap pMap)

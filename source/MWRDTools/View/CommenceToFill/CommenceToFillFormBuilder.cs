@@ -17,7 +17,6 @@ namespace MWRDTools.View
     public static CommenceToFillForm build(IApplication appHook) {
 
       CommenceToFillForm form = new CommenceToFillForm();
-      form.Application = appHook;
 
       IGeodatabaseBridge dbBridge = AbstractFormBuilder.buildDatabaseBridge(appHook);
 
@@ -29,9 +28,10 @@ namespace MWRDTools.View
       carmModel.setWetlandsModel(wetlandsModel);
 
       ICommenceToFillPresenter presenter = new CommenceToFillPresenter();
+      presenter.Application = appHook;
+      presenter.setView(form);
       presenter.setCARMScenarioModel(carmModel);
       presenter.setWetlandsModel(wetlandsModel);
-      presenter.setView(form);
 
       (form as ICommenceToFillView).setPresenter(presenter);
 

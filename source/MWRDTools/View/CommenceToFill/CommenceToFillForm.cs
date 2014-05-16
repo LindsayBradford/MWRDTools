@@ -6,43 +6,19 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using ESRI.ArcGIS.Framework;
-using ESRI.ArcGIS.ArcMapUI;
-using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.Carto;
-
 using MWRDTools.Presenter;
 using MWRDTools.View;
 
 public partial class CommenceToFillForm : Form, ICommenceToFillView
 {
-    private IApplication _application;
-    private IMap _map;
-    private IFeatureWorkspace _featureWorkspace;
-    private IFeatureLayer _featureLayer;
-
     private ICommenceToFillPresenter presenter;
 
     public CommenceToFillForm() {
-        InitializeComponent();
+      InitializeComponent();
 
-        WaggaListView.ListViewItemSorter = new ListViewColumnSorter();
-        GaugeListView.ListViewItemSorter = new ListViewColumnSorter();
-        CARMListView.ListViewItemSorter = new ListViewColumnSorter();
-    }
-
-    public IApplication Application {
-      get { return this._application; }
-      set { this._application = value; initialseApplication(); }
-    }
-
-    private void initialseApplication() {
-      _map = (_application.Document as IMxDocument).FocusMap;
-    }
-
-    private bool SetFeatureWorkspace() {
-      _featureWorkspace = Common.GetFeatureWorkspace(Constants.LayerName.WetLands, _map, ref _featureLayer);
-      return (_featureWorkspace != null);
+      WaggaListView.ListViewItemSorter = new ListViewColumnSorter();
+      GaugeListView.ListViewItemSorter = new ListViewColumnSorter();
+      CARMListView.ListViewItemSorter = new ListViewColumnSorter();
     }
 
     void ICommenceToFillView.setPresenter(ICommenceToFillPresenter presenter) {
@@ -184,24 +160,21 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void HighlightFeatures(ListView view) {
-      int[] features = getSelectedFeatures(view);
-      if (features != null) {
-        Common.HighlightFeatures(features, _featureLayer, _map);
-      }
+      presenter.HigilightWetlands(
+        getSelectedFeatures(view)
+      );
     }
 
     private void ZoomToSelectedFeatures(ListView view) {
-      int[] features = getSelectedFeatures(view);
-      if (features != null) {
-        Common.ZoomToFeatures(features, _featureLayer, _map);
-      }
+      presenter.ZoomToWetlands(
+        getSelectedFeatures(view)
+      );
     }
 
     private void FlashFeatures(ListView view) {
-      int[] features = getSelectedFeatures(view);
-      if (features != null) {
-        Common.FlashFeatures(features, _featureLayer, _map);
-      }
+      presenter.FlashWetlands(
+        getSelectedFeatures(view)
+      );
     }
 
     private void ExportFeatures(ListView view) {
@@ -228,24 +201,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void frmCommenceToFill_Load(object sender, EventArgs e) {
-      try {
-        if (!SetFeatureWorkspace()) {
-          MessageBox.Show(
-            String.Format(
-              "Unable to open the data source. The application was looking for a layer called {0}.",
-              Constants.LayerName.WetLands
-            ),
-            System.Windows.Forms.Application.ProductName
-          );
-          this.Dispose();
-        }
-        FillCombos();
-      } catch (Exception ex) {
-        MessageBox.Show(
-          ex.Message,
-          System.Windows.Forms.Application.ProductName
-        );
-      }
+      FillCombos();
     }
 
     private void CommenceToFillForm_FormClosing(object sender, FormClosingEventArgs e) {

@@ -1,13 +1,68 @@
 ﻿using MWRDTools.View;
 using MWRDTools.Model;
 
+using ESRI.ArcGIS.Framework;
+using ESRI.ArcGIS.ArcMapUI;
+using ESRI.ArcGIS.Carto;
+
 namespace MWRDTools.Presenter {
   public class CommenceToFillPresenter : ICommenceToFillPresenter {
 
     private ICommenceToFillView view;
+    private IApplication application;
 
     public void setView(ICommenceToFillView view) {
       this.view = view;
+    }
+
+    public IApplication Application {
+      get { return this.application; }
+      set { this.application = value; }
+    }
+
+    public IMap Map {
+      get {
+        return (application.Document as IMxDocument).FocusMap; 
+      }
+    }
+
+    public void HigilightWetlands(int[] wetlandIDs) {
+      if (wetlandIDs == null) return;
+
+      Common.HighlightFeatures(
+        wetlandIDs, 
+        Common.GetFeatureLayer(
+          Map, 
+          Constants.LayerName.WetLands
+        ), 
+        Map
+      );
+    }
+
+    public void ZoomToWetlands(int[] wetlandIDs) {
+      if (wetlandIDs == null) return;
+
+      Common.ZoomToFeatures(
+        wetlandIDs,
+        Common.GetFeatureLayer(
+          Map,
+          Constants.LayerName.WetLands
+        ),
+        Map
+      );
+    }
+
+    public void FlashWetlands(int[] wetlandIDs) {
+      if (wetlandIDs == null) return;
+
+      Common.FlashFeatures(
+        wetlandIDs,
+        Common.GetFeatureLayer(
+          Map,
+          Constants.LayerName.WetLands
+        ),
+        Map
+      );
     }
 
     public void CARMScenarioSelected(string scenarioName) {
