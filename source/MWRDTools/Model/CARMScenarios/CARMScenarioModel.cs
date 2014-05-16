@@ -107,17 +107,25 @@ namespace MWRDTools.Model
     }
 
     private void deleteScenario(string scenarioName) {
-      List<string> groupIdList, timeSeriesList;
+      List<string> groupIdList, outputIdList, timeSeriesList;
 
       string scenarioId = getIdForScenario(scenarioName);
 
-      groupIdList = bridge.GetColValuesForQuery<string>(
+      string outputId = getGroupId("Output", scenarioId);
+
+      string mike11OutputId = getGroupId("MIKE11 Output", outputId);
+
+      outputIdList = bridge.GetColValuesForQuery<string>(
         Constants.TableName.CARM_time_series_group,
-        String.Format("parent_id = '{0}'", scenarioId),
+        String.Format("parent_id = '{0}'", mike11OutputId),
         "id"
       );
 
+      groupIdList = new List<String>(outputIdList);
+
       groupIdList.Add(scenarioId);
+      groupIdList.Add(outputId);
+      groupIdList.Add(mike11OutputId);
 
       raiseStatusEvent(
         String.Format(" Deleting scenario '{0}' from CARM time-series tables...", scenarioName)  
@@ -132,7 +140,7 @@ namespace MWRDTools.Model
 
       timeSeriesList = new List<string>();      
 
-      foreach (string childId in groupIdList) {
+      foreach (string childId in outputIdList) {
 
         List<string> currChildList = bridge.GetColValuesForQuery<string>(
           Constants.TableName.CARM_time_series,
