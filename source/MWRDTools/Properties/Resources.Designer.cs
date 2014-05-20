@@ -63,6 +63,16 @@ namespace MWRDTools.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GriffithUniversity {
+            get {
+                object obj = ResourceManager.GetObject("GriffithUniversity", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap openfolderHS {
             get {
                 object obj = ResourceManager.GetObject("openfolderHS", resourceCulture);

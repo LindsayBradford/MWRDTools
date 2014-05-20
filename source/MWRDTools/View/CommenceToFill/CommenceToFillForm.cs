@@ -13,6 +13,8 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
 {
     private ICommenceToFillPresenter presenter;
 
+    private DataTable WaggaWetlands, GaugeWetlands, CARMWetlands; 
+
     public CommenceToFillForm() {
       InitializeComponent();
 
@@ -26,6 +28,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     void ICommenceToFillView.SetWaggaGaugeThresholdInundatedWetlands(DataTable wetlands) {
+      this.WaggaWetlands = wetlands;
       fillListViewFromDataTable(
         WaggaListView,
         wetlands
@@ -33,6 +36,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     void ICommenceToFillView.SetFlowAtGaugeInundatedWetlands(DataTable wetlands) {
+      this.GaugeWetlands = wetlands;
       fillListViewFromDataTable(
         GaugeListView,
         wetlands
@@ -40,6 +44,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     void ICommenceToFillView.SetCARMScenarioInundatedWetlands(DataTable wetlands) {
+      this.CARMWetlands = wetlands;
       fillListViewFromDataTable(
         CARMListView,
         wetlands
@@ -177,11 +182,19 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
       );
     }
 
-    private void ExportFeatures(ListView view) {
+    private void ExportFeatures(ListView view, DataTable wetlands) {
+
+      int[] selectedFeatures = getSelectedFeatures(view);
+      if (selectedFeatures.Length == 0) return;
+      
       dlg.OverwritePrompt = true;
       dlg.Filter = "*.csv|*.csv";
       if (dlg.ShowDialog() != DialogResult.Cancel) {
-        Common.ExportListView(dlg.FileName, view);
+        presenter.ExportWetlands(
+          dlg.FileName, 
+          wetlands, 
+          selectedFeatures
+        );
       }
     }
 
@@ -247,7 +260,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void btnWaggaExport_Click(object sender, EventArgs e) {
-      ExportFeatures(WaggaListView);
+      ExportFeatures(WaggaListView, WaggaWetlands);
     }
 
     private void GaugeListView_KeyDown(object sender, KeyEventArgs e) {
@@ -277,7 +290,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void btnExportGauge_Click(object sender, EventArgs e) {
-      ExportFeatures(GaugeListView);
+      ExportFeatures(GaugeListView, GaugeWetlands);
     }
 
     private void txtFlow_KeyDown(object sender, KeyEventArgs e) {
@@ -315,7 +328,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void btnExportCarm_Click(object sender, EventArgs e) {
-      ExportFeatures(CARMListView);
+      ExportFeatures(CARMListView, CARMWetlands);
     }
 
     private void mnuAbout_Click(object sender, EventArgs e) {

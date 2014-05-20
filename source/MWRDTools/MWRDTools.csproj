@@ -247,6 +247,7 @@
     <Content Include="Images\excel.gif" />
     <Content Include="Images\find.png" />
     <AddInContent Include="Images\frog.png" />
+    <None Include="Resources\GriffithUniversity.jpg" />
     <EmbeddedResource Include="Images\openfolderHS.png" />
     <Content Include="Images\selection_1.bmp" />
     <AddInContent Include="Images\tap.png" />

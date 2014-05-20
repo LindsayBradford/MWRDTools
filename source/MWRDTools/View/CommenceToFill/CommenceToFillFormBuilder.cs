@@ -32,6 +32,9 @@ namespace MWRDTools.View
       presenter.setView(form);
       presenter.setCARMScenarioModel(carmModel);
       presenter.setWetlandsModel(wetlandsModel);
+      presenter.setFileBridge(
+        new FileSystemBridge()
+      );
 
       (form as ICommenceToFillView).setPresenter(presenter);
 

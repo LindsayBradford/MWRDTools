@@ -110,8 +110,8 @@ partial class frmAboutBox : Form
     }
     #endregion
 
-    private void cmdOK_Click(object sender, EventArgs e)
-    {
-        this.Close();
+    private void cmdOK_Click(object sender, EventArgs e) {
+      this.Close();
     }
-}
+
+  }

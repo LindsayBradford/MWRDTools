@@ -7,5 +7,7 @@ namespace MWRDTools.Model
   {
     DataTable CSVtoDataTable(string filePath, char delimiter, int linesToSkip);
     DataTable CSVtoDataTable(string filePath, char delimiter);
+
+    void DataTableToCSV(DataTable table, string filePath);
   }
 }

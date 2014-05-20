@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Data;
 using System.IO;
+using System.Text;
 
 using System.Windows.Forms;
 
@@ -72,5 +75,27 @@ namespace MWRDTools.Model
 
       return splitText;
     }
+
+    public void DataTableToCSV(DataTable table, string filePath) {
+      // http://stackoverflow.com/questions/4959722/c-sharp-datatable-to-csv
+      StringBuilder sb = new StringBuilder();
+
+      string[] columnNames = table.Columns.Cast<DataColumn>().
+                                  Select(column => column.ColumnName).ToArray();
+      sb.AppendLine(
+        string.Join(",", columnNames.ToArray())
+      );
+
+      foreach (DataRow row in table.Rows) {
+        string[] fields = row.ItemArray.Select(field => field.ToString()).ToArray();
+        sb.AppendLine(string.Join(",", fields));
+      }
+
+      File.WriteAllText(
+        filePath, 
+        sb.ToString()
+      );
+    }
+
   }
 }

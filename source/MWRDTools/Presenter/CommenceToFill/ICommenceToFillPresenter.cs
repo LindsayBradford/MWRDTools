@@ -1,4 +1,5 @@
-﻿using MWRDTools.View;
+﻿using System.Data;
+using MWRDTools.View;
 using MWRDTools.Model;
 
 using ESRI.ArcGIS.Framework;
@@ -11,10 +12,12 @@ namespace MWRDTools.Presenter {
     IMap Map { get; }
 
     void setView(ICommenceToFillView view);
+    void setFileBridge(IFileSystemBridge fileBridge);
 
     void HigilightWetlands(int[] wetlandIDs);
     void ZoomToWetlands(int[] wetlandIDs);
     void FlashWetlands(int[] wetlandIDs);
+    void ExportWetlands(string filename, DataTable wetlands, int[] wetlandIDs);
 
     void WaggaGaugeThresholdSelected(string flowThreshold);
     void GaugeAndFlowSelected(string gaugeName, double flow);
