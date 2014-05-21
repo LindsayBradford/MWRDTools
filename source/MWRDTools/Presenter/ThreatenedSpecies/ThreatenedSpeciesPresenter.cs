@@ -31,6 +31,10 @@ namespace MWRDTools.Presenter {
       return threatenedSpeciesModel.GetSpeciesClassNames();
     }
 
+    public string[] GetSpeciesStatuses() {
+      return threatenedSpeciesModel.GetSpeciesStatuses();
+    }
+
     public void SpeciesFilterApplied(string whereClause) {
       view.ApplySpeciesFilter(
         threatenedSpeciesModel.GetSpeciesWhere(

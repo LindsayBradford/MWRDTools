@@ -14,6 +14,7 @@ namespace MWRDTools.Presenter {
 
     void setView(IThreatenedSpeciesView view);
     string[] GetSpeciesClasses();
+    string[] GetSpeciesStatuses();
 
     void SpeciesByWetlandsTabSelected();
     void SpeciesFilterApplied(string whereClause);

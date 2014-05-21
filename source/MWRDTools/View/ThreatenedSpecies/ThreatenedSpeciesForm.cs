@@ -122,6 +122,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     private void ShowFilter() {
       _frmFilter = new frmFilter(
         _speciesWhereClause,
+        presenter.GetSpeciesStatuses(),
         presenter.GetSpeciesClasses()
       );
 

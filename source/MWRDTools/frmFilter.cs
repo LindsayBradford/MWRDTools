@@ -16,9 +16,10 @@ public partial class frmFilter : Form
         InitializeComponent();
     }
 
-    public frmFilter(string whereClause, string[] speciesClasses) {
+    public frmFilter(string whereClause, string[] speciesStatuses, string[] speciesClasses) {
       InitializeComponent();
       _whereClause = whereClause;
+      SetSpeciesStatuses(speciesStatuses);
       SetSpeciesClasses(speciesClasses);
     }
 
@@ -101,6 +102,13 @@ public partial class frmFilter : Form
       }
     }
 
+    private void SetSpeciesStatuses(string[] speciesStatuses) {
+      lboStatus.Items.Clear();
+      foreach (string speciesStatus in speciesStatuses) {
+        lboStatus.Items.Add(speciesStatus);
+      }
+    }
+
     private void frmFilter_Load(object sender, EventArgs e) {
       if (_whereClause != "" && _whereClause != null) {
         ParseWhereClause();
@@ -125,15 +133,5 @@ public partial class frmFilter : Form
         {
             MessageBox.Show(ex.Message, Application.ProductName);
         }
-    }
-
-    private void lboStatus_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
-
-    private void tabPage2_Click(object sender, EventArgs e)
-    {
-
     }
 }

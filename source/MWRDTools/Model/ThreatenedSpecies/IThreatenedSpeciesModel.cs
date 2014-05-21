@@ -11,6 +11,7 @@ namespace MWRDTools.Model
     void OverwriteSightingData(DataTable data);
 
     string[] GetSpeciesClassNames();
+    string[] GetSpeciesStatuses();
     DataTable GetSpeciesWhere(string[] columnNames, string whereClause);
   }
 }

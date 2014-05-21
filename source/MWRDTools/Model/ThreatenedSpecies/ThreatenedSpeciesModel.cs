@@ -95,6 +95,16 @@ namespace MWRDTools.Model
       return names.ToArray();
     }
 
+    public string[] GetSpeciesStatuses() {
+      List<string> names = bridge.GetUniqueColValuesForQuery<string>(
+        Constants.TableName.ThreatenedSpeciesUnique,
+        null,
+        "NSWStatus"
+      );
+      return names.ToArray();
+    }
+
+
     public DataTable GetSpeciesWhere(string[] columnNames, string whereClause) {
 
       DataTable species = new DataTable();
