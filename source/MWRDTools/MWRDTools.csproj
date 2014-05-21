@@ -118,11 +118,14 @@
     <Compile Include="Model\ThreatenedSpecies\ThreatenedSpeciesModel.cs" />
     <Compile Include="Model\Wetlands\IWetlandsModel.cs" />
     <Compile Include="Model\Wetlands\WetlandsModel.cs" />
+    <Compile Include="Presenter\AbstractMWRDPresenter.cs" />
     <Compile Include="Presenter\Administration\AtlasImportPresenter.cs" />
     <Compile Include="Presenter\Administration\CARMImportPresenter.cs" />
     <Compile Include="Presenter\Administration\IFileImportPresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\CommenceToFillPresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\ICommenceToFillPresenter.cs" />
+    <Compile Include="Presenter\ThreatenedSpecies\ThreatenedSpeciesPresenter.cs" />
+    <Compile Include="Presenter\ThreatenedSpecies\IThreatenedSpeciesPresenter.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -130,6 +133,7 @@
     </Compile>
     <Compile Include="View\AbstractFormBuilder.cs" />
     <Compile Include="View\Administration\AdministrationFormBuilder.cs" />
+    <Compile Include="View\ViewUtilities.cs" />
     <Compile Include="View\CommenceToFill\CommenceToFillFormBuilder.cs" />
     <Compile Include="View\CommenceToFill\CommenceToFillButton.cs" />
     <Compile Include="MWRDToolsToolbar.cs" />
@@ -164,6 +168,7 @@
     <Compile Include="frmFilter.Designer.cs">
       <DependentUpon>frmFilter.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\ThreatenedSpecies\IThreatenedSpeciesView.cs" />
     <Compile Include="View\ThreatenedSpecies\ThreatenedSpeciesFormBuilder.cs" />
     <Compile Include="View\ThreatenedSpecies\ThreatenedSpeciesForm.cs">
       <SubType>Form</SubType>

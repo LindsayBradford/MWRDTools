@@ -13,7 +13,10 @@ using ESRI.ArcGIS.ArcMapUI;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Carto;
 
-public partial class ThreatenedSpeciesForm : Form
+using MWRDTools.View;
+using MWRDTools.Presenter;
+
+public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 {
     private IApplication _application;
     private IMap _map;
@@ -30,6 +33,7 @@ public partial class ThreatenedSpeciesForm : Form
     private string _speciesWhereClause;
     private bool _wetlandsLoaded = false;
 
+    private IThreatenedSpeciesPresenter presenter;
 
     public ThreatenedSpeciesForm(IApplication pApplication)
     {
@@ -43,13 +47,17 @@ public partial class ThreatenedSpeciesForm : Form
         _lvWetlandsColumnSorter = new ListViewColumnSorter();
         lvWetlands.ListViewItemSorter = _lvWetlandsColumnSorter;
         _lvWetlandsColumnSorter1 = new ListViewColumnSorter();
-        lvWetlands1.ListViewItemSorter = _lvWetlandsColumnSorter1;
+        AllWetlandsListView.ListViewItemSorter = _lvWetlandsColumnSorter1;
         _lvColumnSorter1 = new ListViewColumnSorter();
         lvSpecies1.ListViewItemSorter = _lvColumnSorter1;
         _spDataAccess = new SpatialDataAccess();
         _spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
         _frmDatePicker = new frmDatePicker();
         _frmDatePicker.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
+    }
+
+    public void setPresenter(IThreatenedSpeciesPresenter presenter) {
+      this.presenter = presenter;
     }
 
     void _spDataAccess_ProgressEvent(object sender, ProgressEventArgs e)
@@ -109,17 +117,14 @@ public partial class ThreatenedSpeciesForm : Form
         lv.Items.Add(li);
     }
 
-    private void LoadWetlands()
-    {
-        lvWetlands1.Items.Clear();
-        ICursor pCursor = DataAccess.GetWetlands(_wetlandsFL);
-        IRow pRow = pCursor.NextRow();
-        while (pRow != null)
-        {
-            AddWetlandsListItem(pRow, lvWetlands1);
-            pRow = pCursor.NextRow();
-        }
+
+    void IThreatenedSpeciesView.SetWetlands(DataTable wetlands) {
+      ViewUtilities.DataTableToListView(
+        wetlands,
+        AllWetlandsListView
+      );
     }
+
 
     private void AddWetlandsListItem(IRow pRow, ListView lv)
     {
@@ -498,7 +503,7 @@ public partial class ThreatenedSpeciesForm : Form
                 _lvWetlandsColumnSorter1.ColunmToSort = e.Column;
                 _lvWetlandsColumnSorter1.SortOrder = "ascending";
             }
-            lvWetlands1.Sort();
+            AllWetlandsListView.Sort();
         }
         catch (Exception ex)
         {
@@ -506,23 +511,13 @@ public partial class ThreatenedSpeciesForm : Form
         }
     }
 
-    private void tab_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        try
-        {
-            if (tab.SelectedIndex == 1 && _wetlandsLoaded == false)
-            {
-                this.Cursor = Cursors.WaitCursor;
-                LoadWetlands();
-                _wetlandsLoaded = true;
-                this.Cursor = Cursors.Default;
-            }
-        }
-        catch (Exception ex)
-        {
-            this.Cursor = Cursors.Default;
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void ThreatenedSpeciesTab_SelectedIndexChanged(object sender, EventArgs e) {
+      if (ThreatenedSpeciesTab.SelectedIndex == 1 && _wetlandsLoaded == false) {
+        this.Cursor = Cursors.WaitCursor;
+        presenter.SpeciesByWetlandsTabSelected();
+        _wetlandsLoaded = true;
+        this.Cursor = Cursors.Default;
+      }
     }
 
     private void btnFind1_Click(object sender, EventArgs e)
@@ -531,16 +526,16 @@ public partial class ThreatenedSpeciesForm : Form
         {
             this.Cursor = Cursors.WaitCursor;
             lvSpecies1.Items.Clear();
-            if (lvWetlands1.SelectedItems != null)
+            if (AllWetlandsListView.SelectedItems != null)
             {
-                if (lvWetlands1.SelectedItems.Count > 0)
+                if (AllWetlandsListView.SelectedItems.Count > 0)
                 {
                     double buffer = 0.0;
                     if (!(cboBuffer1.Text == "None") && !(cboBuffer1.Text == ""))
                     {
                         buffer = Convert.ToDouble(cboBuffer1.Text);
                     }
-                    IFeatureCursor species = _spDataAccess.GetSpeciesByWetland(_featureWorkspace, _wetlandsFL, lvWetlands1.SelectedItems[0].Tag.ToString(), buffer, txtAfter1.Text, txtBefore1.Text, _speciesWhereClause);
+                    IFeatureCursor species = _spDataAccess.GetSpeciesByWetland(_featureWorkspace, _wetlandsFL, AllWetlandsListView.SelectedItems[0].Tag.ToString(), buffer, txtAfter1.Text, txtBefore1.Text, _speciesWhereClause);
                     Common.FeatureCursorToListView(species, ref lvSpecies1, "");
                 }
             }

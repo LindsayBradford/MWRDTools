@@ -27,7 +27,7 @@ partial class ThreatenedSpeciesForm
     private void InitializeComponent()
     {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ThreatenedSpeciesForm));
-      this.tab = new System.Windows.Forms.TabControl();
+      this.ThreatenedSpeciesTab = new System.Windows.Forms.TabControl();
       this.tabPage1 = new System.Windows.Forms.TabPage();
       this.splitContainer1 = new System.Windows.Forms.SplitContainer();
       this.lvSpecies = new System.Windows.Forms.ListView();
@@ -58,7 +58,7 @@ partial class ThreatenedSpeciesForm
       this.btnExport = new System.Windows.Forms.ToolStripButton();
       this.tabPage2 = new System.Windows.Forms.TabPage();
       this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-      this.lvWetlands1 = new System.Windows.Forms.ListView();
+      this.AllWetlandsListView = new System.Windows.Forms.ListView();
       this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -90,7 +90,7 @@ partial class ThreatenedSpeciesForm
       this.statusStrip1 = new System.Windows.Forms.StatusStrip();
       this.pb = new System.Windows.Forms.ToolStripProgressBar();
       this.lblSpeciesFilter = new System.Windows.Forms.ToolStripStatusLabel();
-      this.tab.SuspendLayout();
+      this.ThreatenedSpeciesTab.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.splitContainer1.Panel1.SuspendLayout();
       this.splitContainer1.Panel2.SuspendLayout();
@@ -107,19 +107,19 @@ partial class ThreatenedSpeciesForm
       this.statusStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
-      // tab
+      // ThreatenedSpeciesTab
       // 
-      this.tab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+      this.ThreatenedSpeciesTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.tab.Controls.Add(this.tabPage1);
-      this.tab.Controls.Add(this.tabPage2);
-      this.tab.Location = new System.Drawing.Point(0, 22);
-      this.tab.Name = "tab";
-      this.tab.SelectedIndex = 0;
-      this.tab.Size = new System.Drawing.Size(663, 383);
-      this.tab.TabIndex = 0;
-      this.tab.SelectedIndexChanged += new System.EventHandler(this.tab_SelectedIndexChanged);
+      this.ThreatenedSpeciesTab.Controls.Add(this.tabPage1);
+      this.ThreatenedSpeciesTab.Controls.Add(this.tabPage2);
+      this.ThreatenedSpeciesTab.Location = new System.Drawing.Point(0, 22);
+      this.ThreatenedSpeciesTab.Name = "ThreatenedSpeciesTab";
+      this.ThreatenedSpeciesTab.SelectedIndex = 0;
+      this.ThreatenedSpeciesTab.Size = new System.Drawing.Size(663, 383);
+      this.ThreatenedSpeciesTab.TabIndex = 0;
+      this.ThreatenedSpeciesTab.SelectedIndexChanged += new System.EventHandler(this.ThreatenedSpeciesTab_SelectedIndexChanged);
       // 
       // tabPage1
       // 
@@ -393,7 +393,7 @@ partial class ThreatenedSpeciesForm
       // 
       // splitContainer2.Panel1
       // 
-      this.splitContainer2.Panel1.Controls.Add(this.lvWetlands1);
+      this.splitContainer2.Panel1.Controls.Add(this.AllWetlandsListView);
       this.splitContainer2.Panel1.Controls.Add(this.toolStrip4);
       // 
       // splitContainer2.Panel2
@@ -406,21 +406,21 @@ partial class ThreatenedSpeciesForm
       // 
       // lvWetlands1
       // 
-      this.lvWetlands1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+      this.AllWetlandsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader10,
             this.columnHeader11,
             this.columnHeader12,
             this.columnHeader13});
-      this.lvWetlands1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lvWetlands1.FullRowSelect = true;
-      this.lvWetlands1.HideSelection = false;
-      this.lvWetlands1.Location = new System.Drawing.Point(0, 0);
-      this.lvWetlands1.Name = "lvWetlands1";
-      this.lvWetlands1.Size = new System.Drawing.Size(649, 140);
-      this.lvWetlands1.TabIndex = 0;
-      this.lvWetlands1.UseCompatibleStateImageBehavior = false;
-      this.lvWetlands1.View = System.Windows.Forms.View.Details;
-      this.lvWetlands1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvWetlands1_ColumnClick);
+      this.AllWetlandsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.AllWetlandsListView.FullRowSelect = true;
+      this.AllWetlandsListView.HideSelection = false;
+      this.AllWetlandsListView.Location = new System.Drawing.Point(0, 0);
+      this.AllWetlandsListView.Name = "lvWetlands1";
+      this.AllWetlandsListView.Size = new System.Drawing.Size(649, 140);
+      this.AllWetlandsListView.TabIndex = 0;
+      this.AllWetlandsListView.UseCompatibleStateImageBehavior = false;
+      this.AllWetlandsListView.View = System.Windows.Forms.View.Details;
+      this.AllWetlandsListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvWetlands1_ColumnClick);
       // 
       // columnHeader10
       // 
@@ -679,7 +679,7 @@ partial class ThreatenedSpeciesForm
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(664, 430);
       this.Controls.Add(this.statusStrip1);
-      this.Controls.Add(this.tab);
+      this.Controls.Add(this.ThreatenedSpeciesTab);
       this.Controls.Add(this.menuStrip1);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MainMenuStrip = this.menuStrip1;
@@ -687,7 +687,7 @@ partial class ThreatenedSpeciesForm
       this.Text = "Threatened Species";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ThreatenedSpeciesForm_FormClosing);
       this.Load += new System.EventHandler(this.frmThreatenedSpecies_Load);
-      this.tab.ResumeLayout(false);
+      this.ThreatenedSpeciesTab.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.splitContainer1.Panel1.ResumeLayout(false);
       this.splitContainer1.Panel1.PerformLayout();
@@ -719,7 +719,7 @@ partial class ThreatenedSpeciesForm
 
     #endregion
 
-    private System.Windows.Forms.TabControl tab;
+    private System.Windows.Forms.TabControl ThreatenedSpeciesTab;
     private System.Windows.Forms.TabPage tabPage1;
     private System.Windows.Forms.TabPage tabPage2;
     private System.Windows.Forms.SplitContainer splitContainer1;
@@ -759,7 +759,7 @@ partial class ThreatenedSpeciesForm
     private System.Windows.Forms.ToolStripTextBox txtBeforeDate;
     private System.Windows.Forms.ToolStripButton btnBeforeDate;
     private System.Windows.Forms.SplitContainer splitContainer2;
-    private System.Windows.Forms.ListView lvWetlands1;
+    private System.Windows.Forms.ListView AllWetlandsListView;
     private System.Windows.Forms.ColumnHeader columnHeader10;
     private System.Windows.Forms.ColumnHeader columnHeader11;
     private System.Windows.Forms.ColumnHeader columnHeader12;

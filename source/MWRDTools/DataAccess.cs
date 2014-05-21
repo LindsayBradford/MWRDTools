@@ -26,13 +26,6 @@ public class DataAccess
         return pCursor;
     }
 
-    public static ICursor GetWetlands(IFeatureLayer pFeatureLayer)
-    {
-        IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
-        ITable pTable = (ITable)pFeatureClass;
-        return pTable.Search(null, false);
-    }
-
     public static IEnumerator GetClassNames(IFeatureWorkspace pFeatureWorkspace)
     {
         //ITable pTable = pFeatureWorkspace.OpenTable("ThreatenedSpeciesUnique");

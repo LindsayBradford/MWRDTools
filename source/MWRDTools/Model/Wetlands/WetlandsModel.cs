@@ -65,6 +65,27 @@ namespace MWRDTools.Model {
       return wetlands;
     }
 
+    public DataTable GetAllWetlands() {
+      DataTable wetlands;
+
+      using (ComReleaser comReleaser = new ComReleaser()) {
+
+        ICursor wetlandCursor = bridge.GetCursorForQuery(
+          Constants.TableName.MCMAWetlands,
+          null,
+          null
+        );
+
+        comReleaser.ManageLifetime(wetlandCursor);
+
+        wetlands = Common.CursorToDataTable(wetlandCursor);
+
+      } // using comReleaser
+
+      return wetlands;
+    }
+
+
     public DataTable GetInundatedWetlandsByFlowAtGauge(long gaugeId, double flow) {
       return GetInundatedWetlandsByFlowAtGauge(
         GetGaugeNameForId(gaugeId), 
@@ -100,6 +121,5 @@ namespace MWRDTools.Model {
 
       return wetlands;
     }
-
   }
 }

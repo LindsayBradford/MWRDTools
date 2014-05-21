@@ -25,57 +25,26 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
 
     void ICommenceToFillView.SetWaggaGaugeThresholdInundatedWetlands(DataTable wetlands) {
       this.WaggaWetlands = wetlands;
-      fillListViewFromDataTable(
-        WaggaListView,
-        wetlands
+      ViewUtilities.DataTableToListView(
+        wetlands,
+        WaggaListView
+
       );
     }
 
     void ICommenceToFillView.SetFlowAtGaugeInundatedWetlands(DataTable wetlands) {
       this.GaugeWetlands = wetlands;
-      fillListViewFromDataTable(
-        GaugeListView,
-        wetlands
+      ViewUtilities.DataTableToListView(
+        wetlands,
+        GaugeListView
       );
     }
 
     void ICommenceToFillView.SetCARMScenarioInundatedWetlands(DataTable wetlands) {
       this.CARMWetlands = wetlands;
-      fillListViewFromDataTable(
-        CARMListView,
-        wetlands
-      );
-    }
-
-    private void fillListViewFromDataTable(ListView view, DataTable table) {
-      view.Columns.Clear();
-      view.Items.Clear();
-
-      foreach (DataColumn column in table.Columns)  {
-        view.Columns.Add(
-          column.ColumnName
-        );
-      }
-
-      foreach (DataRow row in table.Rows) {
-        ListViewItem item = new ListViewItem(row[Constants.OID].ToString());
-
-        foreach (DataColumn column in table.Columns) {
-          if (column.ColumnName.Equals(Constants.OID)) {
-            continue;
-          }
-          item.SubItems.Add(
-            row[column.ColumnName].ToString()
-          );
-        }
-
-        item.Tag = row[Constants.OID];
-
-        view.Items.Add(item);
-      }
-
-      view.AutoResizeColumns(
-        ColumnHeaderAutoResizeStyle.HeaderSize
+      ViewUtilities.DataTableToListView(
+        wetlands,
+        CARMListView
       );
     }
 
