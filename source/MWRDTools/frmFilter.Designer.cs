@@ -69,7 +69,6 @@ partial class frmFilter
         this.lboStatus.Name = "lboStatus";
         this.lboStatus.Size = new System.Drawing.Size(177, 124);
         this.lboStatus.TabIndex = 0;
-        this.lboStatus.SelectedIndexChanged += new System.EventHandler(this.lboStatus_SelectedIndexChanged);
         // 
         // btnCancel
         // 
@@ -123,7 +122,6 @@ partial class frmFilter
         this.tabPage2.TabIndex = 1;
         this.tabPage2.Text = "Taxa";
         this.tabPage2.UseVisualStyleBackColor = true;
-        this.tabPage2.Click += new System.EventHandler(this.tabPage2_Click);
         // 
         // groupBox2
         // 

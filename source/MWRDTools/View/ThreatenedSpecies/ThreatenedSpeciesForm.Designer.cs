@@ -165,6 +165,7 @@ partial class ThreatenedSpeciesForm
       this.SpeciesListView.FullRowSelect = true;
       this.SpeciesListView.HideSelection = false;
       this.SpeciesListView.Location = new System.Drawing.Point(0, 0);
+      this.SpeciesListView.MultiSelect = false;
       this.SpeciesListView.Name = "SpeciesListView";
       this.SpeciesListView.Size = new System.Drawing.Size(649, 146);
       this.SpeciesListView.TabIndex = 0;
@@ -291,7 +292,7 @@ partial class ThreatenedSpeciesForm
       this.FindWetlandsBySpeciesButton.ToolTipText = "Execute the query";
       this.FindWetlandsBySpeciesButton.Click += new System.EventHandler(this.btnFind_Click);
       // 
-      // lvWetlands
+      // FilteredWetlandsListView
       // 
       this.FilteredWetlandsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader7,
@@ -301,7 +302,7 @@ partial class ThreatenedSpeciesForm
       this.FilteredWetlandsListView.FullRowSelect = true;
       this.FilteredWetlandsListView.HideSelection = false;
       this.FilteredWetlandsListView.Location = new System.Drawing.Point(0, 25);
-      this.FilteredWetlandsListView.Name = "lvWetlands";
+      this.FilteredWetlandsListView.Name = "FilteredWetlandsListView";
       this.FilteredWetlandsListView.Size = new System.Drawing.Size(649, 151);
       this.FilteredWetlandsListView.TabIndex = 2;
       this.FilteredWetlandsListView.UseCompatibleStateImageBehavior = false;
@@ -415,6 +416,7 @@ partial class ThreatenedSpeciesForm
       this.AllWetlandsListView.FullRowSelect = true;
       this.AllWetlandsListView.HideSelection = false;
       this.AllWetlandsListView.Location = new System.Drawing.Point(0, 0);
+      this.AllWetlandsListView.MultiSelect = false;
       this.AllWetlandsListView.Name = "AllWetlandsListView";
       this.AllWetlandsListView.Size = new System.Drawing.Size(649, 140);
       this.AllWetlandsListView.TabIndex = 0;
@@ -527,15 +529,15 @@ partial class ThreatenedSpeciesForm
       this.FindSpeciesByWetlandsButton.Size = new System.Drawing.Size(47, 22);
       this.FindSpeciesByWetlandsButton.Text = "&Find";
       this.FindSpeciesByWetlandsButton.ToolTipText = "Execute query";
-      this.FindSpeciesByWetlandsButton.Click += new System.EventHandler(this.btnFind1_Click);
+      this.FindSpeciesByWetlandsButton.Click += new System.EventHandler(this.FindSpeciesByWetland_Click);
       // 
-      // lvSpecies1
+      // FilteredSpeciesListView
       // 
       this.FilteredSpeciesListView.Dock = System.Windows.Forms.DockStyle.Fill;
       this.FilteredSpeciesListView.FullRowSelect = true;
       this.FilteredSpeciesListView.HideSelection = false;
       this.FilteredSpeciesListView.Location = new System.Drawing.Point(0, 25);
-      this.FilteredSpeciesListView.Name = "lvSpecies1";
+      this.FilteredSpeciesListView.Name = "FilteredSpeciesListView";
       this.FilteredSpeciesListView.Size = new System.Drawing.Size(649, 157);
       this.FilteredSpeciesListView.TabIndex = 1;
       this.FilteredSpeciesListView.UseCompatibleStateImageBehavior = false;
@@ -631,7 +633,7 @@ partial class ThreatenedSpeciesForm
       // 
       this.mnuFilter.Image = ((System.Drawing.Image)(resources.GetObject("mnuFilter.Image")));
       this.mnuFilter.Name = "mnuFilter";
-      this.mnuFilter.Size = new System.Drawing.Size(149, 22);
+      this.mnuFilter.Size = new System.Drawing.Size(152, 22);
       this.mnuFilter.Text = "Species &Filter...";
       this.mnuFilter.Click += new System.EventHandler(this.mnuFilter_Click);
       // 

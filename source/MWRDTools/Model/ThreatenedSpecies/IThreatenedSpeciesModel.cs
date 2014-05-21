@@ -9,5 +9,8 @@ namespace MWRDTools.Model
     event EventHandler<ProgressChangedEventArgs> StatusChanged;
     void setDatabaseBridge(IGeodatabaseBridge bridge);
     void OverwriteSightingData(DataTable data);
+
+    string[] GetSpeciesClassNames();
+    DataTable GetSpeciesWhere(string[] columnNames, string whereClause);
   }
 }

@@ -10,8 +10,7 @@ public class ListViewColumnSorter : IComparer
     private string _orderOfSort;
     private CaseInsensitiveComparer _objectCompare;
 
-    public ListViewColumnSorter()
-    {
+    public ListViewColumnSorter() {
         _columnToSort = 0;
         _orderOfSort = "none";
         _objectCompare = new CaseInsensitiveComparer();
@@ -19,8 +18,7 @@ public class ListViewColumnSorter : IComparer
 
     #region IComparer Members
 
-    public int Compare(object x, object y)
-    {
+    public int Compare(object x, object y) {
         int compareResult;
         ListViewItem listViewItemX;
         ListViewItem listViewItemY;
@@ -28,45 +26,39 @@ public class ListViewColumnSorter : IComparer
         listViewItemX = (ListViewItem)x;
         listViewItemY = (ListViewItem)y;
 
-        compareResult = _objectCompare.Compare(listViewItemX.SubItems[_columnToSort].Text, listViewItemY.SubItems[_columnToSort].Text);
+        compareResult = _objectCompare.Compare(
+          listViewItemX.SubItems[_columnToSort].Text, 
+          listViewItemY.SubItems[_columnToSort].Text
+        );
 
-        if (_orderOfSort == "ascending")
-        {
+        if (_orderOfSort == "ascending") {
             return compareResult;
         }
 
-        if (_orderOfSort == "descending")
-        {
+        if (_orderOfSort == "descending") {
             return (-compareResult);
         }
-        else
-        {
+        else {
             return 0;
         }
     }
 
-    public int ColunmToSort
-    {
-        set
-        {
-            _columnToSort = value;
-        }
-        get
-        {
-            return _columnToSort;
-        }
+    public int ColunmToSort {
+      set {
+        _columnToSort = value;
+      }
+      get {
+        return _columnToSort;
+      }
     }
 
-    public string SortOrder
-    {
-        set
-        {
-            _orderOfSort = value;
-        }
-        get
-        {
-            return _orderOfSort;
-        }
+    public string SortOrder {
+      set {
+        _orderOfSort = value;
+      }
+      get {
+        return _orderOfSort;
+      }
     }
     #endregion
 }

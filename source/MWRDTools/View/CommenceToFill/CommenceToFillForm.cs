@@ -27,8 +27,8 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
       this.WaggaWetlands = wetlands;
       ViewUtilities.DataTableToListView(
         wetlands,
-        WaggaListView
-
+        WaggaListView,
+        "OID"
       );
     }
 
@@ -36,7 +36,8 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
       this.GaugeWetlands = wetlands;
       ViewUtilities.DataTableToListView(
         wetlands,
-        GaugeListView
+        GaugeListView,
+        "OID"
       );
     }
 
@@ -44,7 +45,8 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
       this.CARMWetlands = wetlands;
       ViewUtilities.DataTableToListView(
         wetlands,
-        CARMListView
+        CARMListView,
+        "OID"
       );
     }
 

@@ -11,17 +11,15 @@ using ESRI.ArcGIS.Geodatabase;
 public partial class frmFilter : Form
 {
     private string _whereClause;
-    private IEnumerator _enumerator;
     public frmFilter()
     {
         InitializeComponent();
     }
 
-    public frmFilter(string whereClause, IEnumerator pEnumerator)
-    {
-        InitializeComponent();
-        _whereClause = whereClause;
-        _enumerator = pEnumerator;
+    public frmFilter(string whereClause, string[] speciesClasses) {
+      InitializeComponent();
+      _whereClause = whereClause;
+      SetSpeciesClasses(speciesClasses);
     }
 
     public string WhereClause
@@ -96,32 +94,17 @@ public partial class frmFilter : Form
         _whereClause = sb.ToString();
     }
 
-    private void LoadClassNames()
-    {
-        lboTaxa.Items.Clear();
-        _enumerator.Reset();
-        object pObject;
-        while(_enumerator.MoveNext())
-        {
-            pObject = _enumerator.Current;
-            lboTaxa.Items.Add(pObject.ToString());
-        }
+    private void SetSpeciesClasses(string[] speciesClasses) {
+      lboTaxa.Items.Clear();
+      foreach(string speciesClass in speciesClasses) {
+        lboTaxa.Items.Add(speciesClass);
+      }
     }
 
-    private void frmFilter_Load(object sender, EventArgs e)
-    {
-        try
-        {
-            LoadClassNames();
-            if (_whereClause != "" && _whereClause != null)
-            {
-                ParseWhereClause();
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void frmFilter_Load(object sender, EventArgs e) {
+      if (_whereClause != "" && _whereClause != null) {
+        ParseWhereClause();
+      }
     }
 
     private void btnCancel_Click(object sender, EventArgs e)

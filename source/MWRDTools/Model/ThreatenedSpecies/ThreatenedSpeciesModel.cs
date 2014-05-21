@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
+using ESRI.ArcGIS.ADF;
+using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 
 namespace MWRDTools.Model
@@ -83,5 +85,36 @@ namespace MWRDTools.Model
 
       return uniqueSpeciesTable;
     }
+
+    public string[] GetSpeciesClassNames() {
+      List<string> names = bridge.GetUniqueColValuesForQuery<string>(
+        Constants.TableName.ThreatenedSpeciesUnique,
+        null,
+        "ClassName"
+      );
+      return names.ToArray();
+    }
+
+    public DataTable GetSpeciesWhere(string[] columnNames, string whereClause) {
+
+      DataTable species = new DataTable();
+
+      using (ComReleaser comReleaser = new ComReleaser()) {
+
+        ICursor cursor = bridge.GetCursorForQuery(
+          Constants.TableName.ThreatenedSpeciesUnique,
+          whereClause,
+          string.Join(",", columnNames)
+        );
+
+        comReleaser.ManageLifetime(cursor);
+
+        species = Common.CursorToDataTable(cursor);
+
+      } // using comReleaser
+
+      return species;
+    }
+
   }
 }

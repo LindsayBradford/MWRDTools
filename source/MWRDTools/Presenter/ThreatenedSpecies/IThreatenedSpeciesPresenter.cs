@@ -13,7 +13,10 @@ namespace MWRDTools.Presenter {
     IMap Map { get; }
 
     void setView(IThreatenedSpeciesView view);
+    string[] GetSpeciesClasses();
+
     void SpeciesByWetlandsTabSelected();
+    void SpeciesFilterApplied(string whereClause);
 
     void setFileBridge(IFileSystemBridge fileBridge);
 

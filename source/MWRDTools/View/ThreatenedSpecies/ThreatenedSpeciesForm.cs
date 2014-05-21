@@ -21,10 +21,9 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     private IApplication _application;
     private IMap _map;
     private IFeatureWorkspace _featureWorkspace;
-    private IFeatureLayer _threatenedSpeciesFL;
     private IFeatureLayer _wetlandsFL;
 
-  SpatialDataAccess _spDataAccess;
+    SpatialDataAccess _spDataAccess;
     frmFilter _frmFilter;
     frmDatePicker _frmDatePicker;
     private string _speciesWhereClause;
@@ -55,34 +54,27 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       this.presenter = presenter;
     }
 
-    void _spDataAccess_ProgressEvent(object sender, ProgressEventArgs e)
-    {
-        switch (e.Activity)
-        {
-            case ProgressEventEnums.eProgress.start:
-                {
-                    pb.Minimum = 0;
-                    pb.Maximum = e.Step;
-                    break;
-                }
-            case ProgressEventEnums.eProgress.update:
-                {
-                    pb.Value = e.Step;
-                    break;
-                }
-            case ProgressEventEnums.eProgress.finish:
-                {
-                    pb.Value = pb.Maximum;
-                    pb.Value = pb.Minimum;
-                    break;
-                }
+    void _spDataAccess_ProgressEvent(object sender, ProgressEventArgs e) {
+      switch (e.Activity) {
+        case ProgressEventEnums.eProgress.start: {
+          pb.Minimum = 0;
+          pb.Maximum = e.Step;
+          break;
         }
+        case ProgressEventEnums.eProgress.update: {
+          pb.Value = e.Step;
+          break;
+        }
+        case ProgressEventEnums.eProgress.finish: {
+          pb.Value = pb.Maximum;
+          pb.Value = pb.Minimum;
+          break;
+        }
+      }
     }
 
-    private bool SetFeatureWorkspace()
-    {
+    private bool SetFeatureWorkspace(){
         _featureWorkspace = Common.GetFeatureWorkspace(Constants.LayerName.WetLands, _map, ref _wetlandsFL);
-        _threatenedSpeciesFL = Common.GetFeatureLayer(_map, Constants.LayerName.ThreatenedSpecies);
         return (_featureWorkspace != null);
     }
 
@@ -111,33 +103,30 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         lv.Items.Add(li);
     }
 
-    void IThreatenedSpeciesView.SetWetlands(DataTable wetlands) {
+    void IThreatenedSpeciesView.ApplySpeciesFilter(DataTable species) {
       ViewUtilities.DataTableToListView(
-        wetlands,
-        AllWetlandsListView
+        species,
+        SpeciesListView,
+        ColumnNames.ScientificName
       );
     }
 
-    private void AddWetlandsListItem(IRow pRow, ListView lv)
-    {
-        //todo: this screen supplies a cut-down number of wetland columns. cater for this. 
-        ListViewItem li = new ListViewItem();
-        string id = Common.GetValueAsString(pRow, "MBCMA_wetland");
-        li.Tag = id;
-        li.Text = Common.GetValueAsString(pRow, "Wetland_Name");
-        li.SubItems.Add(Common.GetValueAsString(pRow, "Complex_name"));
-        li.SubItems.Add(Common.GetValueAsString(pRow, "Flow"));
-        li.SubItems.Add(id);
-        lv.Items.Add(li);
+    void IThreatenedSpeciesView.SetWetlands(DataTable wetlands) {
+      ViewUtilities.DataTableToListView(
+        wetlands,
+        AllWetlandsListView,
+        "MBCMA_wetland"
+      );
     }
 
-    private void ShowFilter()
-    {
-        IEnumerator pEnumerator = DataAccess.GetClassNames(_featureWorkspace);
-        _frmFilter = new frmFilter(_speciesWhereClause, pEnumerator);
-        _frmFilter.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
-        _frmFilter.ShowDialog();
+    private void ShowFilter() {
+      _frmFilter = new frmFilter(
+        _speciesWhereClause,
+        presenter.GetSpeciesClasses()
+      );
 
+      _frmFilter.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
+      _frmFilter.ShowDialog();
     }
 
     private void ThreatenedSpeciesForm_Load(object sender, EventArgs e) {
@@ -299,7 +288,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       }
     }
 
-    private void btnFind1_Click(object sender, EventArgs e)
+    private void FindSpeciesByWetland_Click(object sender, EventArgs e)
     {
         try
         {

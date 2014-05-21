@@ -65,7 +65,7 @@ namespace MWRDTools.Model {
       return wetlands;
     }
 
-    public DataTable GetAllWetlands() {
+    public DataTable GetAllWetlands(string[] columnNames) {
       DataTable wetlands;
 
       using (ComReleaser comReleaser = new ComReleaser()) {
@@ -73,12 +73,12 @@ namespace MWRDTools.Model {
         ICursor wetlandCursor = bridge.GetCursorForQuery(
           Constants.TableName.MCMAWetlands,
           null,
-          null
+          string.Join(",", columnNames)
         );
 
         comReleaser.ManageLifetime(wetlandCursor);
 
-        wetlands = Common.CursorToDataTable(wetlandCursor);
+        wetlands = Common.CursorToDataTable(columnNames, wetlandCursor);
 
       } // using comReleaser
 

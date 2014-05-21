@@ -63,28 +63,15 @@ namespace MWRDTools
     #endregion
     #endregion
 
-    public MWRDToolsToolbar()
-    {
-      //
-      // TODO: Define your toolbar here by adding items
-      //
-      //AddItem("esriArcMapUI.ZoomInTool");
-      //BeginGroup(); //Separator
-      //AddItem("{FBF8C3FB-0480-11D2-8D21-080009EE4E51}", 1); //undo command
-      //AddItem(new Guid("FBF8C3FB-0480-11D2-8D21-080009EE4E51"), 2); //redo command
-    }
+    public MWRDToolsToolbar(){}
 
-    public override string Caption
-    {
-      get
-      {
+    public override string Caption {
+      get {
         return "MRDB Decision Support Toolbar";
       }
     }
-    public override string Name
-    {
-      get
-      {
+    public override string Name {
+      get {
         return "MRDBToolsToolbar";
       }
     }

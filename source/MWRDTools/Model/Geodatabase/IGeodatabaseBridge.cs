@@ -42,6 +42,12 @@ namespace MWRDTools.Model {
       string columnName
     );
 
+    List<T> GetUniqueColValuesForQuery<T>(
+      string tableName,
+      string whereClause,
+      string columnName
+    );
+
     T GetValueForRowColumnName<T>(
       IRow row, 
       string columnName

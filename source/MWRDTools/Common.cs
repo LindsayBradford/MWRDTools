@@ -156,11 +156,9 @@ class Common
       return result;
   }
 
-  public static void ZoomToFeature(int oid, IFeatureLayer pFeatureLayer, IMap pMap)
-  {
+  public static void ZoomToFeature(int oid, IFeatureLayer pFeatureLayer, IMap pMap) {
       IFeature pFeature = pFeatureLayer.FeatureClass.GetFeature(oid);
-      if (pFeature != null)
-      {
+      if (pFeature != null) {
           IEnvelope pEnvelope = pFeature.Shape.Envelope;
           IActiveView pActiveView = (IActiveView) pMap;
           pEnvelope.Expand(10, 10, true);
@@ -169,62 +167,54 @@ class Common
       }
   }
 
-  public static void ZoomToFeatures(int[] oid, IFeatureLayer pFeatureLayer, IMap pMap)
-  {
+  public static void ZoomToFeatures(int[] oid, IFeatureLayer pFeatureLayer, IMap pMap) {
       IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
       IQueryFilter pQueryFilter = new QueryFilterClass();
       StringBuilder sb = new StringBuilder();
-      for (int i = 0; i < oid.Length; i++)
-      {
-          if (i > 0)
-          {
-              sb.Append(" OR ");
-          }
-          sb.Append(pFeatureClass.OIDFieldName);
-          sb.Append(" = ");
-          sb.Append(oid[i].ToString());
+      for (int i = 0; i < oid.Length; i++) {
+        if (i > 0) {
+            sb.Append(" OR ");
+        }
+        sb.Append(pFeatureClass.OIDFieldName);
+        sb.Append(" = ");
+        sb.Append(oid[i].ToString());
       }
       pQueryFilter.WhereClause = sb.ToString();
       IFeatureCursor pFeatureCursor = pFeatureClass.Search(pQueryFilter, false);
       IFeature pFeature = pFeatureCursor.NextFeature();
       IEnvelope pEnvelope = null;
       bool first = true;
-      while (pFeature != null)
-      {
-          if (first)
+      while (pFeature != null) {
+        if (first) {
+          first = false;
+          pEnvelope = pFeature.Extent;
+        }
+        else {
+          if (pFeature.Shape.Envelope.XMax > pEnvelope.XMax)
           {
-              first = false;
-              pEnvelope = pFeature.Extent;
+              pEnvelope.XMax = pFeature.Shape.Envelope.XMax;
           }
-          else
+          if (pFeature.Shape.Envelope.XMin < pEnvelope.XMin)
           {
-              if (pFeature.Shape.Envelope.XMax > pEnvelope.XMax)
-              {
-                  pEnvelope.XMax = pFeature.Shape.Envelope.XMax;
-              }
-              if (pFeature.Shape.Envelope.XMin < pEnvelope.XMin)
-              {
-                  pEnvelope.XMin = pFeature.Shape.Envelope.XMin;
-              }
-              if (pFeature.Shape.Envelope.YMax > pEnvelope.YMax)
-              {
-                  pEnvelope.YMax = pFeature.Shape.Envelope.YMax;
-              }
-              if (pFeature.Shape.Envelope.YMin < pEnvelope.YMin)
-              {
-                  pEnvelope.YMin = pFeature.Shape.Envelope.YMin;
-              }
+              pEnvelope.XMin = pFeature.Shape.Envelope.XMin;
           }
-          pFeature = pFeatureCursor.NextFeature();
+          if (pFeature.Shape.Envelope.YMax > pEnvelope.YMax)
+          {
+              pEnvelope.YMax = pFeature.Shape.Envelope.YMax;
+          }
+          if (pFeature.Shape.Envelope.YMin < pEnvelope.YMin)
+          {
+              pEnvelope.YMin = pFeature.Shape.Envelope.YMin;
+          }
+        }
+        pFeature = pFeatureCursor.NextFeature();
       }
 
-      if (pEnvelope.Height < 500 || pEnvelope.Width < 500)
-      {
+      if (pEnvelope.Height < 500 || pEnvelope.Width < 500) {
           pEnvelope.Expand(500, 500, false);
       }
 
-      if (pEnvelope != null)
-      {
+      if (pEnvelope != null) {
           IActiveView pActiveView = (IActiveView)pMap;
           pEnvelope.Expand(5, 5, true);
           pActiveView.Extent = pEnvelope;
@@ -232,16 +222,29 @@ class Common
       }
   }
 
-  public static void SelectFeature(int oid, IFeatureLayer pFeatureLayer, IMap pMap)
-  {
+  public static void SelectFeature(int oid, IFeatureLayer pFeatureLayer, IMap pMap) {
       IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
+
       IQueryFilter pQueryFilter = new QueryFilterClass();
-      pQueryFilter.WhereClause = String.Format("{0} = {1}", pFeatureClass.OIDFieldName, oid.ToString());
-      ISelectionSet pSelectionSet = pFeatureClass.Select(pQueryFilter, esriSelectionType.esriSelectionTypeIDSet, esriSelectionOption.esriSelectionOptionNormal, null);
+      pQueryFilter.WhereClause = 
+        String.Format(
+        "{0} = {1}", 
+        pFeatureClass.OIDFieldName, 
+        oid.ToString()
+      );
+
+      ISelectionSet pSelectionSet = pFeatureClass.Select(
+        pQueryFilter, 
+        esriSelectionType.esriSelectionTypeIDSet, 
+        esriSelectionOption.esriSelectionOptionNormal, 
+        null
+      );
+
       IFeatureSelection pFeatureSelection = (IFeatureSelection)pFeatureLayer;
       pFeatureSelection.CombinationMethod = esriSelectionResultEnum.esriSelectionResultNew;
       pFeatureSelection.SelectionSet = pSelectionSet;
       pFeatureSelection.SelectionChanged();
+
       IActiveView pActiveView = (IActiveView)pMap;
       pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, null, null);
   }
@@ -334,24 +337,6 @@ class Common
           }
           AddListItem(pFeature, lv, tagField);
       }
-  }
-
-  public static void CursorToListView(ICursor pCursor, ref ListView lv, string tagField)
-  {
-      lv.Items.Clear();
-      IRow pRow = pCursor.NextRow();
-      if (pRow != null)
-      {
-          AddListViewColumns(pRow.Fields, lv);
-          AddListItem(pRow, lv, tagField);
-          pRow = pCursor.NextRow();
-          while (pRow != null)
-          {
-              AddListItem(pRow, lv, tagField);
-              pRow = pCursor.NextRow();
-          }
-      }
-
   }
 
   private static void AddListItem(IRow pRow, ListView lv, string tagField)
@@ -576,6 +561,28 @@ class Common
       pScreenDisplay.FinishDrawing();
   }
 
+  public static DataTable CursorToDataTable(string[] columnNames, ICursor cursor) {
+
+    IRow row = cursor.NextRow();
+    if (row == null) {
+      return null;
+    }
+
+    DataTable table = new DataTable();
+
+    addColumnsToDataTable(columnNames, table);
+    addIRowToDataTable(row, table);
+
+    while ((row = cursor.NextRow()) != null) {
+      addIRowToDataTable(row, table);
+    }
+
+    table.AcceptChanges();
+
+    return table;
+  }
+
+
   public static DataTable CursorToDataTable(ICursor cursor) {
 
     IRow row = cursor.NextRow();
@@ -597,9 +604,21 @@ class Common
     return table;
   }
 
+  private static void addColumnsToDataTable(string[] columnNames, DataTable table) {
+    for (int i = 0; i < columnNames.Length; i++) {
+
+      if (columnNames[i].Equals("OBJECTID")) {
+        table.Columns.Add(Constants.OID);
+      } else {
+        table.Columns.Add(
+          columnNames[i]
+        );
+      }
+    }
+  }
+
 
   private static void addFieldsToDataTable(IFields fields, DataTable table) {
-    table.Columns.Add(Constants.OID);
 
     for (int i = 0; i < fields.FieldCount; i++) {
       IField field = fields.get_Field(i);
@@ -610,12 +629,13 @@ class Common
       }
 
       if (field.AliasName.Equals("OBJECTID")) {
-        continue;
+        table.Columns.Add(Constants.OID);
+      } else {
+        table.Columns.Add(
+          field.AliasName
+        );
       }
 
-      table.Columns.Add(
-        field.AliasName
-      );
     }
  }
 
@@ -628,9 +648,10 @@ class Common
           int oidIndex = esriRow.Fields.FindFieldByAliasName("OBJECTID");
           newRow[column.ColumnName] = esriRow.get_Value(oidIndex).ToString();
           continue;
+        } else {
+          int fieldIndex = esriRow.Fields.FindFieldByAliasName(column.ColumnName);
+          newRow[column.ColumnName] = esriRow.get_Value(fieldIndex).ToString();
         }
-        int fieldIndex = esriRow.Fields.FindFieldByAliasName(column.ColumnName);
-        newRow[column.ColumnName] = esriRow.get_Value(fieldIndex).ToString();
       } catch (Exception e) {
         MessageBox.Show("[" + column.ColumnName + "]" + e.Message);
       }

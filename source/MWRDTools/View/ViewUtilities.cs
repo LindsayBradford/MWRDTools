@@ -37,7 +37,7 @@ namespace MWRDTools.View {
       view.Sort();
     }
 
-    public static void DataTableToListView(DataTable table, ListView view) {
+    public static void DataTableToListView(DataTable table, ListView view, string tagColumn) {
       view.Columns.Clear();
       view.Items.Clear();
 
@@ -48,10 +48,10 @@ namespace MWRDTools.View {
       }
 
       foreach (DataRow row in table.Rows) {
-        ListViewItem item = new ListViewItem(row[Constants.OID].ToString());
+        ListViewItem item = new ListViewItem(row[tagColumn].ToString());
 
         foreach (DataColumn column in table.Columns) {
-          if (column.ColumnName.Equals(Constants.OID)) {
+          if (column.ColumnName.Equals(tagColumn)) {
             continue;
           }
           item.SubItems.Add(
@@ -59,7 +59,7 @@ namespace MWRDTools.View {
           );
         }
 
-        item.Tag = row[Constants.OID];
+        item.Tag = row[tagColumn];
 
         view.Items.Add(item);
       }

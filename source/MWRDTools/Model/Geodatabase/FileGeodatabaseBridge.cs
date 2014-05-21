@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.ComponentModel;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -66,6 +67,33 @@ namespace MWRDTools.Model {
       }
       return value;
     }
+
+    public List<T> GetUniqueColValuesForQuery<T>(string tableName, string whereClause, string columnName) {
+      List<T> valueList = new List<T>();
+
+      using (ComReleaser comReleaser = new ComReleaser()) {
+        ICursor cursor = GetCursorForQuery(tableName, whereClause);
+        comReleaser.ManageLifetime(cursor);
+
+        IDataStatistics stats = new DataStatisticsClass();
+
+        stats.Field = columnName;
+        stats.Cursor = cursor;
+        IEnumerator enumerator = stats.UniqueValues;
+
+        enumerator.Reset();
+        T value;
+        while (enumerator.MoveNext()) {
+          value = (T) enumerator.Current; 
+          valueList.Add(
+             value
+          );
+        }
+      }
+
+      return valueList;
+    }
+
 
     public List<T> GetColValuesForQuery<T>(string tableName,string whereClause, string columnName) {
       List<T> valueList = new List<T>();

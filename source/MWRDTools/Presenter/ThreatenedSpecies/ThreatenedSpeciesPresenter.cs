@@ -12,6 +12,9 @@ using ESRI.ArcGIS.Carto;
 namespace MWRDTools.Presenter {
   public class ThreatenedSpeciesPresenter : AbstractMWRDPresenter, IThreatenedSpeciesPresenter {
 
+    private static string[] WETLAND_COLUMNS = { "MBCMA_wetland", "Wetland_Name", "Complex_name", "Flow" };
+    private static string[] SPECIES_COLUMNS = { "ScientificName", "CommonName", "ClassName", "FamilyName", "NSWStatus", "SpeciesCode" };
+
     private IThreatenedSpeciesView view;
 
     public void setView(IThreatenedSpeciesView view) {
@@ -20,9 +23,23 @@ namespace MWRDTools.Presenter {
 
     public void SpeciesByWetlandsTabSelected() {
       view.SetWetlands(
-        wetlandsModel.GetAllWetlands()
+        wetlandsModel.GetAllWetlands(WETLAND_COLUMNS)
       );
     }
+
+    public string[] GetSpeciesClasses() {
+      return threatenedSpeciesModel.GetSpeciesClassNames();
+    }
+
+    public void SpeciesFilterApplied(string whereClause) {
+      view.ApplySpeciesFilter(
+        threatenedSpeciesModel.GetSpeciesWhere(
+          SPECIES_COLUMNS, 
+          whereClause
+          )
+      );
+    }
+
         
     #region Wetlands Model
 

@@ -7,5 +7,7 @@ namespace MWRDTools.View {
     void setPresenter(IThreatenedSpeciesPresenter presenter);
 
     void SetWetlands(DataTable wetlands);
+
+    void ApplySpeciesFilter(DataTable species);
   }
 }
