@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Data;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Windows.Forms;
 
 using ESRI.ArcGIS.ADF;
 using ESRI.ArcGIS.Geodatabase;
@@ -278,13 +277,9 @@ namespace MWRDTools.Model
 
           IRow row;
           while((row = maxDischargeCursor.NextRow()) != null) {
-            try {
-              int dataIndex = row.Fields.FindField("data_value");
-              double rowDischarge = DISCHARGE_CONVERSION_FACTOR * double.Parse(row.get_Value(dataIndex).ToString());
-              maxDischarge = Math.Max(rowDischarge, maxDischarge);
-            } catch (Exception e) {
-              MessageBox.Show(e.Message);
-            }
+            int dataIndex = row.Fields.FindField("data_value");
+            double rowDischarge = DISCHARGE_CONVERSION_FACTOR * double.Parse(row.get_Value(dataIndex).ToString());
+            maxDischarge = Math.Max(rowDischarge, maxDischarge);
           }
 
           discharge.maxDischarge = maxDischarge;

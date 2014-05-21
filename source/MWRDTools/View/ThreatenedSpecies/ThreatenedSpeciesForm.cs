@@ -13,7 +13,7 @@ using ESRI.ArcGIS.ArcMapUI;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Carto;
 
-public partial class frmThreatenedSpecies : Form
+public partial class ThreatenedSpeciesForm : Form
 {
     private IApplication _application;
     private IMap _map;
@@ -31,7 +31,7 @@ public partial class frmThreatenedSpecies : Form
     private bool _wetlandsLoaded = false;
 
 
-    public frmThreatenedSpecies(IApplication pApplication)
+    public ThreatenedSpeciesForm(IApplication pApplication)
     {
         InitializeComponent();
 
@@ -236,6 +236,11 @@ public partial class frmThreatenedSpecies : Form
         {
             MessageBox.Show(ex.Message, Application.ProductName);
         }
+    }
+
+    private void ThreatenedSpeciesForm_FormClosing(object sender, FormClosingEventArgs e) {
+      e.Cancel = true;
+      this.Hide();
     }
 
     private void lvSpecies_ColumnClick(object sender, ColumnClickEventArgs e)

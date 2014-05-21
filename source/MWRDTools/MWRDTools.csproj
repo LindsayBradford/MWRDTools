@@ -164,17 +164,18 @@
     <Compile Include="frmFilter.Designer.cs">
       <DependentUpon>frmFilter.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmThreatenedSpecies.cs">
+    <Compile Include="View\ThreatenedSpecies\ThreatenedSpeciesFormBuilder.cs" />
+    <Compile Include="View\ThreatenedSpecies\ThreatenedSpeciesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmThreatenedSpecies.Designer.cs">
-      <DependentUpon>frmThreatenedSpecies.cs</DependentUpon>
+    <Compile Include="View\ThreatenedSpecies\ThreatenedSpeciesForm.Designer.cs">
+      <DependentUpon>ThreatenedSpeciesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ListViewColumnSorter.cs" />
     <Compile Include="ProgressEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpatialDataAccess.cs" />
-    <Compile Include="View\AbstractLaunchButton.cs" />
+    <Compile Include="View\AbstractFormLaunchButton.cs" />
     <Compile Include="View\Administration\AdmnistrationButton.cs" />
     <Compile Include="View\Administration\AdministrationForm.cs">
       <SubType>Form</SubType>
@@ -230,8 +231,8 @@
       <DependentUpon>frmFilter.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmThreatenedSpecies.resx">
-      <DependentUpon>frmThreatenedSpecies.cs</DependentUpon>
+    <EmbeddedResource Include="View\ThreatenedSpecies\ThreatenedSpeciesForm.resx">
+      <DependentUpon>ThreatenedSpeciesForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

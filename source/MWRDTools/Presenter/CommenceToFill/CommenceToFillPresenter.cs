@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using System.Linq;
-using System;
 
 using MWRDTools.View;
 using MWRDTools.Model;
