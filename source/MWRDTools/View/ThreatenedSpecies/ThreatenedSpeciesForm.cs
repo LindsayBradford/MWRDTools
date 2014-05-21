@@ -23,11 +23,8 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     private IFeatureWorkspace _featureWorkspace;
     private IFeatureLayer _threatenedSpeciesFL;
     private IFeatureLayer _wetlandsFL;
-    private ListViewColumnSorter _lvColumnSorter;
-    private ListViewColumnSorter _lvColumnSorter1;
-    private ListViewColumnSorter _lvWetlandsColumnSorter;
-    private ListViewColumnSorter _lvWetlandsColumnSorter1;
-    SpatialDataAccess _spDataAccess;
+
+  SpatialDataAccess _spDataAccess;
     frmFilter _frmFilter;
     frmDatePicker _frmDatePicker;
     private string _speciesWhereClause;
@@ -35,25 +32,23 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
     private IThreatenedSpeciesPresenter presenter;
 
-    public ThreatenedSpeciesForm(IApplication pApplication)
-    {
-        InitializeComponent();
+    public ThreatenedSpeciesForm(IApplication pApplication) {
+      InitializeComponent();
 
-        _application = pApplication;
-        IMxDocument pMxDocument = _application.Document as IMxDocument;
-        _map = pMxDocument.FocusMap;
-        _lvColumnSorter = new ListViewColumnSorter();
-        lvSpecies.ListViewItemSorter = _lvColumnSorter;
-        _lvWetlandsColumnSorter = new ListViewColumnSorter();
-        lvWetlands.ListViewItemSorter = _lvWetlandsColumnSorter;
-        _lvWetlandsColumnSorter1 = new ListViewColumnSorter();
-        AllWetlandsListView.ListViewItemSorter = _lvWetlandsColumnSorter1;
-        _lvColumnSorter1 = new ListViewColumnSorter();
-        lvSpecies1.ListViewItemSorter = _lvColumnSorter1;
-        _spDataAccess = new SpatialDataAccess();
-        _spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
-        _frmDatePicker = new frmDatePicker();
-        _frmDatePicker.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
+      _application = pApplication;
+      IMxDocument pMxDocument = _application.Document as IMxDocument;
+      _map = pMxDocument.FocusMap;
+
+      SpeciesListView.ListViewItemSorter = new ListViewColumnSorter();
+      FilteredWetlandsListView.ListViewItemSorter = new ListViewColumnSorter();
+
+      AllWetlandsListView.ListViewItemSorter = new ListViewColumnSorter();
+      FilteredSpeciesListView.ListViewItemSorter = new ListViewColumnSorter();
+
+       _spDataAccess = new SpatialDataAccess();
+      _spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
+      _frmDatePicker = new frmDatePicker();
+      _frmDatePicker.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
     }
 
     public void setPresenter(IThreatenedSpeciesPresenter presenter) {
@@ -84,7 +79,6 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         }
     }
 
-
     private bool SetFeatureWorkspace()
     {
         _featureWorkspace = Common.GetFeatureWorkspace(Constants.LayerName.WetLands, _map, ref _wetlandsFL);
@@ -94,12 +88,12 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
     private void LoadSpecies()
     {
-        lvSpecies.Items.Clear();
+        SpeciesListView.Items.Clear();
         ICursor pCursor = DataAccess.GetSpeciesNames(_featureWorkspace, _speciesWhereClause);
         IRow pRow = pCursor.NextRow();
         while (pRow != null)
         {
-            AddSpeciesListItem(pRow, lvSpecies);
+            AddSpeciesListItem(pRow, SpeciesListView);
             pRow = pCursor.NextRow();
         }
     }
@@ -117,7 +111,6 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         lv.Items.Add(li);
     }
 
-
     void IThreatenedSpeciesView.SetWetlands(DataTable wetlands) {
       ViewUtilities.DataTableToListView(
         wetlands,
@@ -125,9 +118,9 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       );
     }
 
-
     private void AddWetlandsListItem(IRow pRow, ListView lv)
     {
+        //todo: this screen supplies a cut-down number of wetland columns. cater for this. 
         ListViewItem li = new ListViewItem();
         string id = Common.GetValueAsString(pRow, "MBCMA_wetland");
         li.Tag = id;
@@ -136,84 +129,6 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         li.SubItems.Add(Common.GetValueAsString(pRow, "Flow"));
         li.SubItems.Add(id);
         lv.Items.Add(li);
-    }
-
-    private void ZoomToWetlandFeatures()
-    {
-        ZoomToSelectedFeatures(lvWetlands, _wetlandsFL);
-    }
-
-    private void ZoomToSpeciesFeatures()
-    {
-        ZoomToSelectedFeatures(lvSpecies1, _threatenedSpeciesFL);
-    }
-
-    private void ZoomToSelectedFeatures(ListView lv, IFeatureLayer pFeatureLayer)
-    {
-        if (lv.SelectedItems != null)
-        {
-            if (lv.SelectedItems.Count > 0)
-            {
-                int[] oid = new int[lv.SelectedItems.Count];
-                for (int i = 0; i < lv.SelectedItems.Count; i++)
-                {
-                    oid[i] = Convert.ToInt32(lv.SelectedItems[i].Tag.ToString());
-                }
-                Common.ZoomToFeatures(oid, pFeatureLayer, _map);
-            }
-        }
-    }
-
-    private void SelectWetlandFeatures()
-    {
-        SelectFeatures(lvWetlands, _wetlandsFL );
-    }
-
-    private void SelectSpeciesFeatures()
-    {
-        SelectFeatures(lvSpecies1, _threatenedSpeciesFL);
-    }
-
-    private void SelectFeatures(ListView lv, IFeatureLayer pFeatureLayer)
-    {
-        if (lv.SelectedItems != null)
-        {
-            if (lv.SelectedItems.Count > 0)
-            {
-                int[] oid = new int[lv.SelectedItems.Count];
-                for (int i = 0; i < lv.SelectedItems.Count; i++)
-                {
-                    oid[i] = Convert.ToInt32(lv.SelectedItems[i].Tag.ToString());
-                }
-                Common.HighlightFeatures(oid, pFeatureLayer, _map);
-            }
-        }
-    }
-
-    private void FlashWetlandFeatures()
-    {
-        FlashFeatures(lvWetlands, _wetlandsFL);
-    }
-
-    private void FlashSpeciesFeatures()
-    {
-        FlashFeatures(lvSpecies1, _threatenedSpeciesFL);
-    }
-
-    private void FlashFeatures(ListView lv, IFeatureLayer pFeatureLayer)
-    {
-        if (lv.SelectedItems != null)
-        {
-            if (lv.SelectedItems.Count > 0)
-            {
-                int[] oid = new int[lv.SelectedItems.Count];
-                for (int i = 0; i < lv.SelectedItems.Count; i++)
-                {
-                    oid[i] = Convert.ToInt32(lv.SelectedItems[i].Tag.ToString());
-                }
-                Common.FlashFeatures(oid, pFeatureLayer, _map);
-            }
-        }
     }
 
     private void ShowFilter()
@@ -225,22 +140,17 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
     }
 
-    private void frmThreatenedSpecies_Load(object sender, EventArgs e)
-    {
-        try
-        {
-            if (!SetFeatureWorkspace())
-            {
-                MessageBox.Show(String.Format("Unable to open the data source. The application was looking for a layer called {0}.", Constants.LayerName.WetLands), Application.ProductName);
-                this.Dispose();
-            }
-            //LoadSpecies();
-
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void ThreatenedSpeciesForm_Load(object sender, EventArgs e) {
+      if (!SetFeatureWorkspace()) {
+        MessageBox.Show(
+          String.Format(
+            "Unable to open the data source. The application was looking for a layer called {0}.", 
+            Constants.LayerName.WetLands
+          ), 
+          Application.ProductName
+        );
+        this.Dispose();
+      }
     }
 
     private void ThreatenedSpeciesForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -248,32 +158,8 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       this.Hide();
     }
 
-    private void lvSpecies_ColumnClick(object sender, ColumnClickEventArgs e)
-    {
-        try
-        {
-            if (e.Column == _lvColumnSorter.ColunmToSort)
-            {
-                if (_lvColumnSorter.SortOrder == "ascending")
-                {
-                    _lvColumnSorter.SortOrder = "descending";
-                }
-                else
-                {
-                    _lvColumnSorter.SortOrder = "ascending";
-                }
-            }
-            else
-            {
-                _lvColumnSorter.ColunmToSort = e.Column;
-                _lvColumnSorter.SortOrder = "ascending";
-            }
-            lvSpecies.Sort();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void SpeciesListView_ColumnClick(object sender, ColumnClickEventArgs e) {
+      ViewUtilities.ProcessColumnClickEvent(SpeciesListView, e);
     }
 
     private void btnFind_Click(object sender, EventArgs e)
@@ -281,10 +167,11 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         try
         {
             this.Cursor = Cursors.WaitCursor;
-            lvWetlands.Items.Clear();
-            if (lvSpecies.SelectedItems != null)
+
+            FilteredWetlandsListView.Items.Clear();
+            if (SpeciesListView.SelectedItems != null)
             {
-                if (lvSpecies.SelectedItems.Count > 0)
+                if (SpeciesListView.SelectedItems.Count > 0)
                 {
                     double buffer = 0.0;
                     if (!(cboBuffer.Text == "None") && !(cboBuffer.Text == ""))
@@ -293,8 +180,8 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
                     }
                     string afterDate = txtAfterDate.Text;
                     string beforeDate = txtBeforeDate.Text;
-                    ArrayList wetlands = _spDataAccess.GetWetlandsBySpecies(_featureWorkspace, _wetlandsFL, lvSpecies.SelectedItems[0].Tag.ToString(), buffer, afterDate, beforeDate);
-                    Common.ArrayListToListView(wetlands, ref lvWetlands, "");
+                    ArrayList wetlands = _spDataAccess.GetWetlandsBySpecies(_featureWorkspace, _wetlandsFL, SpeciesListView.SelectedItems[0].Tag.ToString(), buffer, afterDate, beforeDate);
+                    Common.ArrayListToListView(wetlands, ref FilteredWetlandsListView, "");
                 }
             }
             this.Cursor = Cursors.Default;
@@ -306,98 +193,30 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         }
     }
 
-    private void btnSelect_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            SelectWetlandFeatures();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnSelect_Click(object sender, EventArgs e) {
+      presenter.HighlightWetlands(
+        ViewUtilities.GetSelectedFeatures(FilteredWetlandsListView)
+      );
     }
 
-    private void btnZoom_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            ZoomToWetlandFeatures();
-
-        }
-        catch (Exception exception)
-        {
-            MessageBox.Show(exception.Message, Application.ProductName);
-        }
+    private void btnZoom_Click(object sender, EventArgs e) {
+      presenter.ZoomToWetlands(
+        ViewUtilities.GetSelectedFeatures(FilteredWetlandsListView)
+      );
     }
 
-    private void btnExport_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            dlg.OverwritePrompt = true;
-            dlg.Filter = "*.csv|*.csv";
-            if (dlg.ShowDialog() != DialogResult.Cancel)
-            {
-                Common.ExportListView(dlg.FileName, lvWetlands);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void FilteredWetlandsListView_ColumnClick(object sender, ColumnClickEventArgs e) {
+      ViewUtilities.ProcessColumnClickEvent(FilteredWetlandsListView, e);
     }
 
-    private void lvWetlands_ColumnClick(object sender, ColumnClickEventArgs e)
-    {
-        try
-        {
-            if (e.Column == _lvWetlandsColumnSorter.ColunmToSort)
-            {
-                if (_lvWetlandsColumnSorter.SortOrder == "ascending")
-                {
-                    _lvWetlandsColumnSorter.SortOrder = "descending";
-                }
-                else
-                {
-                    _lvWetlandsColumnSorter.SortOrder = "ascending";
-                }
-            }
-            else
-            {
-                _lvWetlandsColumnSorter.ColunmToSort = e.Column;
-                _lvWetlandsColumnSorter.SortOrder = "ascending";
-            }
-            lvWetlands.Sort();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnFlash_Click(object sender, EventArgs e) {
+      presenter.FlashWetlands(
+        ViewUtilities.GetSelectedFeatures(FilteredWetlandsListView)
+      );
     }
 
-    private void btnFlash_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            FlashWetlandFeatures();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
-    }
-
-    private void mnuFilter_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            ShowFilter();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message);
-        }
+    private void mnuFilter_Click(object sender, EventArgs e) {
+      ShowFilter();
     }
 
     void _frmFilter_FormClosed(object sender, FormClosedEventArgs e)
@@ -421,18 +240,9 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         }
     }
 
-    private void btnAfterDate_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            _frmDatePicker.DateType = "After";
-            _frmDatePicker.ShowDialog();
-
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnAfterDate_Click(object sender, EventArgs e) {
+      _frmDatePicker.DateType = "After";
+      _frmDatePicker.ShowDialog();
     }
 
     void _frmDatePicker_FormClosed(object sender, FormClosedEventArgs e)
@@ -465,57 +275,26 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         }
     }
 
-    private void btnBeforeDate_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            _frmDatePicker.DateType = "Before";
-            _frmDatePicker.ShowDialog();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnBeforeDate_Click(object sender, EventArgs e) {
+      _frmDatePicker.DateType = "Before";
+      _frmDatePicker.ShowDialog();
     }
         
-    private void mnuExit_Click(object sender, EventArgs e)
-    {
-        this.Close();
+    private void mnuExit_Click(object sender, EventArgs e) {
+      this.Close();
     }
 
-    private void lvWetlands1_ColumnClick(object sender, ColumnClickEventArgs e)
-    {
-        try
-        {
-            if (e.Column == _lvWetlandsColumnSorter1.ColunmToSort)
-            {
-                if (_lvWetlandsColumnSorter1.SortOrder == "ascending")
-                {
-                    _lvWetlandsColumnSorter1.SortOrder = "descending";
-                }
-                else
-                {
-                    _lvWetlandsColumnSorter1.SortOrder = "ascending";
-                }
-            }
-            else
-            {
-                _lvWetlandsColumnSorter1.ColunmToSort = e.Column;
-                _lvWetlandsColumnSorter1.SortOrder = "ascending";
-            }
-            AllWetlandsListView.Sort();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void AllWetlandsListView_ColumnClick(object sender, ColumnClickEventArgs e) {
+      ViewUtilities.ProcessColumnClickEvent(AllWetlandsListView, e);
     }
 
     private void ThreatenedSpeciesTab_SelectedIndexChanged(object sender, EventArgs e) {
       if (ThreatenedSpeciesTab.SelectedIndex == 1 && _wetlandsLoaded == false) {
         this.Cursor = Cursors.WaitCursor;
+ 
         presenter.SpeciesByWetlandsTabSelected();
         _wetlandsLoaded = true;
+  
         this.Cursor = Cursors.Default;
       }
     }
@@ -525,7 +304,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         try
         {
             this.Cursor = Cursors.WaitCursor;
-            lvSpecies1.Items.Clear();
+            FilteredSpeciesListView.Items.Clear();
             if (AllWetlandsListView.SelectedItems != null)
             {
                 if (AllWetlandsListView.SelectedItems.Count > 0)
@@ -536,7 +315,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
                         buffer = Convert.ToDouble(cboBuffer1.Text);
                     }
                     IFeatureCursor species = _spDataAccess.GetSpeciesByWetland(_featureWorkspace, _wetlandsFL, AllWetlandsListView.SelectedItems[0].Tag.ToString(), buffer, txtAfter1.Text, txtBefore1.Text, _speciesWhereClause);
-                    Common.FeatureCursorToListView(species, ref lvSpecies1, "");
+                    Common.FeatureCursorToListView(species, ref FilteredSpeciesListView, "");
                 }
             }
             this.Cursor = Cursors.Default;
@@ -548,105 +327,78 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         }
     }
 
-    private void lvSpecies1_ColumnClick(object sender, ColumnClickEventArgs e)
-    {
-        try
-        {
-            if (e.Column == _lvColumnSorter1.ColunmToSort)
-            {
-                if (_lvColumnSorter1.SortOrder == "ascending")
-                {
-                    _lvColumnSorter1.SortOrder = "descending";
-                }
-                else
-                {
-                    _lvColumnSorter1.SortOrder = "ascending";
-                }
-            }
-            else
-            {
-                _lvColumnSorter1.ColunmToSort = e.Column;
-                _lvColumnSorter1.SortOrder = "ascending";
-            }
-            lvSpecies1.Sort();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void FilteredSpeciesListView_ColumnClick(object sender, ColumnClickEventArgs e) {
+      ViewUtilities.ProcessColumnClickEvent(FilteredSpeciesListView, e);
     }
 
-    private void btnAfter1_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            _frmDatePicker.DateType = "After1";
-            _frmDatePicker.ShowDialog();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnAfter1_Click(object sender, EventArgs e) {
+      _frmDatePicker.DateType = "After1";
+      _frmDatePicker.ShowDialog();
     }
 
-    private void btnBefore1_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            _frmDatePicker.DateType = "Before1";
-            _frmDatePicker.ShowDialog();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnBefore1_Click(object sender, EventArgs e) {
+      _frmDatePicker.DateType = "Before1";
+      _frmDatePicker.ShowDialog();
     }
 
-    private void btnHighlight1_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            SelectSpeciesFeatures();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnHighlight1_Click(object sender, EventArgs e) {
+      presenter.HighlightSpecies(
+        ViewUtilities.GetSelectedFeatures(FilteredSpeciesListView)
+      );
     }
 
-    private void btnZoom1_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            ZoomToSpeciesFeatures();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnZoom1_Click(object sender, EventArgs e) {
+      presenter.ZoomToSpecies(
+        ViewUtilities.GetSelectedFeatures(FilteredWetlandsListView)
+      );
     }
 
-    private void btnFlash1_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            FlashSpeciesFeatures();
+    private void btnFlash1_Click(object sender, EventArgs e) {
+      presenter.FlashSpecies(
+        ViewUtilities.GetSelectedFeatures(FilteredSpeciesListView)
+      );
+    }
+
+    private void ExportFeatures(ListView view, DataTable features) {
+
+      int[] selectedFeatures = ViewUtilities.GetSelectedFeatures(view);
+      if (selectedFeatures.Length == 0) return;
+
+      dlg.OverwritePrompt = true;
+      dlg.Filter = "*.csv|*.csv";
+      if (dlg.ShowDialog() != DialogResult.Cancel) {
+        presenter.ExportFeatures(
+          dlg.FileName,
+          features,
+          selectedFeatures
+        );
+      }
+    }
+
+    private void btnExport_Click(object sender, EventArgs e) {
+      // ExportFeatures(FilteredWetlandsListView, FilteredWetlandsTable);
+
+      try {
+        dlg.OverwritePrompt = true;
+        dlg.Filter = "*.csv|*.csv";
+        if (dlg.ShowDialog() != DialogResult.Cancel) {
+          Common.ExportListView(dlg.FileName, FilteredWetlandsListView);
         }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+      } catch (Exception ex) {
+        MessageBox.Show(ex.Message, Application.ProductName);
+      }
     }
 
     private void btnExport1_Click(object sender, EventArgs e)
     {
-        try
+      // ExportFeatures(FilteredSpeciesListView, FilteredSpeciesTable);
+      try
         {
             dlg.OverwritePrompt = true;
             dlg.Filter = "*.csv|*.csv";
             if (dlg.ShowDialog() != DialogResult.Cancel)
             {
-                Common.ExportListView(dlg.FileName, lvSpecies1);
+                Common.ExportListView(dlg.FileName, FilteredSpeciesListView);
             }
         }
         catch (Exception ex)
@@ -655,55 +407,21 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         }
     }
 
-    private void lvWetlands_KeyDown(object sender, KeyEventArgs e)
-    {
-        try
-        {
-            if ((e.KeyCode == Keys.A) && e.Control)
-            {
-                for (int i = 0; i < lvWetlands.Items.Count; i++)
-                {
-                    ListViewItem li = lvWetlands.Items[i];
-                    li.Selected = true;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void FilteredWetlandsListView_KeyDown(object sender, KeyEventArgs e) {
+      if ((e.KeyCode == Keys.A) && e.Control) {
+        ViewUtilities.SelectAllFeatures(FilteredWetlandsListView);
+      }
     }
 
-    private void lvSpecies1_KeyDown(object sender, KeyEventArgs e)
-    {
-        try
-        {
-            if ((e.KeyCode == Keys.A) && e.Control)
-            {
-                for (int i = 0; i < lvSpecies1.Items.Count; i++)
-                {
-                    ListViewItem li = lvSpecies1.Items[i];
-                    li.Selected = true;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void FilteredSpeciesListView_KeyDown(object sender, KeyEventArgs e) {
+      if ((e.KeyCode == Keys.A) && e.Control) {
+        ViewUtilities.SelectAllFeatures(FilteredSpeciesListView);
+      }
     }
 
-    private void mnuAbout_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            frmAboutBox frm = new frmAboutBox();
-            frm.ShowDialog();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message);
-        }
+    private void mnuAbout_Click(object sender, EventArgs e) {
+      AboutDialog frm = new AboutDialog();
+      frm.ShowDialog();
     }
 }
 

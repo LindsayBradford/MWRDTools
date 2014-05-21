@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Reflection;
 
-partial class frmAboutBox : Form
+partial class AboutDialog : Form
 {
-    public frmAboutBox()
+    public AboutDialog()
     {
         InitializeComponent();
 

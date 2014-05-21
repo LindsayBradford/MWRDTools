@@ -17,10 +17,15 @@ namespace MWRDTools.Presenter {
 
     void setFileBridge(IFileSystemBridge fileBridge);
 
-    void HigilightWetlands(int[] wetlandIDs);
+    void HighlightWetlands(int[] wetlandIDs);
     void ZoomToWetlands(int[] wetlandIDs);
     void FlashWetlands(int[] wetlandIDs);
-    void ExportWetlands(string filename, DataTable wetlands, int[] wetlandIDs);
+
+    void HighlightSpecies(int[] speciesIDs);
+    void ZoomToSpecies(int[] speciesIDs);
+    void FlashSpecies(int[] speciesIDs);
+
+    void ExportFeatures(string filename, DataTable wetlands, int[] wetlandIDs);
 
     void setWetlandsModel(IWetlandsModel model);
 

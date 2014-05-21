@@ -112,70 +112,38 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
       return true;
     }
 
-    private void SelectAllFeatures(ListView view) {
-      for (int i = 0; i < view.Items.Count; i++) {
-        view.Items[i].Selected = true;
-      }
-    }
-
-    private int[] getSelectedFeatures(ListView view) {
-      if (view.SelectedItems == null || view.SelectedItems.Count == 0) {
-        return null;
-      }
-      int[] featureTags = new int[view.SelectedItems.Count];
-      for (int i = 0; i < view.SelectedItems.Count; i++) {
-        featureTags[i] = Convert.ToInt32(view.SelectedItems[i].Tag.ToString());
-      }
-      return featureTags;
-    }
-
-    private void HighlightFeatures(ListView view) {
-      presenter.HigilightWetlands(
-        getSelectedFeatures(view)
+     private void HighlightFeatures(ListView view) {
+      presenter.HighlightWetlands(
+        ViewUtilities.GetSelectedFeatures(view)
       );
     }
 
     private void ZoomToSelectedFeatures(ListView view) {
       presenter.ZoomToWetlands(
-        getSelectedFeatures(view)
+        ViewUtilities.GetSelectedFeatures(view)
       );
     }
 
     private void FlashFeatures(ListView view) {
       presenter.FlashWetlands(
-        getSelectedFeatures(view)
+        ViewUtilities.GetSelectedFeatures(view)
       );
     }
 
-    private void ExportFeatures(ListView view, DataTable wetlands) {
+    private void ExportFeatures(ListView view, DataTable features) {
 
-      int[] selectedFeatures = getSelectedFeatures(view);
+      int[] selectedFeatures = ViewUtilities.GetSelectedFeatures(view);
       if (selectedFeatures.Length == 0) return;
       
       dlg.OverwritePrompt = true;
       dlg.Filter = "*.csv|*.csv";
       if (dlg.ShowDialog() != DialogResult.Cancel) {
-        presenter.ExportWetlands(
+        presenter.ExportFeatures(
           dlg.FileName, 
-          wetlands, 
+          features, 
           selectedFeatures
         );
       }
-    }
-
-    private void ProcessColumnClickEvent(ListView view, ColumnClickEventArgs e) {
-      ListViewColumnSorter sorter = view.ListViewItemSorter as ListViewColumnSorter;
-      if (e.Column == sorter.ColunmToSort) {
-        if (sorter.SortOrder == "ascending") {
-          sorter.SortOrder = "descending";
-        } else {
-          sorter.SortOrder = "ascending";
-        }
-      } else {
-        sorter.ColunmToSort = e.Column;
-        sorter.SortOrder = "ascending";
-      }
-      view.Sort();
     }
 
     private void frmCommenceToFill_Load(object sender, EventArgs e) {
@@ -204,12 +172,12 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
 
     private void WaggaListView_KeyDown(object sender, KeyEventArgs e) {
       if ((e.KeyCode == Keys.A) && e.Control) {
-        SelectAllFeatures(WaggaListView);
+        ViewUtilities.SelectAllFeatures(WaggaListView);
       }
     }
 
     private void WaggaListView_ColumnClick(object sender, ColumnClickEventArgs e) {
-      ProcessColumnClickEvent(WaggaListView, e);
+      ViewUtilities.ProcessColumnClickEvent(WaggaListView, e);
     }
 
     private void btnWaggaZoom_Click(object sender, EventArgs e) {
@@ -230,12 +198,12 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
 
     private void GaugeListView_KeyDown(object sender, KeyEventArgs e) {
       if ((e.KeyCode == Keys.A) && e.Control) {
-        SelectAllFeatures(GaugeListView);
+        ViewUtilities.SelectAllFeatures(GaugeListView);
       }
     }
 
     private void GaugeListView_ColumnClick(object sender, ColumnClickEventArgs e) {
-      ProcessColumnClickEvent(GaugeListView, e);
+      ViewUtilities.ProcessColumnClickEvent(GaugeListView, e);
     }
 
     private void btnFindGauge_Click(object sender, EventArgs e) {
@@ -272,12 +240,12 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
 
     private void CARMListView_KeyDown(object sender, KeyEventArgs e) {
       if ((e.KeyCode == Keys.A) && e.Control) {
-        SelectAllFeatures(CARMListView);
+        ViewUtilities.SelectAllFeatures(CARMListView);
       }
     }
 
     private void CARMListView_ColumnClick(object sender, ColumnClickEventArgs e) {
-      ProcessColumnClickEvent(CARMListView, e);
+      ViewUtilities.ProcessColumnClickEvent(CARMListView, e);
     }
 
     private void btnHilightCarmScenario_Click(object sender, EventArgs e) {
@@ -297,7 +265,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void mnuAbout_Click(object sender, EventArgs e) {
-      frmAboutBox frm = new frmAboutBox();
+      AboutDialog frm = new AboutDialog();
       frm.ShowDialog();
     }
 

@@ -43,5 +43,27 @@ namespace MWRDTools.Presenter {
     }
 
     #endregion
+
+    public void HighlightSpecies(int[] speciesIDs) {
+      HighlightFeatures(
+        speciesIDs,
+        Constants.LayerName.ThreatenedSpecies
+      );
+    }
+
+    public void ZoomToSpecies(int[] speciesIDs) {
+      ZoomToFeatures(
+        speciesIDs,
+        Constants.LayerName.ThreatenedSpecies
+      );
+    }
+
+    public void FlashSpecies(int[] speciesIDs) {
+      FlashFeatures(
+        speciesIDs,
+        Constants.LayerName.ThreatenedSpecies
+      );
+    }
+
   }
 }

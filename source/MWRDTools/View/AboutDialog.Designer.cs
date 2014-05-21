@@ -1,4 +1,4 @@
-partial class frmAboutBox
+partial class AboutDialog
 {
     /// <summary>
     /// Required designer variable.
@@ -25,7 +25,7 @@ partial class frmAboutBox
     /// </summary>
     private void InitializeComponent()
     {
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAboutBox));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutDialog));
       this.cmdOK = new System.Windows.Forms.Button();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.labelProductName = new System.Windows.Forms.Label();

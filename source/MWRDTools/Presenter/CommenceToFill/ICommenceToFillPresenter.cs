@@ -15,10 +15,11 @@ namespace MWRDTools.Presenter {
     void setView(ICommenceToFillView view);
     void setFileBridge(IFileSystemBridge fileBridge);
 
-    void HigilightWetlands(int[] wetlandIDs);
+    void HighlightWetlands(int[] wetlandIDs);
     void ZoomToWetlands(int[] wetlandIDs);
     void FlashWetlands(int[] wetlandIDs);
-    void ExportWetlands(string filename, DataTable wetlands, int[] wetlandIDs);
+
+    void ExportFeatures(string filename, DataTable wetlands, int[] featureIDs);
 
     void WaggaGaugeThresholdSelected(string flowThreshold);
     void GaugeAndFlowSelected(string gaugeName, double flow);

@@ -30,7 +30,7 @@ partial class ThreatenedSpeciesForm
       this.ThreatenedSpeciesTab = new System.Windows.Forms.TabControl();
       this.tabPage1 = new System.Windows.Forms.TabPage();
       this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-      this.lvSpecies = new System.Windows.Forms.ListView();
+      this.SpeciesListView = new System.Windows.Forms.ListView();
       this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -46,8 +46,8 @@ partial class ThreatenedSpeciesForm
       this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
       this.txtBeforeDate = new System.Windows.Forms.ToolStripTextBox();
       this.btnBeforeDate = new System.Windows.Forms.ToolStripButton();
-      this.btnFind = new System.Windows.Forms.ToolStripButton();
-      this.lvWetlands = new System.Windows.Forms.ListView();
+      this.FindWetlandsBySpeciesButton = new System.Windows.Forms.ToolStripButton();
+      this.FilteredWetlandsListView = new System.Windows.Forms.ListView();
       this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -72,8 +72,8 @@ partial class ThreatenedSpeciesForm
       this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
       this.txtBefore1 = new System.Windows.Forms.ToolStripTextBox();
       this.btnBefore1 = new System.Windows.Forms.ToolStripButton();
-      this.btnFind1 = new System.Windows.Forms.ToolStripButton();
-      this.lvSpecies1 = new System.Windows.Forms.ListView();
+      this.FindSpeciesByWetlandsButton = new System.Windows.Forms.ToolStripButton();
+      this.FilteredSpeciesListView = new System.Windows.Forms.ListView();
       this.toolStrip5 = new System.Windows.Forms.ToolStrip();
       this.btnHighlight1 = new System.Windows.Forms.ToolStripButton();
       this.btnZoom1 = new System.Windows.Forms.ToolStripButton();
@@ -141,36 +141,36 @@ partial class ThreatenedSpeciesForm
       // 
       // splitContainer1.Panel1
       // 
-      this.splitContainer1.Panel1.Controls.Add(this.lvSpecies);
+      this.splitContainer1.Panel1.Controls.Add(this.SpeciesListView);
       this.splitContainer1.Panel1.Controls.Add(this.toolStrip1);
       // 
       // splitContainer1.Panel2
       // 
-      this.splitContainer1.Panel2.Controls.Add(this.lvWetlands);
+      this.splitContainer1.Panel2.Controls.Add(this.FilteredWetlandsListView);
       this.splitContainer1.Panel2.Controls.Add(this.toolStrip2);
       this.splitContainer1.Size = new System.Drawing.Size(649, 351);
       this.splitContainer1.SplitterDistance = 171;
       this.splitContainer1.TabIndex = 0;
       // 
-      // lvSpecies
+      // SpeciesListView
       // 
-      this.lvSpecies.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+      this.SpeciesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader6});
-      this.lvSpecies.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lvSpecies.FullRowSelect = true;
-      this.lvSpecies.HideSelection = false;
-      this.lvSpecies.Location = new System.Drawing.Point(0, 0);
-      this.lvSpecies.Name = "lvSpecies";
-      this.lvSpecies.Size = new System.Drawing.Size(649, 146);
-      this.lvSpecies.TabIndex = 0;
-      this.lvSpecies.UseCompatibleStateImageBehavior = false;
-      this.lvSpecies.View = System.Windows.Forms.View.Details;
-      this.lvSpecies.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvSpecies_ColumnClick);
+      this.SpeciesListView.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.SpeciesListView.FullRowSelect = true;
+      this.SpeciesListView.HideSelection = false;
+      this.SpeciesListView.Location = new System.Drawing.Point(0, 0);
+      this.SpeciesListView.Name = "SpeciesListView";
+      this.SpeciesListView.Size = new System.Drawing.Size(649, 146);
+      this.SpeciesListView.TabIndex = 0;
+      this.SpeciesListView.UseCompatibleStateImageBehavior = false;
+      this.SpeciesListView.View = System.Windows.Forms.View.Details;
+      this.SpeciesListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.SpeciesListView_ColumnClick);
       // 
       // columnHeader1
       // 
@@ -214,7 +214,7 @@ partial class ThreatenedSpeciesForm
             this.toolStripLabel3,
             this.txtBeforeDate,
             this.btnBeforeDate,
-            this.btnFind});
+            this.FindWetlandsBySpeciesButton});
       this.toolStrip1.Location = new System.Drawing.Point(0, 146);
       this.toolStrip1.Name = "toolStrip1";
       this.toolStrip1.Size = new System.Drawing.Size(649, 25);
@@ -281,33 +281,33 @@ partial class ThreatenedSpeciesForm
       this.btnBeforeDate.ToolTipText = "Set the observed before date";
       this.btnBeforeDate.Click += new System.EventHandler(this.btnBeforeDate_Click);
       // 
-      // btnFind
+      // FindWetlandsBySpeciesButton
       // 
-      this.btnFind.Image = ((System.Drawing.Image)(resources.GetObject("btnFind.Image")));
-      this.btnFind.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btnFind.Name = "btnFind";
-      this.btnFind.Size = new System.Drawing.Size(47, 22);
-      this.btnFind.Text = "Find";
-      this.btnFind.ToolTipText = "Execute the query";
-      this.btnFind.Click += new System.EventHandler(this.btnFind_Click);
+      this.FindWetlandsBySpeciesButton.Image = ((System.Drawing.Image)(resources.GetObject("FindWetlandsBySpeciesButton.Image")));
+      this.FindWetlandsBySpeciesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.FindWetlandsBySpeciesButton.Name = "FindWetlandsBySpeciesButton";
+      this.FindWetlandsBySpeciesButton.Size = new System.Drawing.Size(47, 22);
+      this.FindWetlandsBySpeciesButton.Text = "Find";
+      this.FindWetlandsBySpeciesButton.ToolTipText = "Execute the query";
+      this.FindWetlandsBySpeciesButton.Click += new System.EventHandler(this.btnFind_Click);
       // 
       // lvWetlands
       // 
-      this.lvWetlands.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+      this.FilteredWetlandsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader7,
             this.columnHeader8,
             this.columnHeader9});
-      this.lvWetlands.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lvWetlands.FullRowSelect = true;
-      this.lvWetlands.HideSelection = false;
-      this.lvWetlands.Location = new System.Drawing.Point(0, 25);
-      this.lvWetlands.Name = "lvWetlands";
-      this.lvWetlands.Size = new System.Drawing.Size(649, 151);
-      this.lvWetlands.TabIndex = 2;
-      this.lvWetlands.UseCompatibleStateImageBehavior = false;
-      this.lvWetlands.View = System.Windows.Forms.View.Details;
-      this.lvWetlands.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvWetlands_ColumnClick);
-      this.lvWetlands.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvWetlands_KeyDown);
+      this.FilteredWetlandsListView.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.FilteredWetlandsListView.FullRowSelect = true;
+      this.FilteredWetlandsListView.HideSelection = false;
+      this.FilteredWetlandsListView.Location = new System.Drawing.Point(0, 25);
+      this.FilteredWetlandsListView.Name = "lvWetlands";
+      this.FilteredWetlandsListView.Size = new System.Drawing.Size(649, 151);
+      this.FilteredWetlandsListView.TabIndex = 2;
+      this.FilteredWetlandsListView.UseCompatibleStateImageBehavior = false;
+      this.FilteredWetlandsListView.View = System.Windows.Forms.View.Details;
+      this.FilteredWetlandsListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.FilteredWetlandsListView_ColumnClick);
+      this.FilteredWetlandsListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FilteredWetlandsListView_KeyDown);
       // 
       // columnHeader7
       // 
@@ -398,13 +398,13 @@ partial class ThreatenedSpeciesForm
       // 
       // splitContainer2.Panel2
       // 
-      this.splitContainer2.Panel2.Controls.Add(this.lvSpecies1);
+      this.splitContainer2.Panel2.Controls.Add(this.FilteredSpeciesListView);
       this.splitContainer2.Panel2.Controls.Add(this.toolStrip5);
       this.splitContainer2.Size = new System.Drawing.Size(649, 351);
       this.splitContainer2.SplitterDistance = 165;
       this.splitContainer2.TabIndex = 0;
       // 
-      // lvWetlands1
+      // AllWetlandsListView
       // 
       this.AllWetlandsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader10,
@@ -415,12 +415,12 @@ partial class ThreatenedSpeciesForm
       this.AllWetlandsListView.FullRowSelect = true;
       this.AllWetlandsListView.HideSelection = false;
       this.AllWetlandsListView.Location = new System.Drawing.Point(0, 0);
-      this.AllWetlandsListView.Name = "lvWetlands1";
+      this.AllWetlandsListView.Name = "AllWetlandsListView";
       this.AllWetlandsListView.Size = new System.Drawing.Size(649, 140);
       this.AllWetlandsListView.TabIndex = 0;
       this.AllWetlandsListView.UseCompatibleStateImageBehavior = false;
       this.AllWetlandsListView.View = System.Windows.Forms.View.Details;
-      this.AllWetlandsListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvWetlands1_ColumnClick);
+      this.AllWetlandsListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.AllWetlandsListView_ColumnClick);
       // 
       // columnHeader10
       // 
@@ -454,7 +454,7 @@ partial class ThreatenedSpeciesForm
             this.toolStripLabel6,
             this.txtBefore1,
             this.btnBefore1,
-            this.btnFind1});
+            this.FindSpeciesByWetlandsButton});
       this.toolStrip4.Location = new System.Drawing.Point(0, 140);
       this.toolStrip4.Name = "toolStrip4";
       this.toolStrip4.Size = new System.Drawing.Size(649, 25);
@@ -519,29 +519,29 @@ partial class ThreatenedSpeciesForm
       this.btnBefore1.Text = "...";
       this.btnBefore1.Click += new System.EventHandler(this.btnBefore1_Click);
       // 
-      // btnFind1
+      // FindSpeciesByWetlandsButton
       // 
-      this.btnFind1.Image = ((System.Drawing.Image)(resources.GetObject("btnFind1.Image")));
-      this.btnFind1.ImageTransparentColor = System.Drawing.Color.Magenta;
-      this.btnFind1.Name = "btnFind1";
-      this.btnFind1.Size = new System.Drawing.Size(47, 22);
-      this.btnFind1.Text = "&Find";
-      this.btnFind1.ToolTipText = "Execute query";
-      this.btnFind1.Click += new System.EventHandler(this.btnFind1_Click);
+      this.FindSpeciesByWetlandsButton.Image = ((System.Drawing.Image)(resources.GetObject("FindSpeciesByWetlandsButton.Image")));
+      this.FindSpeciesByWetlandsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.FindSpeciesByWetlandsButton.Name = "FindSpeciesByWetlandsButton";
+      this.FindSpeciesByWetlandsButton.Size = new System.Drawing.Size(47, 22);
+      this.FindSpeciesByWetlandsButton.Text = "&Find";
+      this.FindSpeciesByWetlandsButton.ToolTipText = "Execute query";
+      this.FindSpeciesByWetlandsButton.Click += new System.EventHandler(this.btnFind1_Click);
       // 
       // lvSpecies1
       // 
-      this.lvSpecies1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lvSpecies1.FullRowSelect = true;
-      this.lvSpecies1.HideSelection = false;
-      this.lvSpecies1.Location = new System.Drawing.Point(0, 25);
-      this.lvSpecies1.Name = "lvSpecies1";
-      this.lvSpecies1.Size = new System.Drawing.Size(649, 157);
-      this.lvSpecies1.TabIndex = 1;
-      this.lvSpecies1.UseCompatibleStateImageBehavior = false;
-      this.lvSpecies1.View = System.Windows.Forms.View.Details;
-      this.lvSpecies1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvSpecies1_ColumnClick);
-      this.lvSpecies1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvSpecies1_KeyDown);
+      this.FilteredSpeciesListView.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.FilteredSpeciesListView.FullRowSelect = true;
+      this.FilteredSpeciesListView.HideSelection = false;
+      this.FilteredSpeciesListView.Location = new System.Drawing.Point(0, 25);
+      this.FilteredSpeciesListView.Name = "lvSpecies1";
+      this.FilteredSpeciesListView.Size = new System.Drawing.Size(649, 157);
+      this.FilteredSpeciesListView.TabIndex = 1;
+      this.FilteredSpeciesListView.UseCompatibleStateImageBehavior = false;
+      this.FilteredSpeciesListView.View = System.Windows.Forms.View.Details;
+      this.FilteredSpeciesListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.FilteredSpeciesListView_ColumnClick);
+      this.FilteredSpeciesListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FilteredSpeciesListView_KeyDown);
       // 
       // toolStrip5
       // 
@@ -686,7 +686,7 @@ partial class ThreatenedSpeciesForm
       this.Name = "ThreatenedSpeciesForm";
       this.Text = "Threatened Species";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ThreatenedSpeciesForm_FormClosing);
-      this.Load += new System.EventHandler(this.frmThreatenedSpecies_Load);
+      this.Load += new System.EventHandler(this.ThreatenedSpeciesForm_Load);
       this.ThreatenedSpeciesTab.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.splitContainer1.Panel1.ResumeLayout(false);
@@ -723,7 +723,7 @@ partial class ThreatenedSpeciesForm
     private System.Windows.Forms.TabPage tabPage1;
     private System.Windows.Forms.TabPage tabPage2;
     private System.Windows.Forms.SplitContainer splitContainer1;
-    private System.Windows.Forms.ListView lvSpecies;
+    private System.Windows.Forms.ListView SpeciesListView;
     private System.Windows.Forms.ColumnHeader columnHeader1;
     private System.Windows.Forms.ColumnHeader columnHeader2;
     private System.Windows.Forms.ColumnHeader columnHeader3;
@@ -731,12 +731,12 @@ partial class ThreatenedSpeciesForm
     private System.Windows.Forms.ColumnHeader columnHeader5;
     private System.Windows.Forms.ColumnHeader columnHeader6;
     private System.Windows.Forms.ToolStrip toolStrip1;
-    private System.Windows.Forms.ToolStripButton btnFind;
+    private System.Windows.Forms.ToolStripButton FindWetlandsBySpeciesButton;
     private System.Windows.Forms.ToolStrip toolStrip2;
     private System.Windows.Forms.ToolStripButton btnSelect;
     private System.Windows.Forms.ToolStripButton btnZoom;
     private System.Windows.Forms.ToolStripButton btnExport;
-    private System.Windows.Forms.ListView lvWetlands;
+    private System.Windows.Forms.ListView FilteredWetlandsListView;
     private System.Windows.Forms.ColumnHeader columnHeader7;
     private System.Windows.Forms.ColumnHeader columnHeader8;
     private System.Windows.Forms.ColumnHeader columnHeader9;
@@ -767,13 +767,13 @@ partial class ThreatenedSpeciesForm
     private System.Windows.Forms.ToolStrip toolStrip4;
     private System.Windows.Forms.ToolStripLabel toolStripLabel4;
     private System.Windows.Forms.ToolStripComboBox cboBuffer1;
-    private System.Windows.Forms.ToolStripButton btnFind1;
+    private System.Windows.Forms.ToolStripButton FindSpeciesByWetlandsButton;
     private System.Windows.Forms.ToolStrip toolStrip5;
     private System.Windows.Forms.ToolStripButton btnHighlight1;
     private System.Windows.Forms.ToolStripButton btnZoom1;
     private System.Windows.Forms.ToolStripButton btnFlash1;
     private System.Windows.Forms.ToolStripButton btnExport1;
-    private System.Windows.Forms.ListView lvSpecies1;
+    private System.Windows.Forms.ListView FilteredSpeciesListView;
     private System.Windows.Forms.ToolStripLabel toolStripLabel5;
     private System.Windows.Forms.ToolStripTextBox txtAfter1;
     private System.Windows.Forms.ToolStripButton btnAfter1;

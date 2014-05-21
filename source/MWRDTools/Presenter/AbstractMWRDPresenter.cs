@@ -29,56 +29,77 @@ namespace MWRDTools.Presenter {
       }
     }
 
-    public void HigilightWetlands(int[] wetlandIDs) {
-      if (wetlandIDs == null) return;
+    public void HighlightFeatures(int[] featureIDs, string layerName) {
+      if (featureIDs == null) return;
 
       Common.HighlightFeatures(
-        wetlandIDs,
+        featureIDs,
         Common.GetFeatureLayer(
           Map,
-          Constants.LayerName.WetLands
+          layerName
         ),
         Map
       );
     }
 
-    public void ZoomToWetlands(int[] wetlandIDs) {
-      if (wetlandIDs == null) return;
+    public void ZoomToFeatures(int[] featuretIDs, string layerName) {
+      if (featuretIDs == null) return;
 
       Common.ZoomToFeatures(
-        wetlandIDs,
+        featuretIDs,
         Common.GetFeatureLayer(
           Map,
-          Constants.LayerName.WetLands
+          layerName
         ),
         Map
+      );
+    }
+
+    public void FlashFeatures(int[] featuretIDs, string layerName) {
+      if (featuretIDs == null) return;
+
+      Common.FlashFeatures(
+        featuretIDs,
+        Common.GetFeatureLayer(
+          Map,
+          layerName
+        ),
+        Map
+      );
+    }
+
+    public void HighlightWetlands(int[] wetlandIDs) {
+      HighlightFeatures(
+        wetlandIDs,
+        Constants.LayerName.WetLands
       );
     }
 
     public void FlashWetlands(int[] wetlandIDs) {
-      if (wetlandIDs == null) return;
-
-      Common.FlashFeatures(
+      FlashFeatures(
         wetlandIDs,
-        Common.GetFeatureLayer(
-          Map,
-          Constants.LayerName.WetLands
-        ),
-        Map
+        Constants.LayerName.WetLands
       );
     }
 
-    public void ExportWetlands(string filename, DataTable wetlands, int[] wetlandIDs) {
+    public void ZoomToWetlands(int[] wetlandIDs) {
+      ZoomToFeatures(
+        wetlandIDs, 
+        Constants.LayerName.WetLands
+      );
+    }
 
-      if (wetlands == null || wetlands.Rows.Count == 0) return;
-      if (wetlandIDs == null || wetlandIDs.Count() == 0) return;
+    public void ExportFeatures(string filename, DataTable featureTable, int[] featureIDs) {
 
-      DataTable exportableWetlands = wetlands.Clone();
+      if (featureTable == null || featureTable.Rows.Count == 0) return;
+      if (featureIDs == null || featureIDs.Count() == 0) return;
 
-      foreach (DataRow wetlandsRow in wetlands.Rows) {
-        int index = Array.IndexOf(wetlandIDs, Convert.ToInt32(wetlandsRow["OID"]));
+      DataTable exportableWetlands = featureTable.Clone();
+
+      foreach (DataRow featureRow in featureTable.Rows) {
+        int index = Array.IndexOf(featureIDs, Convert.ToInt32(featureRow["OID"]));
         if (index != -1) {
-          exportableWetlands.ImportRow(wetlandsRow);
+          exportableWetlands.ImportRow(featureRow);
         }
       }
 
