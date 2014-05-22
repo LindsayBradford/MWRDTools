@@ -283,25 +283,40 @@ namespace MWRDTools.Model {
       return featureClass.Search(filter, false);
     }
 
-    public IFeatureCursor GetIntersectionCursor(string featureClassName, IFeature feature, double buffer) {
-      return GetIntersectionCursor(
+    public IFeatureCursor GetIntersectionCursor(string featureClassName, string whereClause, IFeature feature, double buffer) {
+      return GetSpatialCursor(
         getFeatureClass(featureClassName),
+        whereClause,
         feature,
-        buffer
+        buffer,
+        esriSpatialRelEnum.esriSpatialRelIntersects
       );
     }
 
-    private IFeatureCursor GetIntersectionCursor(IFeatureClass featureClass, IFeature feature, double buffer) {
-      ISpatialFilter filter = new SpatialFilterClass();
-      filter.SpatialRel = esriSpatialRelEnum.esriSpatialRelIntersects;
-      filter.GeometryField = featureClass.ShapeFieldName;
+    public IFeatureCursor GetContainsCursor(string featureClassName, string whereClause, IFeature feature, double buffer) {
+      return GetSpatialCursor(
+        getFeatureClass(featureClassName),
+        whereClause,
+        feature,
+        buffer,
+        esriSpatialRelEnum.esriSpatialRelContains
+      );
+    }
 
-      ITopologicalOperator shape = (ITopologicalOperator) feature.Shape;
+    private IFeatureCursor GetSpatialCursor(IFeatureClass featureClass, string whereClause, IFeature feature, 
+                                            double buffer, esriSpatialRelEnum spatialRelationship) {
+      ISpatialFilter filter = new SpatialFilterClass();
+      filter.SpatialRel = spatialRelationship;
+      filter.GeometryField = featureClass.ShapeFieldName;
+      filter.WhereClause = whereClause;
+
+      ITopologicalOperator shape = (ITopologicalOperator)feature.Shape;
       shape.Simplify();
       filter.Geometry = shape.Buffer(buffer);
 
       return featureClass.Search(filter, false);
     }
+
 
     public void WriteDataTableAsPoints(string tableName, DataTable dataTable, int latitudeColIndex, int longitudeColIndex) {
       IFeatureClass esriTable = (Workspace as IFeatureWorkspace).OpenFeatureClass(tableName);

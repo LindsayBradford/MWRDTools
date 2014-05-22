@@ -69,7 +69,15 @@ namespace MWRDTools.Model {
 
     IFeatureCursor GetIntersectionCursor(
       string featureClassName, 
+      string whereClause,
       IFeature feature, 
+      double buffer
+    );
+
+    IFeatureCursor GetContainsCursor(
+      string featureClassName,
+      string whereClause,
+      IFeature feature,
       double buffer
     );
 

@@ -46,5 +46,14 @@ namespace MWRDTools.Presenter {
       DateTime? afterDate, 
       DateTime? beforeDate
     );
+
+     void FindSpeciesByWetlands(
+      string wetlandsID,
+      string[] speciesClasses,
+      string[] speciesStatuses,
+      double buffer,
+      DateTime? afterDate,
+      DateTime? beforeDate
+    );
   }
 }

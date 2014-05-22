@@ -25,5 +25,14 @@ namespace MWRDTools.Model
       DateTime? afterDate, 
       DateTime? beforeDate
     );
+
+    DataTable GetSpeciesByWetlands(
+      string wetlandsID,
+      string[] speciesClasses,
+      string[] speciesStatuses,
+      double buffer,
+      DateTime? afterDate,
+      DateTime? beforeDate
+    );
   }
 }

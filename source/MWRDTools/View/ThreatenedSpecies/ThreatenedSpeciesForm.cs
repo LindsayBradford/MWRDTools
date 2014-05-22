@@ -18,15 +18,13 @@ using MWRDTools.Presenter;
 
 public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 {
-    private IApplication _application;
-    private IMap _map;
-    private IFeatureWorkspace _featureWorkspace;
-    private IFeatureLayer _wetlandsFL;
-
-    SpatialDataAccess _spDataAccess;
     frmFilter _frmFilter = new frmFilter();
     frmDatePicker _frmDatePicker;
     private bool _wetlandsLoaded = false;
+
+    private const string SCIENTIFIC_NAME = "ScientificName";
+
+    private DataTable WetlandsForSpeciesTable, SpeciesForWetlandsTable;
 
     private IThreatenedSpeciesPresenter presenter;
 
@@ -45,12 +43,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       _frmDatePicker = new frmDatePicker();
       _frmDatePicker.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
 
-      _application = pApplication;
-      IMxDocument pMxDocument = _application.Document as IMxDocument;
-      _map = pMxDocument.FocusMap;
-
-       _spDataAccess = new SpatialDataAccess();
-      _spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
+      //_spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
     }
 
     public void setPresenter(IThreatenedSpeciesPresenter presenter) {
@@ -76,16 +69,11 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       }
     }
 
-    private bool SetFeatureWorkspace(){
-        _featureWorkspace = Common.GetFeatureWorkspace(Constants.LayerName.WetLands, _map, ref _wetlandsFL);
-        return (_featureWorkspace != null);
-    }
-
     void IThreatenedSpeciesView.ApplySpeciesFilter(DataTable species) {
       ViewUtilities.DataTableToListView(
         species,
         SpeciesListView,
-        ColumnNames.ScientificName
+        SCIENTIFIC_NAME
       );
     }
 
@@ -98,9 +86,19 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     void IThreatenedSpeciesView.ShowWetlandsForSpecies(DataTable wetlands) {
+      this.WetlandsForSpeciesTable = wetlands;
       ViewUtilities.DataTableToListView(
         wetlands,
         FilteredWetlandsListView,
+        "OID"
+      );
+    }
+
+    void IThreatenedSpeciesView.ShowSpeciesForWetlands(DataTable species) {
+      this.SpeciesForWetlandsTable = species;
+      ViewUtilities.DataTableToListView(
+        species,
+        FilteredSpeciesListView,
         "OID"
       );
     }
@@ -110,16 +108,16 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     private void ThreatenedSpeciesForm_Load(object sender, EventArgs e) {
-      if (!SetFeatureWorkspace()) {
-        MessageBox.Show(
-          String.Format(
-            "Unable to open the data source. The application was looking for a layer called {0}.", 
-            Constants.LayerName.WetLands
-          ), 
-          Application.ProductName
-        );
-        this.Dispose();
-      }
+      //if (!SetFeatureWorkspace()) {
+      //  MessageBox.Show(
+      //    String.Format(
+      //      "Unable to open the data source. The application was looking for a layer called {0}.", 
+      //      Constants.LayerName.WetLands
+      //    ), 
+      //    Application.ProductName
+      //  );
+      //  this.Dispose();
+      //}
     }
 
     private void ThreatenedSpeciesForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -279,21 +277,26 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       }
     }
 
-    private void FindSpeciesByWetland_Click(object sender, EventArgs e)
-    {
+    private void FindSpeciesByWetland_Click(object sender, EventArgs e) {
+      if (AllWetlandsListView.SelectedItems.Count == 0) {
+        return;
+      }
+
       this.Cursor = Cursors.WaitCursor;
 
-      FilteredSpeciesListView.Items.Clear();
-      if (AllWetlandsListView.SelectedItems != null) {
-        if (AllWetlandsListView.SelectedItems.Count > 0) {
-          double buffer = 0.0;
-          if (!(cboBuffer1.Text == "None") && !(cboBuffer1.Text == "")) {
-            buffer = Convert.ToDouble(cboBuffer1.Text);
-          }
-          //IFeatureCursor species = _spDataAccess.GetSpeciesByWetland(_featureWorkspace, _wetlandsFL, AllWetlandsListView.SelectedItems[0].Tag.ToString(), buffer, txtAfter1.Text, txtBefore1.Text, _speciesWhereClause);
-          //Common.FeatureCursorToListView(species, ref FilteredSpeciesListView, "");
-        }
+      double buffer = 0.0;
+      if (!(cboBuffer1.Text == "None") && !(cboBuffer1.Text == "")) {
+        buffer = Convert.ToDouble(cboBuffer1.Text);
       }
+
+      presenter.FindSpeciesByWetlands(
+        AllWetlandsListView.SelectedItems[0].Tag.ToString(),
+        _frmFilter.GetSelectedSpeciesClasses(),
+        _frmFilter.GetSelectedSpeciesStatuses(),
+        buffer,
+        convertTextBoxToDateTime(txtAfter1),
+        convertTextBoxToDateTime(txtBefore1)
+      );
 
       this.Cursor = Cursors.Default;
     }
@@ -320,7 +323,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
     private void btnZoom1_Click(object sender, EventArgs e) {
       presenter.ZoomToSpecies(
-        ViewUtilities.GetSelectedFeatures(FilteredWetlandsListView)
+        ViewUtilities.GetSelectedFeatures(FilteredSpeciesListView)
       );
     }
 
@@ -347,35 +350,17 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     private void btnExport_Click(object sender, EventArgs e) {
-      // ExportFeatures(FilteredWetlandsListView, FilteredWetlandsTable);
-
-      try {
-        dlg.OverwritePrompt = true;
-        dlg.Filter = "*.csv|*.csv";
-        if (dlg.ShowDialog() != DialogResult.Cancel) {
-          Common.ExportListView(dlg.FileName, FilteredWetlandsListView);
-        }
-      } catch (Exception ex) {
-        MessageBox.Show(ex.Message, Application.ProductName);
-      }
+      ExportFeatures(
+        FilteredWetlandsListView, 
+        WetlandsForSpeciesTable
+      );
     }
 
-    private void btnExport1_Click(object sender, EventArgs e)
-    {
-      // ExportFeatures(FilteredSpeciesListView, FilteredSpeciesTable);
-      try
-        {
-            dlg.OverwritePrompt = true;
-            dlg.Filter = "*.csv|*.csv";
-            if (dlg.ShowDialog() != DialogResult.Cancel)
-            {
-                Common.ExportListView(dlg.FileName, FilteredSpeciesListView);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+    private void btnExport1_Click(object sender, EventArgs e) {
+      ExportFeatures(
+        FilteredSpeciesListView,
+        SpeciesForWetlandsTable
+      );
     }
 
     private void FilteredWetlandsListView_KeyDown(object sender, KeyEventArgs e) {
@@ -394,14 +379,4 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       AboutDialog frm = new AboutDialog();
       frm.ShowDialog();
     }
-}
-
-static class ColumnNames
-{
-  public const string ScientificName = "ScientificName";
-  public const string CommonName = "CommonName";
-  public const string ClassName = "ClassName";
-  public const string FamilyName = "FamilyName";
-  public const string LegalStatus = "NSWStatus";
-  public const string SpeciesCode = "SpeciesCode";
 }

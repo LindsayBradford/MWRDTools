@@ -25,32 +25,6 @@ class Common
     return (GetFocusMap(application) as IActiveView);
   }
   
-  public static IFeatureWorkspace GetFeatureWorkspace(string layerName, IMap pMap, ref IFeatureLayer pFeatureLayer)
-  {
-      IEnumLayer pEnumLayer = GetLayers(pMap);
-      ILayer pLayer = pEnumLayer.Next();
-      while (pLayer != null)
-      {
-          if (pLayer.Name.ToLower() == layerName.ToLower())
-          {
-              break;
-          }
-          pLayer = pEnumLayer.Next();
-      }
-      if (pLayer != null)
-      {
-          pFeatureLayer = pLayer as IFeatureLayer;
-          if (pFeatureLayer != null)
-          {
-              IDataset pDataset = pFeatureLayer.FeatureClass as IDataset;
-              if (pDataset != null)
-              {
-                  return pDataset.Workspace as IFeatureWorkspace;
-              }
-          }
-      }
-      return null;
-  }
 
   public static IFeatureLayer GetFeatureLayer(IApplication application, string layerName) {
     return GetFeatureLayer(
@@ -274,168 +248,6 @@ class Common
       pActiveView.Refresh();
   }
 
-  public static void ExportListView(string fileName, ListView lv)
-  {
-      StreamWriter sw = null;
-      try
-      {
-          bool useSelected = false;
-          if ((lv.SelectedItems.Count > 0) && (lv.SelectedItems.Count != lv.Items.Count))
-          {
-              useSelected = true;
-          }
-          sw = new StreamWriter(fileName);
-          StringBuilder sb = new StringBuilder(lv.Columns[0].Text);
-          for (int i = 1; i < lv.Columns.Count; i++)
-          {
-              sb.Append(",");
-              sb.Append(lv.Columns[i].Text);
-          }
-          sb.Append(Environment.NewLine);
-          foreach (ListViewItem li in lv.Items)
-          {
-              if ((li.Selected == true && useSelected == true) || (useSelected == false))
-              {
-                  for (int i = 0; i < li.SubItems.Count; i++)
-                  {
-                      sb.Append(li.SubItems[i].Text);
-                      sb.Append(",");
-                  }
-                  sb.Append(Environment.NewLine);
-              }
-          }
-          sw.Write(sb.ToString());
-      }
-      catch (Exception ex)
-      {
-          MessageBox.Show(ex.Message, Application.ProductName);
-      }
-      finally
-      {
-          try
-          {
-              sw.Close();
-          }
-          catch
-          {
-
-          }
-      }
-
-  }
-
-  public static void ArrayListToListView(ArrayList features, ref ListView lv, string tagField)
-  {
-      lv.Items.Clear();
-      IFeature pFeature;
-      for (int i = 0; i < features.Count; i++)
-      {
-          pFeature = (IFeature)features[i];
-          if (i == 0)
-          {
-              AddListViewColumns(pFeature.Fields, lv);
-          }
-          AddListItem(pFeature, lv, tagField);
-      }
-  }
-
-  private static void AddListItem(IRow pRow, ListView lv, string tagField)
-  {
-      ListViewItem li = new ListViewItem();
-      IFields pFields = pRow.Fields;
-      bool first = true;
-      string val = "";
-      for (int i = 0; i < pFields.FieldCount; i++)
-      {
-          IField pField = pFields.get_Field(i);
-          if (pField.Type != esriFieldType.esriFieldTypeGeometry && pField.Type != esriFieldType.esriFieldTypeGlobalID)
-          {
-              if (pRow.get_Value(i) != null)
-              {
-                  val = pRow.get_Value(i).ToString();
-              }
-              else
-              {
-                  val = "";
-              }
-              if (first)
-              {
-                  li.Text = val;
-                  first = false;
-              }
-              else
-              {
-                  li.SubItems.Add(val);
-              }
-          }
-      }
-      li.Tag = GetValueAsString(pRow, tagField); 
-      lv.Items.Add(li);
-  }
-
-  public static void FeatureCursorToListView(IFeatureCursor pFeatureCursor, ref ListView lv, string tagField)
-  {
-      lv.Items.Clear();
-      IFeature pFeature = pFeatureCursor.NextFeature();
-      if (pFeature != null)
-      {
-          AddListViewColumns(pFeature.Fields, lv);
-          AddListItem(pFeature, lv, tagField);
-          pFeature = pFeatureCursor.NextFeature();
-          while (pFeature != null)
-          {
-              AddListItem(pFeature, lv, tagField);
-              pFeature = pFeatureCursor.NextFeature();
-          }
-      }
-  }
-
-  private static void AddListViewColumns(IFields pFields, ListView lv)
-  {
-      lv.Columns.Clear();
-      for (int i = 0; i < pFields.FieldCount; i++)
-      {
-          IField pField = pFields.get_Field(i);
-          if (pField.Type != esriFieldType.esriFieldTypeGeometry && pField.Type != esriFieldType.esriFieldTypeGlobalID)
-          {
-              lv.Columns.Add(pField.AliasName);
-          }
-      }
-  }
-
-  private static void AddListItem(IFeature pFeature, ListView lv, string tagField)
-  {
-      ListViewItem li = new ListViewItem();
-      IFields pFields = pFeature.Fields;
-      bool first = true;
-      for (int i = 0; i < pFields.FieldCount; i++)
-      {
-          IField pField = pFields.get_Field(i);
-          if (pField.Type != esriFieldType.esriFieldTypeGeometry && pField.Type != esriFieldType.esriFieldTypeGlobalID)
-          {
-              string val = pFeature.get_Value(i).ToString();
-              if (first)
-              {
-                  li.Text = val;
-                  first = false;
-              }
-              else
-              {
-                  li.SubItems.Add(val);
-              }
-          }
-      }
-      if (tagField == "")
-      {
-          li.Tag = pFeature.OID;
-      }
-      else
-      {
-          li.Tag = GetValueAsString(pFeature, tagField);
-      }
-      lv.Items.Add(li);
-  }
-
   public static void FlashFeatures(int[] oid, IFeatureLayer pFeatureLayer, IMap pMap)
   {
       IActiveView pActiveView = (IActiveView)pMap;
@@ -617,7 +429,6 @@ class Common
     }
   }
 
-
   private static void addFieldsToDataTable(IFields fields, DataTable table) {
 
     for (int i = 0; i < fields.FieldCount; i++) {
@@ -698,11 +509,4 @@ class Common
     }
     table.Rows.Add(newRow);
   }
-
-  public static string DateFormat(DateTime val) {
-    return string.Format(
-      "{0} 00:00:00", val.ToString("yyyy-MM-dd")
-    );
-  }
-
 }

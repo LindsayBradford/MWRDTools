@@ -246,6 +246,7 @@ namespace MWRDTools.Model
         using (ComReleaser comReleaser = new ComReleaser()) {
           IFeatureCursor wetlandsCursor = bridge.GetIntersectionCursor(
             Constants.TableName.MCMAWetlands,
+            null,
             currentSpecies,
             buffer
           );
@@ -276,36 +277,73 @@ namespace MWRDTools.Model
         }
       }
       result.Add(newFeature);
-
     }
 
-    //public IFeatureCursor GetSpeciesByWetland(string wetlandID, double buffer, DateTime? afterDate, DateTime? beforeDate, string speciesFilter) {
-    //  IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
-    //  IQueryFilter pQueryFilter = new QueryFilterClass();
-    //  pQueryFilter.WhereClause = string.Format("MBCMA_wetland = {0}", wetlandID);
-    //  IFeatureCursor pFeatureCursor = pFeatureClass.Search(pQueryFilter, false);
-    //  IFeature pFeature = pFeatureCursor.NextFeature();
-    //  ITopologicalOperator pTopo = (ITopologicalOperator)pFeature.Shape;
-    //  IGeometry pGeometry = pTopo.Buffer(buffer);
-    //  if (pFeature != null) {
-    //    IFeatureClass speciesFC = pFeatureWorkspace.OpenFeatureClass(Constants.LayerName.ThreatenedSpecies);
-    //    ISpatialFilter pSpatialFilter = new SpatialFilterClass();
-    //    pSpatialFilter.GeometryField = speciesFC.ShapeFieldName;
-    //    pSpatialFilter.Geometry = pGeometry;
-    //    pSpatialFilter.SpatialRel = esriSpatialRelEnum.esriSpatialRelContains;
-    //    StringBuilder sb = new StringBuilder();
+    public DataTable GetSpeciesByWetlands(string wetlandID, string[] speciesClasses, string[] speciesStatuses, 
+                                          double buffer, DateTime? afterDate, DateTime? beforeDate) {
+      DataTable speciesTable;
 
-    //    sb.Append(speciesFilter);
-    //    sb.Append(
-    //      buildDateQuery(afterDate, beforeDate)
-    //    );
+      IFeature wetlandFeature;
+      using (ComReleaser comReleaser = new ComReleaser()) {
 
-    //    pSpatialFilter.WhereClause = sb.ToString();
-    //    IFeatureCursor speciesCursor = speciesFC.Search(pSpatialFilter, false);
-    //    return speciesCursor;
-    //  }
-    //  return null;
-    //}
+        IFeatureCursor wetlandsCursor = bridge.GetCursorForFeatureClassQuery(
+          Constants.TableName.MCMAWetlands,
+          string.Format("MBCMA_wetland = {0}", wetlandID),
+          null
+        );
+
+        comReleaser.ManageLifetime(wetlandsCursor);
+
+        wetlandFeature = wetlandsCursor.NextFeature();
+      }
+
+      if (wetlandFeature == null) {
+        return null;
+      }
+
+      StringBuilder speciesWhereClause = new StringBuilder();
+
+      speciesWhereClause.Append(
+        buildSelectedSpeciesClause(
+          speciesClasses, 
+          speciesStatuses
+        )
+      );
+
+      string dateQuery = buildDateQuery(afterDate, beforeDate);
+
+      if (speciesWhereClause.Length > 0 && dateQuery.Length > 0) {
+        speciesWhereClause.Append(" AND ");
+        speciesWhereClause.Append(dateQuery);
+      }
+
+      if (speciesWhereClause.Length == 0) {
+        speciesWhereClause.Append(dateQuery);
+      }
+
+      using (ComReleaser comReleaser = new ComReleaser()) {
+
+        List<IFeature> speciesList = new List<IFeature>();
+
+        IFeatureCursor speciesCursor = bridge.GetContainsCursor(
+          Constants.TableName.ThreatenedSpecies,
+          speciesWhereClause.ToString(),
+          wetlandFeature,
+          buffer
+        );
+
+        comReleaser.ManageLifetime(speciesCursor);
+
+        IFeature speciesFeature;
+        while ((speciesFeature = speciesCursor.NextFeature()) != null) {
+          speciesList.Add(speciesFeature);
+        }
+
+        speciesTable = Common.FeatureListToDataTable(speciesList);
+      } // using comReleaser
+
+      return speciesTable;
+    }
 
     public static string DateFormat(DateTime val) {
       return string.Format(

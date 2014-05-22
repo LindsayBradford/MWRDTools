@@ -41,6 +41,10 @@ namespace MWRDTools.View {
       view.Columns.Clear();
       view.Items.Clear();
 
+      if (table == null || table.Rows.Count == 0) {
+        return;
+      }
+
       foreach (DataColumn column in table.Columns) {
         view.Columns.Add(
           column.ColumnName
