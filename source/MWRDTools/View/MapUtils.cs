@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
 using System.Text;
-using System.Windows.Forms;
 
 using ESRI.ArcGIS.ArcMapUI;
 using ESRI.ArcGIS.Carto;
@@ -14,7 +9,7 @@ using ESRI.ArcGIS.Framework;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Geometry;
 
-class Common
+class MapUtils
 {
 
   public static IMap GetFocusMap(IApplication application) {
@@ -66,68 +61,6 @@ class Common
       pId.Value = "{40A9E885-5533-11d0-98BE-00805F7CED21}";
       IEnumLayer layers = pMap.get_Layers(pId, false);
       return layers;
-  }
-
-  public static string GetValueAsString(IFeature pFeature, string fieldName)
-  {
-      int fieldIndex = pFeature.Fields.FindField(fieldName);
-      if (fieldIndex == -1)
-      {
-          throw new Exception(string.Format("Unable to find field {0} in {1}.", fieldName, pFeature.Class.AliasName));
-      }
-      string result = "";
-      result = pFeature.get_Value(fieldIndex).ToString();
-      return result;
-  }
-
-  public static string GetValueAsString(IRow pRow, string fieldName)
-  {
-      int fieldIndex = pRow.Fields.FindField(fieldName);
-      if (fieldIndex == -1)
-      {
-          throw new Exception(string.Format("Unable to find field {0} in {1}.", fieldName, "table"));
-      }
-      string result = "";
-      result = pRow.get_Value(fieldIndex).ToString();
-      return result;
-  }
-
-  public static int GetValueAsInt(IFeature pFeature, string fieldName)
-  {
-      int fieldIndex = pFeature.Fields.FindField(fieldName);
-      if (fieldIndex == -1)
-      {
-          throw new Exception(string.Format("Unable to find field {0} in {1}.", fieldName, pFeature.Class.AliasName));
-      }
-      int result = -1;
-      try
-      {
-          result = Convert.ToInt32(pFeature.get_Value(fieldIndex).ToString());
-      }
-      catch
-      {
-          throw new Exception(string.Format("Unable to convert value in {0} field in {1} to an integer.", fieldName, pFeature.Class.AliasName));
-      }
-      return result;
-  }
-
-  public static int GetValueAsInt(IRow pRow, string fieldName)
-  {
-      int fieldIndex = pRow.Fields.FindField(fieldName);
-      if (fieldIndex == -1)
-      {
-          throw new Exception(string.Format("Unable to find field {0}.", fieldName));
-      }
-      int result = -1;
-      try
-      {
-          result = Convert.ToInt32(pRow.get_Value(fieldIndex).ToString());
-      }
-      catch
-      {
-          throw new Exception(string.Format("Unable to convert value in {0} field to an integer.", fieldName));
-      }
-      return result;
   }
 
   public static void ZoomToFeature(int oid, IFeatureLayer pFeatureLayer, IMap pMap) {
@@ -196,33 +129,6 @@ class Common
       }
   }
 
-  public static void SelectFeature(int oid, IFeatureLayer pFeatureLayer, IMap pMap) {
-      IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
-
-      IQueryFilter pQueryFilter = new QueryFilterClass();
-      pQueryFilter.WhereClause = 
-        String.Format(
-        "{0} = {1}", 
-        pFeatureClass.OIDFieldName, 
-        oid.ToString()
-      );
-
-      ISelectionSet pSelectionSet = pFeatureClass.Select(
-        pQueryFilter, 
-        esriSelectionType.esriSelectionTypeIDSet, 
-        esriSelectionOption.esriSelectionOptionNormal, 
-        null
-      );
-
-      IFeatureSelection pFeatureSelection = (IFeatureSelection)pFeatureLayer;
-      pFeatureSelection.CombinationMethod = esriSelectionResultEnum.esriSelectionResultNew;
-      pFeatureSelection.SelectionSet = pSelectionSet;
-      pFeatureSelection.SelectionChanged();
-
-      IActiveView pActiveView = (IActiveView)pMap;
-      pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, null, null);
-  }
-
   public static void HighlightFeatures(int[] oid, IFeatureLayer pFeatureLayer, IMap pMap)
   {
       IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
@@ -239,7 +145,13 @@ class Common
           sb.Append(oid[i].ToString());
       }
       pQueryFilter.WhereClause = sb.ToString();
-      ISelectionSet pSelectionSet = pFeatureClass.Select(pQueryFilter, esriSelectionType.esriSelectionTypeIDSet, esriSelectionOption.esriSelectionOptionNormal, null);
+      ISelectionSet pSelectionSet = 
+        pFeatureClass.Select(
+          pQueryFilter, 
+          esriSelectionType.esriSelectionTypeIDSet, 
+          esriSelectionOption.esriSelectionOptionNormal, 
+          null
+        );
       IFeatureSelection pFeatureSelection = (IFeatureSelection)pFeatureLayer;
       pFeatureSelection.CombinationMethod = esriSelectionResultEnum.esriSelectionResultNew;
       pFeatureSelection.SelectionSet = pSelectionSet;
@@ -335,179 +247,6 @@ class Common
       pScreenDisplay.DrawPolygon(pGeometry);
 
       pScreenDisplay.FinishDrawing();
-
-  }
-  /// <summary>
-  /// Obselete
-  /// </summary>
-  /// <param name="oid"></param>
-  /// <param name="pFeatureLayer"></param>
-  /// <param name="pMap"></param>
-  public static void FlashFeature(int oid, IFeatureLayer pFeatureLayer, IMap pMap)
-  {
-      IActiveView pActiveView = (IActiveView)pMap;
-      IScreenDisplay pScreenDisplay = pActiveView.ScreenDisplay;
-
-      IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
-      IQueryFilter pQueryFilter = new QueryFilterClass();
-      pQueryFilter.WhereClause = String.Format("{0} = {1}", pFeatureClass.OIDFieldName, oid.ToString());
-      IFeatureCursor pFeatureCursor = pFeatureClass.Search(pQueryFilter, false);
-      IFeature pFeature = pFeatureCursor.NextFeature();
-
-      pScreenDisplay.StartDrawing(pScreenDisplay.hDC, (short)esriScreenCache.esriNoScreenCache);
-
-      ISimpleFillSymbol pSimpleFillSymbol = new SimpleFillSymbolClass();
-      pSimpleFillSymbol.Outline = null;
-      IRgbColor pRGBColour = new RgbColorClass();
-      pRGBColour.Red = 177;
-      pRGBColour.Green = 8;
-      pRGBColour.Blue = 54;
-      pSimpleFillSymbol.Color = pRGBColour;
-      ISymbol pSymbol = (ISymbol)pSimpleFillSymbol;
-      pSymbol.ROP2 = esriRasterOpCode.esriROPNotXOrPen;
-            
-      pScreenDisplay.SetSymbol(pSymbol as ISymbol);
-      pScreenDisplay.DrawPolygon(pFeature.Shape);
-      System.Threading.Thread.Sleep(300);
-      pScreenDisplay.DrawPolygon(pFeature.Shape);
-
-      pScreenDisplay.FinishDrawing();
   }
 
-  public static DataTable CursorToDataTable(string[] columnNames, ICursor cursor) {
-
-    IRow row = cursor.NextRow();
-    if (row == null) {
-      return null;
-    }
-
-    DataTable table = new DataTable();
-
-    addColumnsToDataTable(columnNames, table);
-    addIRowToDataTable(row, table);
-
-    while ((row = cursor.NextRow()) != null) {
-      addIRowToDataTable(row, table);
-    }
-
-    table.AcceptChanges();
-
-    return table;
-  }
-
-
-  public static DataTable CursorToDataTable(ICursor cursor) {
-
-    IRow row = cursor.NextRow();
-    if (row == null) {
-      return null;
-    }
-
-    DataTable table = new DataTable();
-
-    addFieldsToDataTable(row.Fields, table);
-    addIRowToDataTable(row, table);
-
-    while ((row = cursor.NextRow()) != null) {
-      addIRowToDataTable(row, table);
-    }
-
-    table.AcceptChanges();
-
-    return table;
-  }
-
-  private static void addColumnsToDataTable(string[] columnNames, DataTable table) {
-    for (int i = 0; i < columnNames.Length; i++) {
-
-      if (columnNames[i].Equals("OBJECTID")) {
-        table.Columns.Add(Constants.OID);
-      } else {
-        table.Columns.Add(
-          columnNames[i]
-        );
-      }
-    }
-  }
-
-  private static void addFieldsToDataTable(IFields fields, DataTable table) {
-
-    for (int i = 0; i < fields.FieldCount; i++) {
-      IField field = fields.get_Field(i);
-
-      if (field.Type == esriFieldType.esriFieldTypeGeometry ||
-          field.Type == esriFieldType.esriFieldTypeGlobalID) {
-        continue;
-      }
-
-      if (field.AliasName.Equals("OBJECTID")) {
-        table.Columns.Add(Constants.OID);
-      } else {
-        table.Columns.Add(
-          field.AliasName
-        );
-      }
-
-    }
- }
-
-  private static void addIRowToDataTable(IRow esriRow, DataTable table) {
-    DataRow newRow = table.NewRow();
-
-    foreach (DataColumn column in table.Columns) {
-      try {
-        if (column.ColumnName.Equals(Constants.OID)) {
-          int oidIndex = esriRow.Fields.FindFieldByAliasName("OBJECTID");
-          newRow[column.ColumnName] = esriRow.get_Value(oidIndex).ToString();
-          continue;
-        } else {
-          int fieldIndex = esriRow.Fields.FindFieldByAliasName(column.ColumnName);
-          newRow[column.ColumnName] = esriRow.get_Value(fieldIndex).ToString();
-        }
-      } catch (Exception e) {
-        MessageBox.Show("[" + column.ColumnName + "]" + e.Message);
-      }
-    }
-    table.Rows.Add(newRow);
-  }
-
-
-  public static DataTable FeatureListToDataTable(List<IFeature> features) {
-
-    if (features == null || features.Count == 0) {
-      return null;
-    }
-
-    DataTable table = new DataTable();
-
-    addFieldsToDataTable(features[0].Fields, table);
-
-    foreach (IFeature feature in features) {
-      addFeatureToDataTable(feature, table);
-    }
-
-    table.AcceptChanges();
-
-    return table;
-  }
-
-  private static void addFeatureToDataTable(IFeature feature, DataTable table) {
-    DataRow newRow = table.NewRow();
-
-    foreach (DataColumn column in table.Columns) {
-      try {
-        if (column.ColumnName.Equals(Constants.OID)) {
-          int oidIndex = feature.Fields.FindFieldByAliasName("OBJECTID");
-          newRow[column.ColumnName] = feature.get_Value(oidIndex).ToString();
-          continue;
-        } else {
-          int fieldIndex = feature.Fields.FindFieldByAliasName(column.ColumnName);
-          newRow[column.ColumnName] = feature.get_Value(fieldIndex).ToString();
-        }
-      } catch (Exception e) {
-        MessageBox.Show("[" + column.ColumnName + "]" + e.Message);
-      }
-    }
-    table.Rows.Add(newRow);
-  }
 }

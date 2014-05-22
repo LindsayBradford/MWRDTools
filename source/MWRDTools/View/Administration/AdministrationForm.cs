@@ -59,20 +59,21 @@ namespace MWRDTools.View
 #endregion
 
 #region InterfaceMethods
-    void ICARMScenarioImportView.ImportDirectory(string direcoryPath)
-    {
+    void ICARMScenarioImportView.ImportDirectory(string direcoryPath) {
       this.carmImportPresenter.ImportDirectory(direcoryPath);
     }
 
-    void INSWAtlasWildlifeImportView.ImportFiles(params String[] files)
-    {
-      ILayer layer = Common.GetFeatureLayer(application, Constants.LayerName.ThreatenedSpecies);
+    void INSWAtlasWildlifeImportView.ImportFiles(params String[] files) {
+      ILayer layer = MapUtils.GetFeatureLayer(
+        application, 
+        Constants.LayerName.ThreatenedSpecies
+      );
 
       layer.Visible = false;
       
       this.atlasImportPresenter.ImportFiles(files);
 
-      Common.RefreshFeatureLayer(application, layer);
+      MapUtils.RefreshFeatureLayer(application, layer);
 
       layer.Visible = true;
     }

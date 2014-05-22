@@ -32,9 +32,9 @@ namespace MWRDTools.Presenter {
     public void HighlightFeatures(int[] featureIDs, string layerName) {
       if (featureIDs == null) return;
 
-      Common.HighlightFeatures(
+      MapUtils.HighlightFeatures(
         featureIDs,
-        Common.GetFeatureLayer(
+        MapUtils.GetFeatureLayer(
           Map,
           layerName
         ),
@@ -45,9 +45,9 @@ namespace MWRDTools.Presenter {
     public void ZoomToFeatures(int[] featuretIDs, string layerName) {
       if (featuretIDs == null) return;
 
-      Common.ZoomToFeatures(
+      MapUtils.ZoomToFeatures(
         featuretIDs,
-        Common.GetFeatureLayer(
+        MapUtils.GetFeatureLayer(
           Map,
           layerName
         ),
@@ -58,9 +58,9 @@ namespace MWRDTools.Presenter {
     public void FlashFeatures(int[] featuretIDs, string layerName) {
       if (featuretIDs == null) return;
 
-      Common.FlashFeatures(
+      MapUtils.FlashFeatures(
         featuretIDs,
-        Common.GetFeatureLayer(
+        MapUtils.GetFeatureLayer(
           Map,
           layerName
         ),

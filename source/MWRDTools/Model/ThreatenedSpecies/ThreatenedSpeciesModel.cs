@@ -150,7 +150,7 @@ namespace MWRDTools.Model
 
         comReleaser.ManageLifetime(cursor);
 
-        species = Common.CursorToDataTable(columnNames, cursor);
+        species = ModelUtils.CursorToDataTable(columnNames, cursor);
 
       } // using comReleaser
 
@@ -192,7 +192,7 @@ namespace MWRDTools.Model
     }
 
     public DataTable GetWetlandsBySpecies(string scientificName, double buffer, DateTime? afterDate, DateTime? beforeDate) {
-      return Common.FeatureListToDataTable(
+      return ModelUtils.FeatureListToDataTable(
         GetWetlandsBySpeciesList(
           scientificName, 
           buffer, 
@@ -339,7 +339,7 @@ namespace MWRDTools.Model
           speciesList.Add(speciesFeature);
         }
 
-        speciesTable = Common.FeatureListToDataTable(speciesList);
+        speciesTable = ModelUtils.FeatureListToDataTable(speciesList);
       } // using comReleaser
 
       return speciesTable;

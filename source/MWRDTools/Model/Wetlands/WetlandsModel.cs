@@ -58,7 +58,7 @@ namespace MWRDTools.Model {
 
         comReleaser.ManageLifetime(wetlandCursor);
 
-        wetlands = Common.CursorToDataTable(wetlandCursor);
+        wetlands = ModelUtils.CursorToDataTable(wetlandCursor);
 
       } // using comReleaser
 
@@ -78,7 +78,7 @@ namespace MWRDTools.Model {
 
         comReleaser.ManageLifetime(wetlandCursor);
 
-        wetlands = Common.CursorToDataTable(columnNames, wetlandCursor);
+        wetlands = ModelUtils.CursorToDataTable(columnNames, wetlandCursor);
 
       } // using comReleaser
 
@@ -115,7 +115,7 @@ namespace MWRDTools.Model {
 
         comReleaser.ManageLifetime(wetlandCursor);
 
-        wetlands = Common.CursorToDataTable(wetlandCursor);
+        wetlands = ModelUtils.CursorToDataTable(wetlandCursor);
 
       } // using comReleaser
 

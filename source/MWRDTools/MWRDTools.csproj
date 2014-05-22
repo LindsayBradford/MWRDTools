@@ -114,6 +114,7 @@
     <Compile Include="Model\CARMScenarios\ICARMScenarioModel.cs" />
     <Compile Include="Model\FileSystem\IFileSystemBridge.cs" />
     <Compile Include="Model\Geodatabase\IGeodatabaseBridge.cs" />
+    <Compile Include="Model\ModelUtils.cs" />
     <Compile Include="Model\ThreatenedSpecies\IThreatenedSpeciesModel.cs" />
     <Compile Include="Model\ThreatenedSpecies\ThreatenedSpeciesModel.cs" />
     <Compile Include="Model\Wetlands\IWetlandsModel.cs" />
@@ -136,8 +137,8 @@
     <Compile Include="View\ViewUtilities.cs" />
     <Compile Include="View\CommenceToFill\CommenceToFillFormBuilder.cs" />
     <Compile Include="View\CommenceToFill\CommenceToFillButton.cs" />
-    <Compile Include="MWRDToolsToolbar.cs" />
-    <Compile Include="Common.cs" />
+    <Compile Include="View\MWRDToolsToolbar.cs" />
+    <Compile Include="View\MapUtils.cs" />
     <Compile Include="Config.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Config.esriaddinx</DependentUpon>
@@ -155,16 +156,16 @@
     <Compile Include="View\CommenceToFill\CommenceToFillForm.Designer.cs">
       <DependentUpon>CommenceToFillForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmDatePicker.cs">
+    <Compile Include="View\ThreatenedSpecies\frmDatePicker.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmDatePicker.Designer.cs">
+    <Compile Include="View\ThreatenedSpecies\frmDatePicker.Designer.cs">
       <DependentUpon>frmDatePicker.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmFilter.cs">
+    <Compile Include="View\ThreatenedSpecies\frmFilter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmFilter.Designer.cs">
+    <Compile Include="View\ThreatenedSpecies\frmFilter.Designer.cs">
       <DependentUpon>frmFilter.cs</DependentUpon>
     </Compile>
     <Compile Include="View\ThreatenedSpecies\IThreatenedSpeciesView.cs" />
@@ -226,11 +227,11 @@
       <DependentUpon>CommenceToFillForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmDatePicker.resx">
+    <EmbeddedResource Include="View\ThreatenedSpecies\frmDatePicker.resx">
       <DependentUpon>frmDatePicker.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmFilter.resx">
+    <EmbeddedResource Include="View\ThreatenedSpecies\frmFilter.resx">
       <DependentUpon>frmFilter.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -241,6 +242,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Administration\AdministrationForm.resx">
       <DependentUpon>AdministrationForm.cs</DependentUpon>
@@ -251,7 +253,7 @@
     <Content Include="Images\excel.gif" />
     <Content Include="Images\find.png" />
     <AddInContent Include="Images\frog.png" />
-    <None Include="Resources\GriffithUniversity.jpg" />
+    <EmbeddedResource Include="Resources\GriffithUniversity.jpg" />
     <EmbeddedResource Include="Images\openfolderHS.png" />
     <Content Include="Images\selection_1.bmp" />
     <AddInContent Include="Images\tap.png" />
