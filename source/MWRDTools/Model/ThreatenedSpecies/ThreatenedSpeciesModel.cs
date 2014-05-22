@@ -93,6 +93,7 @@ namespace MWRDTools.Model
         null,
         "ClassName"
       );
+      names.Sort();
       return names.ToArray();
     }
 
@@ -121,6 +122,8 @@ namespace MWRDTools.Model
            }
         }
       }
+
+      uniqueStatuses.Sort();
 
       return uniqueStatuses.ToArray();
     }
