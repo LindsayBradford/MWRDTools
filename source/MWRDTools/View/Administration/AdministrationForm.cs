@@ -59,8 +59,19 @@ namespace MWRDTools.View
 #endregion
 
 #region InterfaceMethods
-    void ICARMScenarioImportView.ImportDirectory(string direcoryPath) {
-      this.carmImportPresenter.ImportDirectory(direcoryPath);
+    void ICARMScenarioImportView.ImportDirectory(string directoryPath) {
+
+      this.Cursor = Cursors.WaitCursor;
+      try {
+        carmImportPresenter.ImportDirectory(directoryPath);
+      } catch {
+        MessageBox.Show(
+          String.Format("Importing CARM Scenario(s) from {0} failed.", directoryPath)
+        );
+      } finally {
+        this.Cursor = Cursors.Default;
+        this.AdminStripProgressBar.Value = 0;
+      }
     }
 
     void INSWAtlasWildlifeImportView.ImportFiles(params String[] files) {
@@ -70,8 +81,19 @@ namespace MWRDTools.View
       );
 
       layer.Visible = false;
-      
-      this.atlasImportPresenter.ImportFiles(files);
+
+      this.Cursor = Cursors.WaitCursor;
+
+      try {
+        this.atlasImportPresenter.ImportFiles(files);
+      } catch {
+        MessageBox.Show(
+          "Importing Atlas of NSW Wildlife files failed."
+        );
+      } finally {
+        this.Cursor = Cursors.Default;
+        this.AdminStripProgressBar.Value = 0;
+      }
 
       MapUtils.RefreshFeatureLayer(application, layer);
 
@@ -80,15 +102,18 @@ namespace MWRDTools.View
 
     private void showStatusString(String status)
     {
-      this.AdminStripLabel.Invalidate();
       this.AdminStripLabel.Text = status;
-      this.Refresh();
+      this.AdminStripLabel.Invalidate();
+      this.Update();
     }
 
     private void showPercentComplete(int percentComplete) {
-      this.AdminStripProgressBar.Invalidate();
+      if (this.AdminStripProgressBar.Value == percentComplete) {
+        return;
+      }
+
       this.AdminStripProgressBar.Value = percentComplete;
-      this.Refresh();
+      this.AdminStripProgressBar.Invalidate();
     }
 #endregion
 
@@ -138,13 +163,11 @@ namespace MWRDTools.View
       this.AtlasImportButton.Enabled = true;
     }
 
-    private void AtlasFloraTextBox_TextChanged(object sender, EventArgs e)
-    {
+    private void AtlasFloraTextBox_TextChanged(object sender, EventArgs e) {
       checkAtlasImportButtonEnablable();
     }
 
-    private void AtlasFaunaTextBox_TextChanged(object sender, EventArgs e)
-    {
+    private void AtlasFaunaTextBox_TextChanged(object sender, EventArgs e) {
       checkAtlasImportButtonEnablable();
     }
 
@@ -162,19 +185,15 @@ namespace MWRDTools.View
       }
     }
 
-    private void CarmScenarioPathTextBox_TextChanged(object sender, EventArgs e)
-    {
+    private void CarmScenarioPathTextBox_TextChanged(object sender, EventArgs e) {
       checkCarmImportButtonEnablable();
     }
 
-    private void checkCarmImportButtonEnablable()
-    {
-      if (CarmScenarioPathTextBox.Text.Length > 0)
-      {
+    private void checkCarmImportButtonEnablable() {
+      if (CarmScenarioPathTextBox.Text.Length > 0) {
         CarmImportButton.Enabled = true;
       }
-      else
-      {
+      else {
         CarmImportButton.Enabled = false;
       }
     }
@@ -185,8 +204,8 @@ namespace MWRDTools.View
     }
 
     public void StatusChangedHandler(object sender, ProgressChangedEventArgs args) {
-      this.showStatusString(args.UserState as string);
       this.showPercentComplete(args.ProgressPercentage);
+      this.showStatusString(args.UserState as string);
     }
   }
 #endregion
