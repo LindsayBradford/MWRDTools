@@ -281,43 +281,44 @@ class Common
       pQueryFilter.WhereClause = sb.ToString();
       IFeatureCursor pFeatureCursor = pFeatureClass.Search(pQueryFilter, false);
       IGeometry pGeometry = null;
-      IFeature pFeature = pFeatureCursor.NextFeature();
-      if (pFeature != null)
+      IFeature feature = pFeatureCursor.NextFeature();
+      if (feature != null)
       {
-          if (pFeature.Shape.GeometryType == esriGeometryType.esriGeometryPoint || pFeature.Shape.GeometryType == esriGeometryType.esriGeometryMultipoint)
+          if (feature.Shape.GeometryType == esriGeometryType.esriGeometryMultipoint || 
+              feature.Shape.GeometryType == esriGeometryType.esriGeometryPoint)
           {
               IGeometryCollection pGeometryBag = new GeometryBagClass();
-              IMultipoint pMultiPoint = (IMultipoint)pFeature.Shape;
-              ITopologicalOperator pTopo = (ITopologicalOperator)pMultiPoint;
+              IGeometry featureShape = (IGeometry)feature.Shape;
+              ITopologicalOperator pTopo = (ITopologicalOperator)featureShape;
               pTopo.Simplify();
               IPolygon pPolygon = (IPolygon) pTopo.Buffer(100);
               pGeometryBag.AddGeometry(pPolygon, ref missing, ref missing);
-              pFeature = pFeatureCursor.NextFeature();
-              while (pFeature != null)
+              feature = pFeatureCursor.NextFeature();
+              while (feature != null)
               {
-                  pMultiPoint = (IMultipoint)pFeature.Shape;
-                  pTopo = (ITopologicalOperator)pMultiPoint;
+                  featureShape = (IGeometry)feature.Shape;
+                  pTopo = (ITopologicalOperator)featureShape;
                   pTopo.Simplify();
                   pPolygon = (IPolygon)pTopo.Buffer(100);
                   pGeometryBag.AddGeometry(pPolygon, ref missing, ref missing);
-                  pFeature = pFeatureCursor.NextFeature();
+                  feature = pFeatureCursor.NextFeature();
               }
               pTopo = new PolygonClass();
               pTopo.ConstructUnion(pGeometryBag as IEnumGeometry);
               pGeometry = pTopo as IPolygon;
           }
       }
-      if(pFeature != null)
+      if(feature != null)
       {
-          if(pFeature.Shape.GeometryType == esriGeometryType.esriGeometryPolygon)   
+          if(feature.Shape.GeometryType == esriGeometryType.esriGeometryPolygon)   
           {
               IGeometryCollection pGeometryBag = new GeometryBagClass();
-              pGeometryBag.AddGeometry(pFeature.Shape, ref missing, ref missing);
-              pFeature = pFeatureCursor.NextFeature();
-              while (pFeature != null)
+              pGeometryBag.AddGeometry(feature.Shape, ref missing, ref missing);
+              feature = pFeatureCursor.NextFeature();
+              while (feature != null)
               {
-                  pGeometryBag.AddGeometry(pFeature.Shape, ref missing, ref missing);
-                  pFeature = pFeatureCursor.NextFeature();
+                  pGeometryBag.AddGeometry(feature.Shape, ref missing, ref missing);
+                  feature = pFeatureCursor.NextFeature();
               }
               ITopologicalOperator pTopo = new PolygonClass();
               pTopo.ConstructUnion(pGeometryBag as IEnumGeometry);
