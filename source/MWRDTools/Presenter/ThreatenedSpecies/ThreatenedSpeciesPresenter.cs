@@ -35,16 +35,16 @@ namespace MWRDTools.Presenter {
       return threatenedSpeciesModel.GetSpeciesStatuses();
     }
 
-    public void SpeciesFilterApplied(string whereClause) {
+    public void SpeciesFilterApplied(string[] classesSelected, string[] statusesSelected) {
       view.ApplySpeciesFilter(
-        threatenedSpeciesModel.GetSpeciesWhere(
-          SPECIES_COLUMNS, 
-          whereClause
-          )
+        threatenedSpeciesModel.GetSelectedSpecies(
+          SPECIES_COLUMNS,
+          classesSelected,
+          statusesSelected
+        )
       );
     }
 
-        
     #region Wetlands Model
 
     private IWetlandsModel wetlandsModel;

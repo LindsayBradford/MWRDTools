@@ -12,6 +12,11 @@ namespace MWRDTools.Model
 
     string[] GetSpeciesClassNames();
     string[] GetSpeciesStatuses();
-    DataTable GetSpeciesWhere(string[] columnNames, string whereClause);
+
+    DataTable GetSelectedSpecies(
+      string[] columnNames, 
+      string[] classesSelected, 
+      string[] statusesSelected
+    );
   }
 }

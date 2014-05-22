@@ -8,130 +8,62 @@ using System.Text;
 using System.Windows.Forms;
 using ESRI.ArcGIS.Geodatabase;
 
-public partial class frmFilter : Form
+public partial class frmFilter : Form 
 {
-    private string _whereClause;
-    public frmFilter()
-    {
-        InitializeComponent();
-    }
-
-    public frmFilter(string whereClause, string[] speciesStatuses, string[] speciesClasses) {
+    private bool _filterSettingsLoaded = false;
+  
+    public frmFilter() {
       InitializeComponent();
-      _whereClause = whereClause;
-      SetSpeciesStatuses(speciesStatuses);
-      SetSpeciesClasses(speciesClasses);
     }
 
-    public string WhereClause
-    {
-        get
-        {
-            return _whereClause;
-        }
-        set
-        {
-            _whereClause = value;
-        }
+    public bool FilterSettingsLoaded {
+      get { return _filterSettingsLoaded; }
     }
 
-    private void ParseWhereClause()
-    {
-        //(First_LEGAL_STAT ='E1' OR First_LEGAL_STAT = 'E2') AND (First_CLASS_NAME ='AVES'); 
-        CheckItems(lboStatus);
-        CheckItems(lboTaxa);
-    }
+    public string[] GetSelectedSpeciesClasses() {
+      List<string> classes = new List<string>();
 
-    private void CheckItems(CheckedListBox lbo)
-    {
-        for (int i = 0; i < lbo.Items.Count; i++)
-        {
-            string val = string.Format("'{0}'", lbo.Items[i].ToString());
-            if (_whereClause.IndexOf(val) > 0)
-            {
-                lbo.SetItemChecked(i, true);
-            }
-        }
-    }
+      foreach (string item in lboTaxa.CheckedItems) {
+        classes.Add(item);
+      }
 
-    private void BuildWhereClause()
-    {
-        StringBuilder sb = new StringBuilder();
-            
-        if (lboStatus.CheckedItems.Count > 0)
-        {
-            sb.Append("(");
-            for (int i = 0; i < lboStatus.CheckedItems.Count; i++)
-            {
-                if (i > 0)
-                {
-                    sb.Append(" OR ");
-                }
-                sb.Append("NSWStatus LIKE '%");
-                sb.Append(lboStatus.CheckedItems[i].ToString());
-                sb.Append("%'");
-            }
-            sb.Append(") ");
-        }
-        if (lboTaxa.CheckedItems.Count > 0)
-        {
-            if (sb.Length > 0)
-            {
-                sb.Append(" AND ");
-            }
-            sb.Append("(");
-            for (int i = 0; i < lboTaxa.CheckedItems.Count; i++)
-            {
-                if (i > 0)
-                {
-                    sb.Append(" OR ");
-                }
-                sb.Append("ClassName ='");
-                sb.Append(lboTaxa.CheckedItems[i].ToString());
-                sb.Append("'");
-            }
-            sb.Append(")");
-        }
-        _whereClause = sb.ToString();
+      return classes.ToArray();
     }
-
-    private void SetSpeciesClasses(string[] speciesClasses) {
+  
+    public void SetSpeciesClasses(string[] speciesClasses) {
       lboTaxa.Items.Clear();
       foreach(string speciesClass in speciesClasses) {
         lboTaxa.Items.Add(speciesClass);
       }
+      _filterSettingsLoaded = true;
     }
 
-    private void SetSpeciesStatuses(string[] speciesStatuses) {
+    public string[] GetSelectedSpeciesStatuses() {
+      List<string> statuses = new List<string>();
+
+      foreach (string item in lboStatus.CheckedItems) {
+        statuses.Add(item);
+      }
+
+      return statuses.ToArray();
+    }
+
+    public void SetSpeciesStatuses(string[] speciesStatuses) {
       lboStatus.Items.Clear();
       foreach (string speciesStatus in speciesStatuses) {
         lboStatus.Items.Add(speciesStatus);
       }
+      _filterSettingsLoaded = true;
     }
 
-    private void frmFilter_Load(object sender, EventArgs e) {
-      if (_whereClause != "" && _whereClause != null) {
-        ParseWhereClause();
-      }
+    private void btnCancel_Click(object sender, EventArgs e) {
+      this.DialogResult = DialogResult.Cancel;
+      this.Close();
     }
 
-    private void btnCancel_Click(object sender, EventArgs e)
-    {
-        this.DialogResult = DialogResult.Cancel;
-        this.Close();
+    private void btnOK_Click(object sender, EventArgs e) {
+      this.DialogResult = DialogResult.OK;
+      this.Close();
     }
 
-    private void btnOK_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            this.DialogResult = DialogResult.OK;
-            BuildWhereClause();
-            this.Close();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
-    }
 }

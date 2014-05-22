@@ -17,7 +17,11 @@ namespace MWRDTools.Presenter {
     string[] GetSpeciesStatuses();
 
     void SpeciesByWetlandsTabSelected();
-    void SpeciesFilterApplied(string whereClause);
+
+    void SpeciesFilterApplied(
+      string[] classesSelected, 
+      string[] statusesSelected
+    );
 
     void setFileBridge(IFileSystemBridge fileBridge);
 

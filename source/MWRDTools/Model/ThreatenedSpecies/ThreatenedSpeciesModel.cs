@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Text;
 
 using ESRI.ArcGIS.ADF;
 using ESRI.ArcGIS.Geodatabase;
@@ -104,8 +105,7 @@ namespace MWRDTools.Model
       return names.ToArray();
     }
 
-
-    public DataTable GetSpeciesWhere(string[] columnNames, string whereClause) {
+    public DataTable GetSelectedSpecies(string[] columnNames, string[] classesSelected, string[] statusesSelected) {
 
       DataTable species = new DataTable();
 
@@ -113,18 +113,54 @@ namespace MWRDTools.Model
 
         ICursor cursor = bridge.GetCursorForQuery(
           Constants.TableName.ThreatenedSpeciesUnique,
-          whereClause,
+          buildSelectedSpeciesClause(
+            classesSelected, 
+            statusesSelected
+          ),
           string.Join(",", columnNames)
         );
 
         comReleaser.ManageLifetime(cursor);
 
-        species = Common.CursorToDataTable(cursor);
+        species = Common.CursorToDataTable(columnNames, cursor);
 
       } // using comReleaser
 
       return species;
     }
 
+    private string buildSelectedSpeciesClause(string[] classesSelected, string[] statusesSelected) {
+      StringBuilder sb = new StringBuilder();
+
+      if (statusesSelected.Length > 0) {
+        sb.Append("(");
+        for (int i = 0; i < statusesSelected.Length; i++) {
+          if (i > 0) {
+            sb.Append(" OR ");
+          }
+          sb.Append("NSWStatus LIKE '%");
+          sb.Append(statusesSelected[i]);
+          sb.Append("%'");
+        }
+        sb.Append(") ");
+      }
+      if (classesSelected.Length > 0) {
+        if (sb.Length > 0) {
+          sb.Append(" AND ");
+        }
+        sb.Append("(");
+        for (int i = 0; i < classesSelected.Length; i++) {
+          if (i > 0) {
+            sb.Append(" OR ");
+          }
+          sb.Append("ClassName ='");
+          sb.Append(classesSelected[i]);
+          sb.Append("'");
+        }
+        sb.Append(")");
+      }
+
+      return sb.ToString();
+    }
   }
 }

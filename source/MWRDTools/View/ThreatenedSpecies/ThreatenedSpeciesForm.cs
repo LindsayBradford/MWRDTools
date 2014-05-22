@@ -24,15 +24,18 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     private IFeatureLayer _wetlandsFL;
 
     SpatialDataAccess _spDataAccess;
-    frmFilter _frmFilter;
+    frmFilter _frmFilter = new frmFilter();
     frmDatePicker _frmDatePicker;
-    private string _speciesWhereClause;
     private bool _wetlandsLoaded = false;
 
     private IThreatenedSpeciesPresenter presenter;
 
     public ThreatenedSpeciesForm(IApplication pApplication) {
       InitializeComponent();
+
+      _frmFilter.Load += new EventHandler(_frmFilter_Load);
+      _frmFilter.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
+
 
       _application = pApplication;
       IMxDocument pMxDocument = _application.Document as IMxDocument;
@@ -78,31 +81,6 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         return (_featureWorkspace != null);
     }
 
-    private void LoadSpecies()
-    {
-        SpeciesListView.Items.Clear();
-        ICursor pCursor = DataAccess.GetSpeciesNames(_featureWorkspace, _speciesWhereClause);
-        IRow pRow = pCursor.NextRow();
-        while (pRow != null)
-        {
-            AddSpeciesListItem(pRow, SpeciesListView);
-            pRow = pCursor.NextRow();
-        }
-    }
-
-    private void AddSpeciesListItem(IRow pRow, ListView lv)
-    {
-        ListViewItem li = new ListViewItem();
-        li.Tag = Common.GetValueAsString(pRow, ColumnNames.ScientificName);
-        li.Text = Common.GetValueAsString(pRow, ColumnNames.CommonName);
-        li.SubItems.Add(Common.GetValueAsString(pRow, ColumnNames.ClassName));
-        li.SubItems.Add(Common.GetValueAsString(pRow, ColumnNames.FamilyName));
-        li.SubItems.Add(Common.GetValueAsString(pRow, ColumnNames.ScientificName));
-        li.SubItems.Add(Common.GetValueAsString(pRow, ColumnNames.LegalStatus));
-        li.SubItems.Add(Common.GetValueAsString(pRow, ColumnNames.SpeciesCode));
-        lv.Items.Add(li);
-    }
-
     void IThreatenedSpeciesView.ApplySpeciesFilter(DataTable species) {
       ViewUtilities.DataTableToListView(
         species,
@@ -120,13 +98,6 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     private void ShowFilter() {
-      _frmFilter = new frmFilter(
-        _speciesWhereClause,
-        presenter.GetSpeciesStatuses(),
-        presenter.GetSpeciesClasses()
-      );
-
-      _frmFilter.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
       _frmFilter.ShowDialog();
     }
 
@@ -209,25 +180,32 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       ShowFilter();
     }
 
+    void _frmFilter_Load(object sender, EventArgs e) {
+      if (_frmFilter.FilterSettingsLoaded) {
+        return;
+      }
+
+      _frmFilter.SetSpeciesClasses(
+        presenter.GetSpeciesClasses()
+      );
+
+      _frmFilter.SetSpeciesStatuses(
+        presenter.GetSpeciesStatuses()
+      );
+    }
+
     void _frmFilter_FormClosed(object sender, FormClosedEventArgs e)
     {
-        try
-        {
-            this.Cursor = Cursors.WaitCursor;
-            if (_frmFilter.DialogResult != DialogResult.Cancel)
-            {
-                _speciesWhereClause = _frmFilter.WhereClause;
-                LoadSpecies();
-            }
-            _frmFilter.FormClosed -= new FormClosedEventHandler(_frmFilter_FormClosed);
-            lblSpeciesFilter.Text = _speciesWhereClause;
-            this.Cursor = Cursors.Default;
-        }
-        catch (Exception ex)
-        {
-            this.Cursor = Cursors.Default;
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+      this.Cursor = Cursors.WaitCursor;
+
+      if (_frmFilter.DialogResult != DialogResult.Cancel) {
+        presenter.SpeciesFilterApplied(
+           _frmFilter.GetSelectedSpeciesClasses(),
+           _frmFilter.GetSelectedSpeciesStatuses()
+        );      
+      }
+
+      this.Cursor = Cursors.Default;
     }
 
     private void btnAfterDate_Click(object sender, EventArgs e) {
@@ -291,30 +269,21 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
     private void FindSpeciesByWetland_Click(object sender, EventArgs e)
     {
-        try
-        {
-            this.Cursor = Cursors.WaitCursor;
-            FilteredSpeciesListView.Items.Clear();
-            if (AllWetlandsListView.SelectedItems != null)
-            {
-                if (AllWetlandsListView.SelectedItems.Count > 0)
-                {
-                    double buffer = 0.0;
-                    if (!(cboBuffer1.Text == "None") && !(cboBuffer1.Text == ""))
-                    {
-                        buffer = Convert.ToDouble(cboBuffer1.Text);
-                    }
-                    IFeatureCursor species = _spDataAccess.GetSpeciesByWetland(_featureWorkspace, _wetlandsFL, AllWetlandsListView.SelectedItems[0].Tag.ToString(), buffer, txtAfter1.Text, txtBefore1.Text, _speciesWhereClause);
-                    Common.FeatureCursorToListView(species, ref FilteredSpeciesListView, "");
-                }
-            }
-            this.Cursor = Cursors.Default;
+      this.Cursor = Cursors.WaitCursor;
 
+      FilteredSpeciesListView.Items.Clear();
+      if (AllWetlandsListView.SelectedItems != null) {
+        if (AllWetlandsListView.SelectedItems.Count > 0) {
+          double buffer = 0.0;
+          if (!(cboBuffer1.Text == "None") && !(cboBuffer1.Text == "")) {
+            buffer = Convert.ToDouble(cboBuffer1.Text);
+          }
+          //IFeatureCursor species = _spDataAccess.GetSpeciesByWetland(_featureWorkspace, _wetlandsFL, AllWetlandsListView.SelectedItems[0].Tag.ToString(), buffer, txtAfter1.Text, txtBefore1.Text, _speciesWhereClause);
+          //Common.FeatureCursorToListView(species, ref FilteredSpeciesListView, "");
         }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+      }
+
+      this.Cursor = Cursors.Default;
     }
 
     private void FilteredSpeciesListView_ColumnClick(object sender, ColumnClickEventArgs e) {
