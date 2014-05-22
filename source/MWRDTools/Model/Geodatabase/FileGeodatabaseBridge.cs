@@ -54,6 +54,12 @@ namespace MWRDTools.Model {
       edit.StopEditing(true);
     }
 
+    #region ESRI Table Processing
+
+    private ITable getTable(string tableName) {
+      return (Workspace as IFeatureWorkspace).OpenTable(tableName);
+    }
+
     public T GetFirstColValueForQuery<T>(string tableName, string whereClause, string columnName) {
       T value = default(T);
       using (ComReleaser comReleaser = new ComReleaser()) {
@@ -84,7 +90,7 @@ namespace MWRDTools.Model {
         enumerator.Reset();
         T value;
         while (enumerator.MoveNext()) {
-          value = (T) enumerator.Current; 
+          value = (T)enumerator.Current;
           valueList.Add(
              value
           );
@@ -94,8 +100,7 @@ namespace MWRDTools.Model {
       return valueList;
     }
 
-
-    public List<T> GetColValuesForQuery<T>(string tableName,string whereClause, string columnName) {
+    public List<T> GetColValuesForQuery<T>(string tableName, string whereClause, string columnName) {
       List<T> valueList = new List<T>();
 
       using (ComReleaser comReleaser = new ComReleaser()) {
@@ -114,7 +119,7 @@ namespace MWRDTools.Model {
 
     public T GetValueForRowColumnName<T>(IRow row, string columnName) {
       int index = row.Table.FindField(columnName);
-      return (T) row.get_Value(index);
+      return (T)row.get_Value(index);
     }
 
     public int GetIndexForTableColumnName(string tableName, string columnName) {
@@ -146,7 +151,7 @@ namespace MWRDTools.Model {
       query.Tables = tableList;
       query.SubFields = subFields;
       query.WhereClause = whereClause;
-     
+
       return query.Evaluate();
     }
 
@@ -163,10 +168,6 @@ namespace MWRDTools.Model {
       filter.WhereClause = whereClause;
       filter.SubFields = subFields;
       return table.Search(filter, false);
-    }
-
-    private ITable getTable(string tableName) {
-      return (Workspace as IFeatureWorkspace).OpenTable(tableName);
     }
 
     public void DeleteTableContent(string tableName) {
@@ -259,10 +260,53 @@ namespace MWRDTools.Model {
       }
     }
 
+    #endregion
+
+    #region ESRI FeatureClass Support
+
+    private IFeatureClass getFeatureClass(string featureClassName) {
+      return (Workspace as IFeatureWorkspace).OpenFeatureClass(featureClassName);
+    }
+
+    public IFeatureCursor GetCursorForFeatureClassQuery(string featureClassName, string whereClause, string subFields) {
+      return GetCursorForFeatureClassQuery(
+        getFeatureClass(featureClassName),
+        whereClause,
+        subFields
+      );
+    }
+
+    private IFeatureCursor GetCursorForFeatureClassQuery(IFeatureClass featureClass, string whereClause, string subFields) {
+      IQueryFilter filter = new QueryFilter();
+      filter.WhereClause = whereClause;
+      filter.SubFields = subFields;
+      return featureClass.Search(filter, false);
+    }
+
+    public IFeatureCursor GetIntersectionCursor(string featureClassName, IFeature feature, double buffer) {
+      return GetIntersectionCursor(
+        getFeatureClass(featureClassName),
+        feature,
+        buffer
+      );
+    }
+
+    private IFeatureCursor GetIntersectionCursor(IFeatureClass featureClass, IFeature feature, double buffer) {
+      ISpatialFilter filter = new SpatialFilterClass();
+      filter.SpatialRel = esriSpatialRelEnum.esriSpatialRelIntersects;
+      filter.GeometryField = featureClass.ShapeFieldName;
+
+      ITopologicalOperator shape = (ITopologicalOperator) feature.Shape;
+      shape.Simplify();
+      filter.Geometry = shape.Buffer(buffer);
+
+      return featureClass.Search(filter, false);
+    }
+
     public void WriteDataTableAsPoints(string tableName, DataTable dataTable, int latitudeColIndex, int longitudeColIndex) {
       IFeatureClass esriTable = (Workspace as IFeatureWorkspace).OpenFeatureClass(tableName);
       IFeatureClassLoad esriTableLoad = esriTable as IFeatureClassLoad;
-      
+
       ISpatialReference sp = (esriTable as IGeoDataset).SpatialReference;
 
       try {
@@ -346,7 +390,7 @@ namespace MWRDTools.Model {
       }
     }
 
-    private IPoint buildPointFromDataRow(ISpatialReference spatialReference, DataRow row, 
+    private IPoint buildPointFromDataRow(ISpatialReference spatialReference, DataRow row,
                                          int latitudeColIndex, int longitudeColIndex) {
       IPoint point = new PointClass();
       point.SpatialReference = spatialReference;
@@ -362,6 +406,10 @@ namespace MWRDTools.Model {
 
       return point;
     }
+
+    #endregion
+
+
 
     private void raiseStatusEvent(string status) {
       ProgressChangedEventArgs statusArgs = new ProgressChangedEventArgs(0, status);

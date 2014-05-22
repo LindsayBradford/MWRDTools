@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 using MWRDTools.View;
 using MWRDTools.Model;
@@ -39,5 +40,11 @@ namespace MWRDTools.Presenter {
 
     void setThreatenedSpeciesModel(IThreatenedSpeciesModel model);
 
+    void FindWetlandsBySpecies(
+      string speciesScientificName, 
+      double buffer, 
+      DateTime? afterDate, 
+      DateTime? beforeDate
+    );
   }
 }

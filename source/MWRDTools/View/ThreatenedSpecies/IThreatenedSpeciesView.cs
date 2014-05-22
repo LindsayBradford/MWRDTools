@@ -9,5 +9,7 @@ namespace MWRDTools.View {
     void SetWetlands(DataTable wetlands);
 
     void ApplySpeciesFilter(DataTable species);
+
+    void ShowWetlandsForSpecies(DataTable wetlands);
   }
 }

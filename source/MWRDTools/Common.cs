@@ -658,4 +658,51 @@ class Common
     }
     table.Rows.Add(newRow);
   }
+
+
+  public static DataTable FeatureListToDataTable(List<IFeature> features) {
+
+    if (features == null || features.Count == 0) {
+      return null;
+    }
+
+    DataTable table = new DataTable();
+
+    addFieldsToDataTable(features[0].Fields, table);
+
+    foreach (IFeature feature in features) {
+      addFeatureToDataTable(feature, table);
+    }
+
+    table.AcceptChanges();
+
+    return table;
+  }
+
+  private static void addFeatureToDataTable(IFeature feature, DataTable table) {
+    DataRow newRow = table.NewRow();
+
+    foreach (DataColumn column in table.Columns) {
+      try {
+        if (column.ColumnName.Equals(Constants.OID)) {
+          int oidIndex = feature.Fields.FindFieldByAliasName("OBJECTID");
+          newRow[column.ColumnName] = feature.get_Value(oidIndex).ToString();
+          continue;
+        } else {
+          int fieldIndex = feature.Fields.FindFieldByAliasName(column.ColumnName);
+          newRow[column.ColumnName] = feature.get_Value(fieldIndex).ToString();
+        }
+      } catch (Exception e) {
+        MessageBox.Show("[" + column.ColumnName + "]" + e.Message);
+      }
+    }
+    table.Rows.Add(newRow);
+  }
+
+  public static string DateFormat(DateTime val) {
+    return string.Format(
+      "{0} 00:00:00", val.ToString("yyyy-MM-dd")
+    );
+  }
+
 }

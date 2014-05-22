@@ -45,6 +45,17 @@ namespace MWRDTools.Presenter {
       );
     }
 
+    public void FindWetlandsBySpecies(string speciesScientificName, double buffer, DateTime? afterDate, DateTime? beforeDate) {
+      view.ShowWetlandsForSpecies(
+        threatenedSpeciesModel.GetWetlandsBySpecies(
+          speciesScientificName, 
+          buffer, 
+          afterDate, 
+          beforeDate
+        )
+      );
+    }
+
     #region Wetlands Model
 
     private IWetlandsModel wetlandsModel;

@@ -97,6 +97,14 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       );
     }
 
+    void IThreatenedSpeciesView.ShowWetlandsForSpecies(DataTable wetlands) {
+      ViewUtilities.DataTableToListView(
+        wetlands,
+        FilteredWetlandsListView,
+        "OID"
+      );
+    }
+
     private void ShowFilter() {
       _frmFilter.ShowDialog();
     }
@@ -136,16 +144,12 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
         buffer = Convert.ToDouble(cboBuffer.Text);
       }
 
-      ArrayList wetlands = _spDataAccess.GetWetlandsBySpecies(
-        _featureWorkspace, 
-        _wetlandsFL, 
+      presenter.FindWetlandsBySpecies(
         SpeciesListView.SelectedItems[0].Tag.ToString(), 
         buffer,
         convertTextBoxToDateTime(txtAfterDate),
         convertTextBoxToDateTime(txtBeforeDate)
       );
-
-      Common.ArrayListToListView(wetlands, ref FilteredWetlandsListView, "");
 
       this.Cursor = Cursors.Default;
     }

@@ -61,6 +61,18 @@ namespace MWRDTools.Model {
       DataTable content
     );
 
+    IFeatureCursor GetCursorForFeatureClassQuery(
+      string featureClassName, 
+      string whereClause, 
+      string subFields
+    );
+
+    IFeatureCursor GetIntersectionCursor(
+      string featureClassName, 
+      IFeature feature, 
+      double buffer
+    );
+
     void WriteDataTableAsPoints(
       string tableName, 
       DataTable content, 

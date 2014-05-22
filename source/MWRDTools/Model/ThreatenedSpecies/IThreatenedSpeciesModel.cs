@@ -18,5 +18,12 @@ namespace MWRDTools.Model
       string[] classesSelected, 
       string[] statusesSelected
     );
+
+    DataTable GetWetlandsBySpecies(
+      string speciesScientificName, 
+      double buffer, 
+      DateTime? afterDate, 
+      DateTime? beforeDate
+    );
   }
 }
