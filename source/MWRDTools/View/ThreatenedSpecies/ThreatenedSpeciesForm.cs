@@ -18,11 +18,12 @@ using MWRDTools.Presenter;
 
 public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 {
-    frmFilter _frmFilter = new frmFilter();
-    frmDatePicker _frmDatePicker;
-    private bool _wetlandsLoaded = false;
 
     private const string SCIENTIFIC_NAME = "ScientificName";
+
+    private SpeciesFIlterForm speciesFilterForm = new SpeciesFIlterForm();
+    private DatePickerForm datePickerForm;
+    private bool wetlandsLoaded = false;
 
     private DataTable WetlandsForSpeciesTable, SpeciesForWetlandsTable;
 
@@ -37,11 +38,11 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       AllWetlandsListView.ListViewItemSorter = new ListViewColumnSorter();
       FilteredSpeciesListView.ListViewItemSorter = new ListViewColumnSorter();
 
-      _frmFilter.Load += new EventHandler(_frmFilter_Load);
-      _frmFilter.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
+      speciesFilterForm.Load += new EventHandler(_frmFilter_Load);
+      speciesFilterForm.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
 
-      _frmDatePicker = new frmDatePicker();
-      _frmDatePicker.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
+      datePickerForm = new DatePickerForm();
+      datePickerForm.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
 
       //_spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
     }
@@ -50,24 +51,24 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       this.presenter = presenter;
     }
 
-    void _spDataAccess_ProgressEvent(object sender, ProgressEventArgs e) {
-      switch (e.Activity) {
-        case ProgressEventEnums.eProgress.start: {
-          pb.Minimum = 0;
-          pb.Maximum = e.Step;
-          break;
-        }
-        case ProgressEventEnums.eProgress.update: {
-          pb.Value = e.Step;
-          break;
-        }
-        case ProgressEventEnums.eProgress.finish: {
-          pb.Value = pb.Maximum;
-          pb.Value = pb.Minimum;
-          break;
-        }
-      }
-    }
+    //void _spDataAccess_ProgressEvent(object sender, ProgressEventArgs e) {
+    //  switch (e.Activity) {
+    //    case ProgressEventEnums.eProgress.start: {
+    //      pb.Minimum = 0;
+    //      pb.Maximum = e.Step;
+    //      break;
+    //    }
+    //    case ProgressEventEnums.eProgress.update: {
+    //      pb.Value = e.Step;
+    //      break;
+    //    }
+    //    case ProgressEventEnums.eProgress.finish: {
+    //      pb.Value = pb.Maximum;
+    //      pb.Value = pb.Minimum;
+    //      break;
+    //    }
+    //  }
+    //}
 
     void IThreatenedSpeciesView.ApplySpeciesFilter(DataTable species) {
       ViewUtilities.DataTableToListView(
@@ -104,7 +105,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     private void ShowFilter() {
-      _frmFilter.ShowDialog();
+      speciesFilterForm.ShowDialog();
     }
 
     private void ThreatenedSpeciesForm_Load(object sender, EventArgs e) {
@@ -191,15 +192,15 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     void _frmFilter_Load(object sender, EventArgs e) {
-      if (_frmFilter.FilterSettingsLoaded) {
+      if (speciesFilterForm.FilterSettingsLoaded) {
         return;
       }
 
-      _frmFilter.SetSpeciesClasses(
+      speciesFilterForm.SetSpeciesClasses(
         presenter.GetSpeciesClasses()
       );
 
-      _frmFilter.SetSpeciesStatuses(
+      speciesFilterForm.SetSpeciesStatuses(
         presenter.GetSpeciesStatuses()
       );
     }
@@ -208,10 +209,10 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     {
       this.Cursor = Cursors.WaitCursor;
 
-      if (_frmFilter.DialogResult != DialogResult.Cancel) {
+      if (speciesFilterForm.DialogResult != DialogResult.Cancel) {
         presenter.SpeciesFilterApplied(
-           _frmFilter.GetSelectedSpeciesClasses(),
-           _frmFilter.GetSelectedSpeciesStatuses()
+           speciesFilterForm.GetSelectedSpeciesClasses(),
+           speciesFilterForm.GetSelectedSpeciesStatuses()
         );      
       }
 
@@ -219,34 +220,34 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     private void btnAfterDate_Click(object sender, EventArgs e) {
-      _frmDatePicker.DateType = "After";
-      _frmDatePicker.ShowDialog();
+      datePickerForm.DateType = "After";
+      datePickerForm.ShowDialog();
     }
 
     void _frmDatePicker_FormClosed(object sender, FormClosedEventArgs e)
     {
-        if(_frmDatePicker.DialogResult != DialogResult.Cancel)
+        if(datePickerForm.DialogResult != DialogResult.Cancel)
         {
-            switch (_frmDatePicker.DateType)
+            switch (datePickerForm.DateType)
             {
                 case "After":
                     {
-                        txtAfterDate.Text = _frmDatePicker.Result.ToShortDateString();
+                        txtAfterDate.Text = datePickerForm.Result.ToShortDateString();
                         break;
                     }
                 case "Before":
                     {
-                        txtBeforeDate.Text = _frmDatePicker.Result.ToShortDateString();
+                        txtBeforeDate.Text = datePickerForm.Result.ToShortDateString();
                         break;
                     }
                 case "After1":
                     {
-                        txtAfter1.Text = _frmDatePicker.Result.ToShortDateString();
+                        txtAfter1.Text = datePickerForm.Result.ToShortDateString();
                         break;
                     }
                 case "Before1":
                     {
-                        txtBefore1.Text = _frmDatePicker.Result.ToShortDateString();
+                        txtBefore1.Text = datePickerForm.Result.ToShortDateString();
                         break;
                     }
             }
@@ -254,8 +255,8 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     private void btnBeforeDate_Click(object sender, EventArgs e) {
-      _frmDatePicker.DateType = "Before";
-      _frmDatePicker.ShowDialog();
+      datePickerForm.DateType = "Before";
+      datePickerForm.ShowDialog();
     }
         
     private void mnuExit_Click(object sender, EventArgs e) {
@@ -267,11 +268,11 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     private void ThreatenedSpeciesTab_SelectedIndexChanged(object sender, EventArgs e) {
-      if (ThreatenedSpeciesTab.SelectedIndex == 1 && _wetlandsLoaded == false) {
+      if (ThreatenedSpeciesTab.SelectedIndex == 1 && wetlandsLoaded == false) {
         this.Cursor = Cursors.WaitCursor;
  
         presenter.SpeciesByWetlandsTabSelected();
-        _wetlandsLoaded = true;
+        wetlandsLoaded = true;
   
         this.Cursor = Cursors.Default;
       }
@@ -291,8 +292,8 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
       presenter.FindSpeciesByWetlands(
         AllWetlandsListView.SelectedItems[0].Tag.ToString(),
-        _frmFilter.GetSelectedSpeciesClasses(),
-        _frmFilter.GetSelectedSpeciesStatuses(),
+        speciesFilterForm.GetSelectedSpeciesClasses(),
+        speciesFilterForm.GetSelectedSpeciesStatuses(),
         buffer,
         convertTextBoxToDateTime(txtAfter1),
         convertTextBoxToDateTime(txtBefore1)
@@ -306,13 +307,13 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     }
 
     private void btnAfter1_Click(object sender, EventArgs e) {
-      _frmDatePicker.DateType = "After1";
-      _frmDatePicker.ShowDialog();
+      datePickerForm.DateType = "After1";
+      datePickerForm.ShowDialog();
     }
 
     private void btnBefore1_Click(object sender, EventArgs e) {
-      _frmDatePicker.DateType = "Before1";
-      _frmDatePicker.ShowDialog();
+      datePickerForm.DateType = "Before1";
+      datePickerForm.ShowDialog();
     }
 
     private void btnHighlight1_Click(object sender, EventArgs e) {

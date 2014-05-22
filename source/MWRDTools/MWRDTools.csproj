@@ -156,17 +156,17 @@
     <Compile Include="View\CommenceToFill\CommenceToFillForm.Designer.cs">
       <DependentUpon>CommenceToFillForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\ThreatenedSpecies\frmDatePicker.cs">
+    <Compile Include="View\ThreatenedSpecies\DatePickerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\ThreatenedSpecies\frmDatePicker.Designer.cs">
-      <DependentUpon>frmDatePicker.cs</DependentUpon>
+    <Compile Include="View\ThreatenedSpecies\DatePickerForm.Designer.cs">
+      <DependentUpon>DatePickerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\ThreatenedSpecies\frmFilter.cs">
+    <Compile Include="View\ThreatenedSpecies\SpeciesFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\ThreatenedSpecies\frmFilter.Designer.cs">
-      <DependentUpon>frmFilter.cs</DependentUpon>
+    <Compile Include="View\ThreatenedSpecies\SpeciesFilterForm.Designer.cs">
+      <DependentUpon>SpeciesFilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\ThreatenedSpecies\IThreatenedSpeciesView.cs" />
     <Compile Include="View\ThreatenedSpecies\ThreatenedSpeciesFormBuilder.cs" />
@@ -227,12 +227,12 @@
       <DependentUpon>CommenceToFillForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\ThreatenedSpecies\frmDatePicker.resx">
-      <DependentUpon>frmDatePicker.cs</DependentUpon>
+    <EmbeddedResource Include="View\ThreatenedSpecies\DatePickerForm.resx">
+      <DependentUpon>DatePickerForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\ThreatenedSpecies\frmFilter.resx">
-      <DependentUpon>frmFilter.cs</DependentUpon>
+    <EmbeddedResource Include="View\ThreatenedSpecies\SpeciesFilterForm.resx">
+      <DependentUpon>SpeciesFilterForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ThreatenedSpecies\ThreatenedSpeciesForm.resx">

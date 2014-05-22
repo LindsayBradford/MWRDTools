@@ -6,15 +6,15 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-public partial class frmDatePicker : Form
+public partial class DatePickerForm : Form
 {
     private string _dateType;
        
-    public frmDatePicker()
+    public DatePickerForm()
     {
         InitializeComponent();
     }
-    public frmDatePicker(string dateType)
+    public DatePickerForm(string dateType)
     {
         InitializeComponent();
         _dateType = dateType;

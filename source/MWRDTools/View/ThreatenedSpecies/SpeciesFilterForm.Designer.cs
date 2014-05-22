@@ -1,4 +1,4 @@
-partial class frmFilter
+partial class SpeciesFIlterForm
 {
     /// <summary>
     /// Required designer variable.

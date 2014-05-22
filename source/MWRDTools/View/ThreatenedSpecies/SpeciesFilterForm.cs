@@ -8,11 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using ESRI.ArcGIS.Geodatabase;
 
-public partial class frmFilter : Form 
+public partial class SpeciesFIlterForm : Form 
 {
     private bool _filterSettingsLoaded = false;
   
-    public frmFilter() {
+    public SpeciesFIlterForm() {
       InitializeComponent();
     }
 

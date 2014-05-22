@@ -1,4 +1,4 @@
-partial class frmDatePicker
+partial class DatePickerForm
 {
     /// <summary>
     /// Required designer variable.
