@@ -97,12 +97,32 @@ namespace MWRDTools.Model
     }
 
     public string[] GetSpeciesStatuses() {
-      List<string> names = bridge.GetUniqueColValuesForQuery<string>(
+      List<string> statuses = bridge.GetUniqueColValuesForQuery<string>(
         Constants.TableName.ThreatenedSpeciesUnique,
         null,
         "NSWStatus"
       );
-      return names.ToArray();
+
+      // Original dataset fuses a number of statuses as a comma separated list,
+      // below, we split them up as unique entries.
+
+      List<string> uniqueStatuses = new List<string>();
+      foreach (string status in statuses) {
+        if (status.IndexOf(",") != -1) {
+          string[] splitStatus = status.Split(',');
+          foreach (string uniqueStatus in splitStatus) {
+            if (!uniqueStatuses.Contains(uniqueStatus)) {
+              uniqueStatuses.Add(uniqueStatus);
+            }
+          }
+        } else {
+            if (!uniqueStatuses.Contains(status)) {
+              uniqueStatuses.Add(status);
+           }
+        }
+      }
+
+      return uniqueStatuses.ToArray();
     }
 
     public DataTable GetSelectedSpecies(string[] columnNames, string[] classesSelected, string[] statusesSelected) {
