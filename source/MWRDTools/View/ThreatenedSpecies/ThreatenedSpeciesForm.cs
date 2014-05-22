@@ -33,24 +33,24 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     public ThreatenedSpeciesForm(IApplication pApplication) {
       InitializeComponent();
 
-      _frmFilter.Load += new EventHandler(_frmFilter_Load);
-      _frmFilter.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
-
-
-      _application = pApplication;
-      IMxDocument pMxDocument = _application.Document as IMxDocument;
-      _map = pMxDocument.FocusMap;
-
       SpeciesListView.ListViewItemSorter = new ListViewColumnSorter();
       FilteredWetlandsListView.ListViewItemSorter = new ListViewColumnSorter();
 
       AllWetlandsListView.ListViewItemSorter = new ListViewColumnSorter();
       FilteredSpeciesListView.ListViewItemSorter = new ListViewColumnSorter();
 
-       _spDataAccess = new SpatialDataAccess();
-      _spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
+      _frmFilter.Load += new EventHandler(_frmFilter_Load);
+      _frmFilter.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
+
       _frmDatePicker = new frmDatePicker();
       _frmDatePicker.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
+
+      _application = pApplication;
+      IMxDocument pMxDocument = _application.Document as IMxDocument;
+      _map = pMxDocument.FocusMap;
+
+       _spDataAccess = new SpatialDataAccess();
+      _spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
     }
 
     public void setPresenter(IThreatenedSpeciesPresenter presenter) {
@@ -123,35 +123,43 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       ViewUtilities.ProcessColumnClickEvent(SpeciesListView, e);
     }
 
-    private void btnFind_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            this.Cursor = Cursors.WaitCursor;
+    private void btnFind_Click(object sender, EventArgs e) {
 
-            FilteredWetlandsListView.Items.Clear();
-            if (SpeciesListView.SelectedItems != null)
-            {
-                if (SpeciesListView.SelectedItems.Count > 0)
-                {
-                    double buffer = 0.0;
-                    if (!(cboBuffer.Text == "None") && !(cboBuffer.Text == ""))
-                    {
-                        buffer = Convert.ToDouble(cboBuffer.Text);
-                    }
-                    string afterDate = txtAfterDate.Text;
-                    string beforeDate = txtBeforeDate.Text;
-                    ArrayList wetlands = _spDataAccess.GetWetlandsBySpecies(_featureWorkspace, _wetlandsFL, SpeciesListView.SelectedItems[0].Tag.ToString(), buffer, afterDate, beforeDate);
-                    Common.ArrayListToListView(wetlands, ref FilteredWetlandsListView, "");
-                }
-            }
-            this.Cursor = Cursors.Default;
-        }
-        catch (Exception ex)
-        {
-            this.Cursor = Cursors.Default;
-            MessageBox.Show(ex.Message, Application.ProductName);
-        }
+      if (SpeciesListView.SelectedItems.Count == 0) {
+        return;
+      }
+      
+      this.Cursor = Cursors.WaitCursor;
+
+      double buffer = 0.0;
+      if (!(cboBuffer.Text == "None") && !(cboBuffer.Text == "")) {
+        buffer = Convert.ToDouble(cboBuffer.Text);
+      }
+
+      ArrayList wetlands = _spDataAccess.GetWetlandsBySpecies(
+        _featureWorkspace, 
+        _wetlandsFL, 
+        SpeciesListView.SelectedItems[0].Tag.ToString(), 
+        buffer,
+        convertTextBoxToDateTime(txtAfterDate),
+        convertTextBoxToDateTime(txtBeforeDate)
+      );
+
+      Common.ArrayListToListView(wetlands, ref FilteredWetlandsListView, "");
+
+      this.Cursor = Cursors.Default;
+    }
+
+    private DateTime? convertTextBoxToDateTime(ToolStripTextBox textbox) {
+      DateTime? dt = null;
+
+      try {
+        dt = new DateTime?(
+          Convert.ToDateTime(textbox.Text)
+        );
+      } catch { }
+
+      return dt;
     }
 
     private void btnSelect_Click(object sender, EventArgs e) {

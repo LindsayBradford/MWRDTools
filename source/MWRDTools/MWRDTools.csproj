@@ -143,7 +143,6 @@
       <DependentUpon>Config.esriaddinx</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
-    <Compile Include="DataAccess.cs" />
     <Compile Include="View\AboutDialog.cs">
       <SubType>Form</SubType>
     </Compile>

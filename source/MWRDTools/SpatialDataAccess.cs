@@ -15,8 +15,8 @@ public class SpatialDataAccess
     public event ProgressEventHandler ProgressEvent;
 
 
-    public ArrayList GetWetlandsBySpecies(IFeatureWorkspace pFeatureWorkspace, IFeatureLayer wetlandsFL, string scientificName, double buffer, string afterDate, string beforeDate)
-    {
+    public ArrayList GetWetlandsBySpecies(IFeatureWorkspace pFeatureWorkspace, IFeatureLayer wetlandsFL, 
+                                          string scientificName, double buffer, DateTime? afterDate, DateTime? beforeDate) {
         ProgressEventArgs pe = new ProgressEventArgs(ProgressEventEnums.eProgress.start, 0);
             
         ArrayList result = new ArrayList();
@@ -38,25 +38,25 @@ public class SpatialDataAccess
         sb.Append(scientificName);
         sb.Append("'");
 
-        if (afterDate != "")
+        if (afterDate.HasValue)
         {
             sb.Append(" AND ");
             sb.Append('"');
             sb.Append("DateFirst");
             sb.Append('"');
             sb.Append("> date '");
-            sb.Append(DateFormat(afterDate));
+            sb.Append(DateFormat(afterDate.Value));
             sb.Append("'");
         }
 
-        if (beforeDate != "")
+        if (beforeDate.HasValue)
         {
             sb.Append(" AND ");
             sb.Append('"');
             sb.Append("DateLast");
             sb.Append('"');
             sb.Append("< date '");
-            sb.Append(DateFormat(beforeDate));
+            sb.Append(DateFormat(beforeDate.Value));
             sb.Append("'");
         }
 
@@ -111,7 +111,8 @@ public class SpatialDataAccess
         result.Add(pNewFeature);
     }
 
-    public IFeatureCursor GetSpeciesByWetland(IFeatureWorkspace pFeatureWorkspace, IFeatureLayer pFeatureLayer, string wetlandID, double buffer, string afterDate, string beforeDate, string speciesFilter)
+    public IFeatureCursor GetSpeciesByWetland(IFeatureWorkspace pFeatureWorkspace, IFeatureLayer pFeatureLayer, string wetlandID, 
+                                              double buffer, DateTime? afterDate, DateTime? beforeDate, string speciesFilter)
     {
         IFeatureClass pFeatureClass = pFeatureLayer.FeatureClass;
         IQueryFilter pQueryFilter = new QueryFilterClass();
@@ -131,7 +132,7 @@ public class SpatialDataAccess
 
             sb.Append(speciesFilter);
                 
-            if (afterDate != "")
+            if (afterDate.HasValue)
             {
                 if (sb.Length > 0)
                 {
@@ -141,10 +142,10 @@ public class SpatialDataAccess
                 sb.Append("DateFirst");
                 sb.Append('"');
                 sb.Append("> date '");
-                sb.Append(DateFormat(afterDate));
+                sb.Append(DateFormat(afterDate.Value));
                 sb.Append("'");
             }
-            if (beforeDate != "")
+            if (beforeDate.HasValue)
             {
                 if(sb.Length > 0)
                 {
@@ -154,7 +155,7 @@ public class SpatialDataAccess
                 sb.Append("DateLast");
                 sb.Append('"');
                 sb.Append("< date '");
-                sb.Append(DateFormat(beforeDate));
+                sb.Append(DateFormat(beforeDate.Value));
                 sb.Append("'");
             }
             pSpatialFilter.WhereClause = sb.ToString();
@@ -164,13 +165,9 @@ public class SpatialDataAccess
         return null;
     }
 
-    public static string DateFormat(string val) {
-      try {
-        DateTime dt = Convert.ToDateTime(val);
-        return string.Format("{0} 00:00:00", dt.ToString("yyyy-MM-dd"));
-      }
-      catch {
-        return "Invalid date";
-      }
+    public static string DateFormat(DateTime val) {
+      return string.Format(
+        "{0} 00:00:00", val.ToString("yyyy-MM-dd")
+      );
     }
 }
