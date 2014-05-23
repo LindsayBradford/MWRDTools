@@ -28,6 +28,7 @@
     /// </summary>
     private void InitializeComponent()
     {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdministrationForm));
       this.AdminTabControl = new System.Windows.Forms.TabControl();
       this.AtlasNSWWildlifeTabPage = new System.Windows.Forms.TabPage();
       this.AtlasFaunaFileButton = new System.Windows.Forms.Button();
@@ -250,7 +251,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
       this.AdminStripLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
       this.AdminStripLabel.Name = "AdminStripLabel";
-      this.AdminStripLabel.Size = new System.Drawing.Size(264, 17);
+      this.AdminStripLabel.Size = new System.Drawing.Size(295, 17);
       this.AdminStripLabel.Spring = true;
       this.AdminStripLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
@@ -286,13 +287,14 @@
       this.ClientSize = new System.Drawing.Size(412, 193);
       this.Controls.Add(this.AdminTabControl);
       this.Controls.Add(this.AdministrationstatusStrip);
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.MinimumSize = new System.Drawing.Size(420, 220);
       this.Name = "AdministrationForm";
       this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-      this.Text = "Administration";
+      this.Text = "MWRD Administration";
       this.TopMost = true;
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AdministrationForm_Closing);
       this.AdminTabControl.ResumeLayout(false);

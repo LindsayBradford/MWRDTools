@@ -633,7 +633,7 @@ partial class ThreatenedSpeciesForm
       // 
       this.mnuFilter.Image = ((System.Drawing.Image)(resources.GetObject("mnuFilter.Image")));
       this.mnuFilter.Name = "mnuFilter";
-      this.mnuFilter.Size = new System.Drawing.Size(152, 22);
+      this.mnuFilter.Size = new System.Drawing.Size(149, 22);
       this.mnuFilter.Text = "Species &Filter...";
       this.mnuFilter.Click += new System.EventHandler(this.mnuFilter_Click);
       // 
@@ -686,7 +686,7 @@ partial class ThreatenedSpeciesForm
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.MainMenuStrip = this.menuStrip1;
       this.Name = "ThreatenedSpeciesForm";
-      this.Text = "Threatened Species";
+      this.Text = "MWRD Threatened Species";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ThreatenedSpeciesForm_FormClosing);
       this.Load += new System.EventHandler(this.ThreatenedSpeciesForm_Load);
       this.ThreatenedSpeciesTab.ResumeLayout(false);

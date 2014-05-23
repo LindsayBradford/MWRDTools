@@ -137,6 +137,9 @@
   <metadata name="WaggaToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="WaggaToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="btnWaggaHighlight.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -190,6 +193,9 @@
         AAAASUVORK5CYII=
 </value>
   </data>
+  <metadata name="GaugeToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>83, 17</value>
+  </metadata>
   <metadata name="GaugeToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>83, 17</value>
   </metadata>
@@ -262,6 +268,9 @@
         f0nPw9n4cgAAAABJRU5ErkJggg==
 </value>
   </data>
+  <metadata name="CARMToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>531, 17</value>
+  </metadata>
   <metadata name="CARMToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>531, 17</value>
   </metadata>
@@ -345,19 +354,26 @@
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        AAABAAEAICAQAAAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAgAIAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD//wD/AAAA/wD/AP//
-        AAD///8AAAAAAAAAAAAAAAAAAAAAAA////////////////////AP//////mZmZ/////////wD/////mZ
-        mZmf////////8A/////5n/////////////AP////mf/5mZ/////////wD//MzJn5mZmf////////8A/8
-        zMzM+Zn///////////AP/P//zMz////////////wD//////Mz//6qqqqqqqv8A//zMz//8z6qqqqqqqq
-        r/AP/MzMzP/8+q/////////wDwz//8zM/6r6qqqv////8A8Aqqr/zMyq+qqqr/////APAKqqqv/Mqvqv
-        ///////wDwD//6qv+qr6r6qg////8A8A////qqqv+q+q8AD///APAP////qv//r/r/8A///wDwD/////
-        ////////AP//8A8A//////////////AP//APAP/////////////wD//wDwD/////////////8A//8A8A
-        //////////////AA//APAP//////////////AP/wDwD//////////////wD/8A8A///////////////w
-        D/APAP//////////////8A/wDwAAAAAAAAAAAP8AAPAP8A8AAAAAAAAAAAAAAAAAAPAP///////////w
-        AA/wAADwD///////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAD///8A////AP///wD/ZAAh/2YAaf9jAB////8A////AP///wD///8A////AP///wD///8A////AP//
+        /wD///8A////AP///wD/AAAB/2YAyP9mAP//ZgDA////AP///wD///8A////AP///wD///8A////AP//
+        /wD///8A////AP///wD///8A/4AABP9mAJT/ZgD//2UAyf///wD///8A////AP///wD///8A////AP//
+        /wD///8A////AP///wD///8A////AP///wD/ZwBo/2YA/P9nAGH///8A////AP///wD///8A////AP//
+        /wD///8A////AP///wD///8A////AP///wD///8A/2EAFf9mAOH/XQAL////AP///wD///8A////AP//
+        /wD///8A////AP///wD///8A////AP///wD///8A////AP///wD/ZgA8////AP///wD///8A////AP//
+        /wD///8A////AP///wD///8A////AP///wD///8A////AAAAAGgAAACwAAAAsAAAALAAAAB3////AP//
+        /wD///8A////AP///wAAAAAGAAAAOv///wD///8A////AP///wAAAAAOAAAA6QAAAP8AAAD6AAAAFf//
+        /wD///8A////AP///wD///8AAAAAcAAAALD///8A////AP///wD///8A////AAAAAOAAAAD/AAAA+gAA
+        AEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAJoAAACw////AP///wD///8A////AP///wAAAADgAAAA/wAA
+        AP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAsP///wD///8A////AP///wD///8AAAAAhwAA
+        AP0AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAALD///8A////AP///wD///8A////AP//
+        /wD///8A////AAAAALoAAAD/AAAA/wAAAGL///8A////AAAAAHgAAACw////AP///wD///8A////AP//
+        /wD///8A////AP///wAAAAAJAAAA5AAAAJz///8A////AP///wAAAABMAAAArv///wD///8A////AP//
+        /wD///8A////AP///wD///8A////AAAAAJoAAABE////AP///wD///8A////AP///wD///8A////AP//
+        /wD///8A////AP///wAAAAAJAAAA7wAAAPgAAAD5AAAA9gAAAPgAAACj////AP///wD///8A////AP//
+        /wD///8A////AP///wD///8A////AAAAABMAAAAYAAAAOAAAABsAAAAYAAAAC////wD///8A////AP//
+        /wD///8A//8AAOP/AADj/wAA9/8AAPf/AAD//wAA4/8AAOP7AADj8wAA4AMAAOADAAD8ewAA/nsAAP7/
+        AAD4HwAA//8AAA==
 </value>
   </data>
 </root>
