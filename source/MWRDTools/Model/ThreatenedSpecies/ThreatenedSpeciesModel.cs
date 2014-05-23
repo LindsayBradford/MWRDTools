@@ -22,10 +22,6 @@ namespace MWRDTools.Model
        "ScientificName", "Exotic", "CommonName", "NSWStatus"
     };
 
-    public delegate void ProgressEventHandler(object sender, ProgressEventArgs e);
-
-    public event ProgressEventHandler ProgressEvent;
-
     public void OverwriteSightingData(DataTable speciesSightings) {
 
       DataTable uniqueSpeciesTable = DeriveUniqueThreatenedSpecies(speciesSightings);
@@ -203,11 +199,7 @@ namespace MWRDTools.Model
     }
 
     private List<IFeature> GetWetlandsBySpeciesList(string scientificName, double buffer, DateTime? afterDate, DateTime? beforeDate) {
-      ProgressEventArgs pe = new ProgressEventArgs(ProgressEventEnums.eProgress.start, 0);
 
-      int steps = 0;
-      int step = 0;
- 
       StringBuilder speciesQuery = new StringBuilder();
       speciesQuery.Append("ScientificName = '");
       speciesQuery.Append(scientificName);
@@ -216,6 +208,8 @@ namespace MWRDTools.Model
       speciesQuery.Append(
         buildDateQuery(afterDate, beforeDate)
       );
+
+      int steps = 0;
 
       List<IFeature> species = new List<IFeature>();
 
@@ -234,10 +228,10 @@ namespace MWRDTools.Model
           steps++;
           species.Add(speciesFeature);
         }
-        pe.Step = steps;
-        //ProgressEvent(this, pe);
-        //pe.Activity = ProgressEventEnums.eProgress.update;
       }
+
+      int step = 0;
+      raiseStatusEvent(0); 
 
       List<IFeature> result = new List<IFeature>();
 
@@ -260,12 +254,10 @@ namespace MWRDTools.Model
         } // using comReleaser
 
         step++;
-        pe.Step = step;
-        //ProgressEvent(this, pe);
+
+        raiseStatusEvent((int)step/steps * 100); 
       }
 
-      pe.Activity = ProgressEventEnums.eProgress.finish;
-      //ProgressEvent(this, pe);
       return result;
     }
       

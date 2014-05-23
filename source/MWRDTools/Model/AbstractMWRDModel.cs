@@ -16,8 +16,16 @@ namespace MWRDTools.Model {
       bridge.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.HandleBridgeStatusEvent);
     }
 
+    protected void raiseStatusEvent(int percentComplete) {
+      raiseStatusEvent(null, percentComplete);
+    }
+
     protected void raiseStatusEvent(string status) {
-      ProgressChangedEventArgs statusArgs = new ProgressChangedEventArgs(0, status);
+      raiseStatusEvent(status, 0);
+    }
+
+    protected void raiseStatusEvent(string status, int percentComplete) {
+      ProgressChangedEventArgs statusArgs = new ProgressChangedEventArgs(percentComplete, status);
 
       if (StatusChanged != null) {
         StatusChanged(this, statusArgs);

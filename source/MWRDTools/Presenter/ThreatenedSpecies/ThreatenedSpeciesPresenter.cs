@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 
@@ -16,6 +17,8 @@ namespace MWRDTools.Presenter {
     private static string[] SPECIES_COLUMNS = { "ScientificName", "CommonName", "ClassName", "FamilyName", "NSWStatus", "SpeciesCode" };
 
     private IThreatenedSpeciesView view;
+
+    public event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
     public void setView(IThreatenedSpeciesView view) {
       this.view = view;
@@ -87,6 +90,7 @@ namespace MWRDTools.Presenter {
 
     public void setThreatenedSpeciesModel(IThreatenedSpeciesModel model) {
       this.threatenedSpeciesModel = model;
+      model.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.HandleModelStatusEvent);
     }
 
     #endregion
@@ -112,5 +116,10 @@ namespace MWRDTools.Presenter {
       );
     }
 
+    private void HandleModelStatusEvent(object sender, ProgressChangedEventArgs args) {
+      if (StatusChanged != null) {
+        StatusChanged(this, args);
+      }
+    }
   }
 }

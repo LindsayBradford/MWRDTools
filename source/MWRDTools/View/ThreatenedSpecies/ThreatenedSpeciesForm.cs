@@ -43,32 +43,18 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
       datePickerForm = new DatePickerForm();
       datePickerForm.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
-
-      //_spDataAccess.ProgressEvent += new SpatialDataAccess.ProgressEventHandler(_spDataAccess_ProgressEvent);
     }
 
     public void setPresenter(IThreatenedSpeciesPresenter presenter) {
       this.presenter = presenter;
+      presenter.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.StatusChangedHandler);
     }
 
-    //void _spDataAccess_ProgressEvent(object sender, ProgressEventArgs e) {
-    //  switch (e.Activity) {
-    //    case ProgressEventEnums.eProgress.start: {
-    //      pb.Minimum = 0;
-    //      pb.Maximum = e.Step;
-    //      break;
-    //    }
-    //    case ProgressEventEnums.eProgress.update: {
-    //      pb.Value = e.Step;
-    //      break;
-    //    }
-    //    case ProgressEventEnums.eProgress.finish: {
-    //      pb.Value = pb.Maximum;
-    //      pb.Value = pb.Minimum;
-    //      break;
-    //    }
-    //  }
-    //}
+    public void StatusChangedHandler(object sender, ProgressChangedEventArgs args) {
+      this.pb.Value = args.ProgressPercentage;
+      this.pb.Invalidate();
+      this.Update();
+    }
 
     void IThreatenedSpeciesView.ApplySpeciesFilter(DataTable species) {
       ViewUtilities.DataTableToListView(

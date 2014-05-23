@@ -108,7 +108,7 @@ namespace MWRDTools.View
     }
 
     private void showPercentComplete(int percentComplete) {
-      if (this.AdminStripProgressBar.Value == percentComplete) {
+      if (this.AdminStripProgressBar.Value >= percentComplete) {
         return;
       }
 
