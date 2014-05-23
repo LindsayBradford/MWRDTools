@@ -17,7 +17,7 @@ namespace MWRDTools.Model {
 
     public event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
-    private const int STATUS_UPDATE_FREQUENCY = 500;
+    private const int STATUS_UPDATE_FREQUENCY = 1000;
 
     // Efficiency matters per type of database.  As this a file-geodatabase bridge,
     // the methods for DB interaction have been optimised for file geodatabses. See:
@@ -167,7 +167,7 @@ namespace MWRDTools.Model {
       IQueryFilter filter = new QueryFilter();
       filter.WhereClause = whereClause;
       filter.SubFields = subFields;
-      return table.Search(filter, false);
+      return table.Search(filter, true);
     }
 
     public void DeleteTableContent(string tableName) {
@@ -314,7 +314,7 @@ namespace MWRDTools.Model {
       shape.Simplify();
       filter.Geometry = shape.Buffer(buffer);
 
-      return featureClass.Search(filter, false);
+      return featureClass.Search(filter, true);
     }
 
 
@@ -423,8 +423,6 @@ namespace MWRDTools.Model {
     }
 
     #endregion
-
-
 
     private void raiseStatusEvent(string status) {
       ProgressChangedEventArgs statusArgs = new ProgressChangedEventArgs(0, status);
