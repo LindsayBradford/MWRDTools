@@ -12,7 +12,7 @@ namespace MWRDTools
   /// </summary>
   [Guid("950af1a9-9710-4a12-b227-a3ad43cf95f8")]
   [ClassInterface(ClassInterfaceType.None)]
-  [ProgId("MRDBTools.MRDBToolsToolbar")]
+  [ProgId("MWRDTools.MWRDToolsToolbar")]
   public sealed class MWRDToolsToolbar : BaseToolbar
   {
     #region COM Registration Function(s)
@@ -67,12 +67,12 @@ namespace MWRDTools
 
     public override string Caption {
       get {
-        return "MRDB Decision Support Toolbar";
+        return "MWRD Decision Support Toolbar";
       }
     }
     public override string Name {
       get {
-        return "MRDBToolsToolbar";
+        return "MWRDToolsToolbar";
       }
     }
   }
