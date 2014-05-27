@@ -1,11 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Collections;
-using System.IO;
-
-using ESRI.ArcGIS.ArcMapUI;
-using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Framework;
+﻿using ESRI.ArcGIS.Framework;
 
 using MWRDTools.Presenter;
 using MWRDTools.Model;

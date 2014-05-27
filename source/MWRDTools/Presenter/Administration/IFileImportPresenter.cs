@@ -2,9 +2,6 @@
 using System.ComponentModel;
 using System.Data;
 
-using ESRI.ArcGIS.Framework;
-
-using MWRDTools.View;
 using MWRDTools.Model;
 
 namespace MWRDTools.Presenter

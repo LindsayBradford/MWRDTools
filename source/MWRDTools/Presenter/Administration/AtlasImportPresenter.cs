@@ -1,12 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.ComponentModel;
 
-using MWRDTools.View;
 using MWRDTools.Model;
 
 namespace MWRDTools.Presenter

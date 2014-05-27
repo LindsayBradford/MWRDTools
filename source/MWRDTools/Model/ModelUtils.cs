@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 using ESRI.ArcGIS.Geodatabase;
 
@@ -96,7 +95,7 @@ namespace MWRDTools.Model {
             newRow[column.ColumnName] = esriRow.get_Value(fieldIndex).ToString();
           }
         } catch (Exception e) {
-          MessageBox.Show("[" + column.ColumnName + "]" + e.Message);
+          throw e;
         }
       }
       table.Rows.Add(newRow);
@@ -136,7 +135,7 @@ namespace MWRDTools.Model {
             newRow[column.ColumnName] = feature.get_Value(fieldIndex).ToString();
           }
         } catch (Exception e) {
-          MessageBox.Show("[" + column.ColumnName + "]" + e.Message);
+          throw e;
         }
       }
       table.Rows.Add(newRow);

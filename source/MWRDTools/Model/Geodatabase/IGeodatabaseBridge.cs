@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Collections.Generic;
 
 using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.Geometry;
 
 namespace MWRDTools.Model {
   public interface IGeodatabaseBridge {

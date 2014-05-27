@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Data;
 
-using MWRDTools.View;
 using MWRDTools.Model;
 
-using ESRI.ArcGIS.Framework;
 using ESRI.ArcGIS.Carto;
+using ESRI.ArcGIS.Framework;
 
 namespace MWRDTools.Presenter {
   public interface ICommenceToFillPresenter {

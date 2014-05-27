@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Data;
 using System.IO;
 
-using MWRDTools.View;
 using MWRDTools.Model;
 
 namespace MWRDTools.Presenter

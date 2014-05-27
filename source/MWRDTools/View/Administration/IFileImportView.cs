@@ -1,6 +1,4 @@
-﻿using System;
-
-using ESRI.ArcGIS.Framework;
+﻿using ESRI.ArcGIS.Framework;
 
 namespace MWRDTools.View
 {

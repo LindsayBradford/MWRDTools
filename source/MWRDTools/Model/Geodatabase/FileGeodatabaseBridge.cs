@@ -1,11 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
-using System.Windows.Forms;
 
 using ESRI.ArcGIS.ADF;
 using ESRI.ArcGIS.Geodatabase;
@@ -254,7 +251,7 @@ namespace MWRDTools.Model {
           insertCursor.Flush();
         } // using ComReleaser()
       } catch (Exception e) {
-        MessageBox.Show(e.Message);
+        throw e;
       } finally {
         esriTableLoad.LoadOnlyMode = false;
       }
@@ -399,7 +396,7 @@ namespace MWRDTools.Model {
           insertCursor.Flush();
         } // using ComReleaser()
       } catch (Exception e) {
-        MessageBox.Show(e.Message);
+        throw e;
       } finally {
         esriTableLoad.LoadOnlyMode = false;
       }

@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Data;
-using System.Linq;
 
-using MWRDTools.View;
 using MWRDTools.Model;
-
-using ESRI.ArcGIS.Framework;
-using ESRI.ArcGIS.ArcMapUI;
-using ESRI.ArcGIS.Carto;
 
 namespace MWRDTools.Presenter {
   public class CommenceToFillPresenter : AbstractMWRDPresenter , ICommenceToFillPresenter {

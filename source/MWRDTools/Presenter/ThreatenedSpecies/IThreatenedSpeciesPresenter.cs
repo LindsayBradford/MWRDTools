@@ -2,7 +2,6 @@
 using System.Data;
 using System.ComponentModel;
 
-using MWRDTools.View;
 using MWRDTools.Model;
 
 using ESRI.ArcGIS.Framework;

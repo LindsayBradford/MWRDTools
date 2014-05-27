@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-using MWRDTools.Presenter;
+﻿using MWRDTools.Presenter;
 
 namespace MWRDTools.View {
   public interface IThreatenedSpeciesView {
