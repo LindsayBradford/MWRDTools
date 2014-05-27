@@ -11,60 +11,41 @@ using ESRI.ArcGIS.Carto;
 namespace MWRDTools.Presenter {
   public abstract class AbstractMWRDPresenter {
 
+    protected IMapUtils mapUtils;
     protected IFileSystemBridge fileBridge;
-    private IApplication application;
 
     public void setFileBridge(IFileSystemBridge fileBridge) {
       this.fileBridge = fileBridge;
     }
 
-    public IApplication Application {
-      get { return this.application; }
-      set { this.application = value; }
-    }
-
-    public IMap Map {
-      get {
-        return (application.Document as IMxDocument).FocusMap;
-      }
+    public void setMapUtils(IMapUtils mapUtils) {
+      this.mapUtils = mapUtils;
     }
 
     public void HighlightFeatures(int[] featureIDs, string layerName) {
       if (featureIDs == null) return;
 
-      MapUtils.HighlightFeatures(
+      mapUtils.HighlightFeatures(
         featureIDs,
-        MapUtils.GetFeatureLayer(
-          Map,
-          layerName
-        ),
-        Map
+        layerName
       );
     }
 
     public void ZoomToFeatures(int[] featuretIDs, string layerName) {
       if (featuretIDs == null) return;
 
-      MapUtils.ZoomToFeatures(
+      mapUtils.ZoomToFeatures(
         featuretIDs,
-        MapUtils.GetFeatureLayer(
-          Map,
-          layerName
-        ),
-        Map
+        layerName
       );
     }
 
     public void FlashFeatures(int[] featuretIDs, string layerName) {
       if (featuretIDs == null) return;
 
-      MapUtils.FlashFeatures(
+      mapUtils.FlashFeatures(
         featuretIDs,
-        MapUtils.GetFeatureLayer(
-          Map,
-          layerName
-        ),
-        Map
+        layerName
       );
     }
 

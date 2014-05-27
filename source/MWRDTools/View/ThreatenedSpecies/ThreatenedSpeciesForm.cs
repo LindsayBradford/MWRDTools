@@ -21,7 +21,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
     private IThreatenedSpeciesPresenter presenter;
 
-    public ThreatenedSpeciesForm(IApplication pApplication) {
+    public ThreatenedSpeciesForm() {
       InitializeComponent();
 
       SpeciesListView.ListViewItemSorter = new ListViewColumnSorter();

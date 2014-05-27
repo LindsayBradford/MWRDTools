@@ -11,10 +11,12 @@ namespace MWRDTools.View
     public static AdministrationForm build(IApplication appHook) {
       
       AdministrationForm form = new AdministrationForm();
-      form.Application = appHook;
 
       FileSystemBridge fileBridge = new FileSystemBridge();
       IGeodatabaseBridge dbBridge = AbstractFormBuilder.buildDatabaseBridge(appHook);
+
+      IMapUtils mapUtils = new MapUtils();
+      mapUtils.setApplication(appHook);
 
       ICARMScenarioModel carmModel = new CARMScenarioModel();
       carmModel.setDatabaseBridge(dbBridge);
@@ -32,7 +34,8 @@ namespace MWRDTools.View
       form.setAtlasImportPresenter(
         buildAtlasPresenter(
           fileBridge,
-          speciesModel
+          speciesModel,
+          mapUtils
         )
       );
 
@@ -49,12 +52,14 @@ namespace MWRDTools.View
       return presenter;
     }
 
-    private static INSWAtlasWildlifeImportPresenter buildAtlasPresenter(IFileSystemBridge fileBridge, IThreatenedSpeciesModel model)
+    private static INSWAtlasWildlifeImportPresenter buildAtlasPresenter(
+      IFileSystemBridge fileBridge, IThreatenedSpeciesModel model, IMapUtils mapUtils)
     {
       AtlasImportPresenter presenter = new AtlasImportPresenter();
 
       presenter.setFileBridge(fileBridge);
       presenter.setModel(model);
+      presenter.setMapUtils(mapUtils);
 
       return presenter;
     }

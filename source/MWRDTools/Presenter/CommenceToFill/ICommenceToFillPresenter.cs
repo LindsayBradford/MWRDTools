@@ -11,16 +11,14 @@ namespace MWRDTools.Presenter {
 
     event EventHandler<InundatedWetlandsEventArgs> InundatedWetlandsChanged;
 
-    IApplication Application {get; set;}
-    IMap Map { get; }
-
     void setFileBridge(IFileSystemBridge fileBridge);
+    void setMapUtils(IMapUtils mapUtils);
 
     void HighlightWetlands(int[] wetlandIDs);
     void ZoomToWetlands(int[] wetlandIDs);
     void FlashWetlands(int[] wetlandIDs);
 
-    void ExportFeatures(string filename, DataTable wetlands, int[] featureIDs);
+    void ExportFeatures(string filename, DataTable features, int[] featureIDs);
 
     void WaggaGaugeThresholdSelected(string flowThreshold);
     void GaugeAndFlowSelected(string gaugeName, double flow);
@@ -30,8 +28,8 @@ namespace MWRDTools.Presenter {
     string[] GetScenarios();
     string[] GetWaggaFlowThresholds();
     
-    string[] GetGaugeNames();
     void setCARMScenarioModel(ICARMScenarioModel model);
+    string[] GetGaugeNames();
 
   }
 }

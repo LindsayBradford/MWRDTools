@@ -136,11 +136,12 @@
     </Compile>
     <Compile Include="View\AbstractFormBuilder.cs" />
     <Compile Include="View\Administration\AdministrationFormBuilder.cs" />
+    <Compile Include="Presenter\IMapUtils.cs" />
     <Compile Include="View\ViewUtilities.cs" />
     <Compile Include="View\CommenceToFill\CommenceToFillFormBuilder.cs" />
     <Compile Include="View\CommenceToFill\CommenceToFillButton.cs" />
     <Compile Include="View\MWRDToolsToolbar.cs" />
-    <Compile Include="View\MapUtils.cs" />
+    <Compile Include="Presenter\MapUtils.cs" />
     <Compile Include="Config.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Config.esriaddinx</DependentUpon>

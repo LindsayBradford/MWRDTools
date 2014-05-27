@@ -13,8 +13,6 @@ namespace MWRDTools.View
   public partial class AdministrationForm : Form, INSWAtlasWildlifeImportView, ICARMScenarioImportView
   {
 
-    private IApplication application;
-
     private ICARMScenarioImportPresenter carmImportPresenter;
     private INSWAtlasWildlifeImportPresenter atlasImportPresenter;
 
@@ -22,11 +20,6 @@ namespace MWRDTools.View
     public AdministrationForm() : base()
     {
       InitializeComponent();
-    }
-
-    public IApplication Application {
-      get { return this.application; }
-      set { this.application = value; }
     }
 
     public void setCarmImportPresenter(ICARMScenarioImportPresenter presenter)
@@ -66,12 +59,6 @@ namespace MWRDTools.View
     }
 
     void INSWAtlasWildlifeImportView.ImportFiles(params String[] files) {
-      ILayer layer = MapUtils.GetFeatureLayer(
-        application, 
-        Constants.LayerName.ThreatenedSpecies
-      );
-
-      layer.Visible = false;
 
       this.Cursor = Cursors.WaitCursor;
 
@@ -82,13 +69,9 @@ namespace MWRDTools.View
           "Importing Atlas of NSW Wildlife files failed."
         );
       } finally {
-        this.Cursor = Cursors.Default;
         this.AdminStripProgressBar.Value = 0;
+        this.Cursor = Cursors.Default;
       }
-
-      MapUtils.RefreshFeatureLayer(application, layer);
-
-      layer.Visible = true;
     }
 
     private void showStatusString(String status)

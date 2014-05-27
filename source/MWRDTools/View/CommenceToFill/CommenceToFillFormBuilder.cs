@@ -13,6 +13,9 @@ namespace MWRDTools.View
 
       IGeodatabaseBridge dbBridge = AbstractFormBuilder.buildDatabaseBridge(appHook);
 
+      IMapUtils mapUtils = new MapUtils();
+      mapUtils.setApplication(appHook);
+
       IWetlandsModel wetlandsModel = new WetlandsModel();
       wetlandsModel.setDatabaseBridge(dbBridge);
 
@@ -21,12 +24,13 @@ namespace MWRDTools.View
       carmModel.setWetlandsModel(wetlandsModel);
 
       ICommenceToFillPresenter presenter = new CommenceToFillPresenter();
-      presenter.Application = appHook;
       presenter.setCARMScenarioModel(carmModel);
       presenter.setWetlandsModel(wetlandsModel);
       presenter.setFileBridge(
         new FileSystemBridge()
       );
+
+      presenter.setMapUtils(mapUtils);
 
       (form as ICommenceToFillView).setPresenter(presenter);
 

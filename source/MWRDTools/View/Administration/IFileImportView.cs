@@ -9,16 +9,10 @@ namespace MWRDTools.View
   // See: http://www.roxolan.com/2009/04/interface-inheritance-in-c.html
 
   public interface ICARMScenarioImportView {
-
-    IApplication Application { get; set; }
-
     void ImportDirectory(string directoryPath);
   }
 
   public interface INSWAtlasWildlifeImportView {
-
-    IApplication Application { get; set; }
-
     void ImportFiles(params string[] files);
   }
 }

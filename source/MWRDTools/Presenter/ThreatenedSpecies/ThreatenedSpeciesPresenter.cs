@@ -7,8 +7,13 @@ using MWRDTools.Model;
 namespace MWRDTools.Presenter {
   public class ThreatenedSpeciesPresenter : AbstractMWRDPresenter, IThreatenedSpeciesPresenter {
 
-    private static string[] WETLAND_COLUMNS = { "MBCMA_wetland", "Wetland_Name", "Complex_name", "Flow" };
-    private static string[] SPECIES_COLUMNS = { "ScientificName", "CommonName", "ClassName", "FamilyName", "NSWStatus", "SpeciesCode" };
+    private static string[] WETLAND_COLUMNS = { 
+      "MBCMA_wetland", "Wetland_Name", "Complex_name", "Flow" 
+    };
+
+    private static string[] SPECIES_COLUMNS = { 
+      "ScientificName", "CommonName", "ClassName", "FamilyName", "NSWStatus", "SpeciesCode"
+    };
 
     public event EventHandler<ThreatenedSpeciesEventArgs> ThreatenedSpeciesPresentationChanged;
     public event EventHandler<ProgressChangedEventArgs> StatusChanged;

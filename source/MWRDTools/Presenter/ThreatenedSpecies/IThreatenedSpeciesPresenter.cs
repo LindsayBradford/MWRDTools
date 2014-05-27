@@ -13,9 +13,6 @@ namespace MWRDTools.Presenter {
     event EventHandler<ThreatenedSpeciesEventArgs> ThreatenedSpeciesPresentationChanged;
     event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
-    IApplication Application {get; set;}
-    IMap Map { get; }
-
     string[] GetSpeciesClasses();
     string[] GetSpeciesStatuses();
 
@@ -27,6 +24,7 @@ namespace MWRDTools.Presenter {
     );
 
     void setFileBridge(IFileSystemBridge fileBridge);
+    void setMapUtils(IMapUtils mapUtils);
 
     void HighlightWetlands(int[] wetlandIDs);
     void ZoomToWetlands(int[] wetlandIDs);
@@ -36,7 +34,7 @@ namespace MWRDTools.Presenter {
     void ZoomToSpecies(int[] speciesIDs);
     void FlashSpecies(int[] speciesIDs);
 
-    void ExportFeatures(string filename, DataTable wetlands, int[] wetlandIDs);
+    void ExportFeatures(string filename, DataTable features, int[] featureIDs);
 
     void setWetlandsModel(IWetlandsModel model);
 

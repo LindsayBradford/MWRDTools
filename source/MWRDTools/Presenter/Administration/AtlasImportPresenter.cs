@@ -22,6 +22,7 @@ namespace MWRDTools.Presenter
 
     private IFileSystemBridge bridge;
     private IThreatenedSpeciesModel model;
+    private IMapUtils mapUtils;
 
     private int percentComplete = 0;
 
@@ -31,11 +32,16 @@ namespace MWRDTools.Presenter
       model.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.HandleModelStatusEvent);
     }
 
+    public void setMapUtils(IMapUtils mapUtils) {
+      this.mapUtils = mapUtils;
+    }
+
     public void setFileBridge(IFileSystemBridge bridge) {
       this.bridge = bridge;
     }
 
     public void ImportFiles(params string[] files) {
+
       WriteImportedData(
         importFloraFile(
           files[FLORA_INDEX]
@@ -44,6 +50,11 @@ namespace MWRDTools.Presenter
           files[FAUNA_INDEX]
         )
       );
+
+      mapUtils.RefreshFeatureLayer(
+        Constants.LayerName.ThreatenedSpecies
+      );
+
     }
 
     private DataTable importFloraFile(string floraFile) {
