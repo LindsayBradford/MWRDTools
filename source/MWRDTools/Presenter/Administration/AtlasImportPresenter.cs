@@ -24,15 +24,10 @@ namespace MWRDTools.Presenter
 
     private const string NSW_STATUS_COLUMN_NAME = "NSWStatus";
 
-    private INSWAtlasWildlifeImportView view;
     private IFileSystemBridge bridge;
     private IThreatenedSpeciesModel model;
 
     private int percentComplete = 0;
-
-    public void setView(INSWAtlasWildlifeImportView view) {
-      this.view = view;
-    }
 
     public void setModel(IThreatenedSpeciesModel model) {
       this.model = model;

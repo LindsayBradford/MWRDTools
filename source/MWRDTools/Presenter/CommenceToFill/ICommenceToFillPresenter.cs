@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 using MWRDTools.View;
 using MWRDTools.Model;
@@ -9,10 +10,11 @@ using ESRI.ArcGIS.Carto;
 namespace MWRDTools.Presenter {
   public interface ICommenceToFillPresenter {
 
+    event EventHandler<InundatedWetlandsEventArgs> InundatedWetlandsChanged;
+
     IApplication Application {get; set;}
     IMap Map { get; }
 
-    void setView(ICommenceToFillView view);
     void setFileBridge(IFileSystemBridge fileBridge);
 
     void HighlightWetlands(int[] wetlandIDs);

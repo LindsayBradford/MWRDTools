@@ -29,7 +29,6 @@ namespace MWRDTools.View
 
       ICommenceToFillPresenter presenter = new CommenceToFillPresenter();
       presenter.Application = appHook;
-      presenter.setView(form);
       presenter.setCARMScenarioModel(carmModel);
       presenter.setWetlandsModel(wetlandsModel);
       presenter.setFileBridge(

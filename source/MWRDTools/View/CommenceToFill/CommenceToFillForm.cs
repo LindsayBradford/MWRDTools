@@ -9,7 +9,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
 {
     private ICommenceToFillPresenter presenter;
 
-    private DataTable WaggaWetlands, GaugeWetlands, CARMWetlands; 
+    private DataTable WaggaWetlands, GaugeWetlands, CARMWetlands;
 
     public CommenceToFillForm() {
       InitializeComponent();
@@ -19,35 +19,39 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
       CARMListView.ListViewItemSorter = new ListViewColumnSorter();
     }
 
-    void ICommenceToFillView.setPresenter(ICommenceToFillPresenter presenter) {
+    public void setPresenter(ICommenceToFillPresenter presenter) {
       this.presenter = presenter;
+      this.presenter.InundatedWetlandsChanged += 
+        new EventHandler<InundatedWetlandsEventArgs>(this.HandleInundatedWetlandsEvent);
     }
 
-    void ICommenceToFillView.SetWaggaGaugeThresholdInundatedWetlands(DataTable wetlands) {
-      this.WaggaWetlands = wetlands;
-      ViewUtilities.DataTableToListView(
-        wetlands,
-        WaggaListView,
-        "OID"
-      );
-    }
-
-    void ICommenceToFillView.SetFlowAtGaugeInundatedWetlands(DataTable wetlands) {
-      this.GaugeWetlands = wetlands;
-      ViewUtilities.DataTableToListView(
-        wetlands,
-        GaugeListView,
-        "OID"
-      );
-    }
-
-    void ICommenceToFillView.SetCARMScenarioInundatedWetlands(DataTable wetlands) {
-      this.CARMWetlands = wetlands;
-      ViewUtilities.DataTableToListView(
-        wetlands,
-        CARMListView,
-        "OID"
-      );
+    public void HandleInundatedWetlandsEvent(object sender, InundatedWetlandsEventArgs args) {
+      switch (args.Type) {
+        case InundatedWetlandsType.WaggaGaugeThreshold: 
+            this.WaggaWetlands = args.Wetlands;
+            ViewUtilities.DataTableToListView(
+              args.Wetlands,
+              WaggaListView,
+              "OID"
+            );
+            break;
+        case InundatedWetlandsType.FlowAtGauge: 
+          this.GaugeWetlands = args.Wetlands;
+          ViewUtilities.DataTableToListView(
+            args.Wetlands,
+            GaugeListView,
+            "OID"
+          );
+          break;
+        case InundatedWetlandsType.CARMScenario: 
+          this.CARMWetlands = args.Wetlands;
+          ViewUtilities.DataTableToListView(
+            args.Wetlands,
+            CARMListView,
+            "OID"
+          );
+          break;
+      }
     }
 
     private void FillCombos() {

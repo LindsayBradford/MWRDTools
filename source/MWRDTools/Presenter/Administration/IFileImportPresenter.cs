@@ -18,11 +18,10 @@ namespace MWRDTools.Presenter
   public interface ICARMScenarioImportPresenter
   {
     event EventHandler<ProgressChangedEventArgs> StatusChanged;
-    
+
     void ImportDirectory(string directoryPath);
     void WriteImportedData(params DataTable[] scenarioTables);
 
-    void setView(ICARMScenarioImportView view);
     void setFileBridge(IFileSystemBridge bridge);
     void setModel(ICARMScenarioModel model);
   }
@@ -31,7 +30,6 @@ namespace MWRDTools.Presenter
   {
     event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
-    void setView(INSWAtlasWildlifeImportView view);
     void setFileBridge(IFileSystemBridge bridge);
     void setModel(IThreatenedSpeciesModel model);
 

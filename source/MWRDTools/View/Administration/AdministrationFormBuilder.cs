@@ -28,7 +28,6 @@ namespace MWRDTools.View
 
       form.setCarmImportPresenter(
         buildCarmPresenter(
-          form,
           fileBridge,
           carmModel
         )
@@ -39,7 +38,6 @@ namespace MWRDTools.View
 
       form.setAtlasImportPresenter(
         buildAtlasPresenter(
-          form,
           fileBridge,
           speciesModel
         )
@@ -48,24 +46,20 @@ namespace MWRDTools.View
       return form;
     }
 
-    private static ICARMScenarioImportPresenter buildCarmPresenter(
-                      ICARMScenarioImportView view, IFileSystemBridge fileBridge, ICARMScenarioModel model)
+    private static ICARMScenarioImportPresenter buildCarmPresenter(IFileSystemBridge fileBridge, ICARMScenarioModel model)
     {
       CARMImportPresenter presenter = new CARMImportPresenter();
 
-      presenter.setView(view);
       presenter.setFileBridge(fileBridge);
       presenter.setModel(model);
 
       return presenter;
     }
 
-    private static INSWAtlasWildlifeImportPresenter buildAtlasPresenter(
-                      INSWAtlasWildlifeImportView view, IFileSystemBridge fileBridge, IThreatenedSpeciesModel model)
+    private static INSWAtlasWildlifeImportPresenter buildAtlasPresenter(IFileSystemBridge fileBridge, IThreatenedSpeciesModel model)
     {
       AtlasImportPresenter presenter = new AtlasImportPresenter();
 
-      presenter.setView(view);
       presenter.setFileBridge(fileBridge);
       presenter.setModel(model);
 

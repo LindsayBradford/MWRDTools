@@ -19,7 +19,6 @@ namespace MWRDTools.View
 
       IThreatenedSpeciesPresenter presenter = new ThreatenedSpeciesPresenter();
       presenter.Application = appHook;
-      presenter.setView(form as IThreatenedSpeciesView);
       presenter.setWetlandsModel(wetlandsModel);
       presenter.setThreatenedSpeciesModel(threatenedSpeciesModel);
       presenter.setFileBridge(

@@ -12,20 +12,18 @@ using ESRI.ArcGIS.Carto;
 namespace MWRDTools.Presenter {
   public class CommenceToFillPresenter : AbstractMWRDPresenter , ICommenceToFillPresenter {
 
-    private ICommenceToFillView view;
-
-    public void setView(ICommenceToFillView view) {
-      this.view = view;
-    }
+    public event EventHandler<InundatedWetlandsEventArgs> InundatedWetlandsChanged;
 
     public void CARMScenarioSelected(string scenarioName) {
-      view.SetCARMScenarioInundatedWetlands(
+      raiseInundatedWetlandsEvent(
+        InundatedWetlandsType.CARMScenario, 
         carmScenarioModel.GetWetlandsInundated(scenarioName)
       );
     }
 
     public void GaugeAndFlowSelected(string gaugeName, double flowAtGauge) {
-      view.SetFlowAtGaugeInundatedWetlands(
+      raiseInundatedWetlandsEvent(
+        InundatedWetlandsType.FlowAtGauge,
         wetlandsModel.GetInundatedWetlandsByFlowAtGauge(
           gaugeName, 
           flowAtGauge
@@ -34,7 +32,8 @@ namespace MWRDTools.Presenter {
     }
 
     public void WaggaGaugeThresholdSelected(string flowThreshold) {
-      view.SetWaggaGaugeThresholdInundatedWetlands(
+      raiseInundatedWetlandsEvent(
+        InundatedWetlandsType.WaggaGaugeThreshold,
         wetlandsModel.GetInundatedWetlandsByWaggaFlowThreshold(
           flowThreshold
          )
@@ -72,5 +71,15 @@ namespace MWRDTools.Presenter {
     }
 
     #endregion
+
+    private void raiseInundatedWetlandsEvent(InundatedWetlandsType type, DataTable inundatedWetlands) {
+      InundatedWetlandsChanged(
+        this, 
+        new InundatedWetlandsEventArgs(
+          type, 
+          inundatedWetlands
+        )
+      );
+    }
   }
 }

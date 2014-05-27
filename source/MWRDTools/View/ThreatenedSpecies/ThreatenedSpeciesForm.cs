@@ -48,6 +48,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
     public void setPresenter(IThreatenedSpeciesPresenter presenter) {
       this.presenter = presenter;
       presenter.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.StatusChangedHandler);
+      presenter.ThreatenedSpeciesPresentationChanged += new EventHandler<ThreatenedSpeciesEventArgs>(PresentationChangedHandler);
     }
 
     public void StatusChangedHandler(object sender, ProgressChangedEventArgs args) {
@@ -56,38 +57,39 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       this.Update();
     }
 
-    void IThreatenedSpeciesView.ApplySpeciesFilter(DataTable species) {
-      ViewUtilities.DataTableToListView(
-        species,
-        SpeciesListView,
-        SCIENTIFIC_NAME
-      );
-    }
-
-    void IThreatenedSpeciesView.SetWetlands(DataTable wetlands) {
-      ViewUtilities.DataTableToListView(
-        wetlands,
-        AllWetlandsListView,
-        "MBCMA_wetland"
-      );
-    }
-
-    void IThreatenedSpeciesView.ShowWetlandsForSpecies(DataTable wetlands) {
-      this.WetlandsForSpeciesTable = wetlands;
-      ViewUtilities.DataTableToListView(
-        wetlands,
-        FilteredWetlandsListView,
-        "OID"
-      );
-    }
-
-    void IThreatenedSpeciesView.ShowSpeciesForWetlands(DataTable species) {
-      this.SpeciesForWetlandsTable = species;
-      ViewUtilities.DataTableToListView(
-        species,
-        FilteredSpeciesListView,
-        "OID"
-      );
+    public void PresentationChangedHandler(object sender, ThreatenedSpeciesEventArgs args) {
+      switch (args.Type) {
+        case ThreatenedSpeciesEventType.AllWetlands:
+          ViewUtilities.DataTableToListView(
+            args.EventTable,
+            AllWetlandsListView,
+            "MBCMA_wetland"
+          );
+          break;
+        case ThreatenedSpeciesEventType.FilteredSpecies:
+          ViewUtilities.DataTableToListView(
+            args.EventTable,
+            SpeciesListView,
+            SCIENTIFIC_NAME
+          );
+          break;
+        case ThreatenedSpeciesEventType.SpeciesForWetlands:
+          this.SpeciesForWetlandsTable = args.EventTable;
+          ViewUtilities.DataTableToListView(
+            args.EventTable,
+            FilteredSpeciesListView,
+            "OID"
+          );
+          break;
+        case ThreatenedSpeciesEventType.WetlandsForSpecies:
+          this.WetlandsForSpeciesTable = args.EventTable;
+          ViewUtilities.DataTableToListView(
+            args.EventTable,
+            FilteredWetlandsListView,
+            "OID"
+          );
+          break;
+      }
     }
 
     private void ShowFilter() {

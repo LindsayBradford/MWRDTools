@@ -11,12 +11,12 @@ using ESRI.ArcGIS.Carto;
 namespace MWRDTools.Presenter {
   public interface IThreatenedSpeciesPresenter {
 
+    event EventHandler<ThreatenedSpeciesEventArgs> ThreatenedSpeciesPresentationChanged;
     event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
     IApplication Application {get; set;}
     IMap Map { get; }
 
-    void setView(IThreatenedSpeciesView view);
     string[] GetSpeciesClasses();
     string[] GetSpeciesStatuses();
 

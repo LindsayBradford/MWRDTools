@@ -16,19 +16,8 @@ namespace MWRDTools.Presenter {
     private static string[] WETLAND_COLUMNS = { "MBCMA_wetland", "Wetland_Name", "Complex_name", "Flow" };
     private static string[] SPECIES_COLUMNS = { "ScientificName", "CommonName", "ClassName", "FamilyName", "NSWStatus", "SpeciesCode" };
 
-    private IThreatenedSpeciesView view;
-
+    public event EventHandler<ThreatenedSpeciesEventArgs> ThreatenedSpeciesPresentationChanged;
     public event EventHandler<ProgressChangedEventArgs> StatusChanged;
-
-    public void setView(IThreatenedSpeciesView view) {
-      this.view = view;
-    }
-
-    public void SpeciesByWetlandsTabSelected() {
-      view.SetWetlands(
-        wetlandsModel.GetAllWetlands(WETLAND_COLUMNS)
-      );
-    }
 
     public string[] GetSpeciesClasses() {
       return threatenedSpeciesModel.GetSpeciesClassNames();
@@ -38,8 +27,16 @@ namespace MWRDTools.Presenter {
       return threatenedSpeciesModel.GetSpeciesStatuses();
     }
 
+    public void SpeciesByWetlandsTabSelected() {
+      raisePresentationEvent(
+        ThreatenedSpeciesEventType.AllWetlands,
+        wetlandsModel.GetAllWetlands(WETLAND_COLUMNS)
+      );
+    }
+
     public void SpeciesFilterApplied(string[] classesSelected, string[] statusesSelected) {
-      view.ApplySpeciesFilter(
+      raisePresentationEvent(
+        ThreatenedSpeciesEventType.FilteredSpecies,
         threatenedSpeciesModel.GetSelectedSpecies(
           SPECIES_COLUMNS,
           classesSelected,
@@ -49,7 +46,8 @@ namespace MWRDTools.Presenter {
     }
 
     public void FindWetlandsBySpecies(string speciesScientificName, double buffer, DateTime? afterDate, DateTime? beforeDate) {
-      view.ShowWetlandsForSpecies(
+      raisePresentationEvent(
+        ThreatenedSpeciesEventType.WetlandsForSpecies,
         threatenedSpeciesModel.GetWetlandsBySpecies(
           speciesScientificName, 
           buffer, 
@@ -61,7 +59,8 @@ namespace MWRDTools.Presenter {
 
     public void FindSpeciesByWetlands(string wetlandsID, string[] speciesClasses, string[] speciesStatuses,
                                       double buffer, DateTime? afterDate, DateTime? beforeDate) {
-      view.ShowSpeciesForWetlands(
+      raisePresentationEvent(
+        ThreatenedSpeciesEventType.SpeciesForWetlands,
         threatenedSpeciesModel.GetSpeciesByWetlands(
           wetlandsID,
           speciesClasses,
@@ -72,7 +71,6 @@ namespace MWRDTools.Presenter {
         )
       );
     }
-
 
     #region Wetlands Model
 
@@ -120,6 +118,16 @@ namespace MWRDTools.Presenter {
       if (StatusChanged != null) {
         StatusChanged(this, args);
       }
+    }
+
+    private void raisePresentationEvent(ThreatenedSpeciesEventType type, DataTable eventData) {
+      ThreatenedSpeciesPresentationChanged(
+        this,
+        new ThreatenedSpeciesEventArgs(
+          type,
+          eventData
+        )
+      );
     }
   }
 }

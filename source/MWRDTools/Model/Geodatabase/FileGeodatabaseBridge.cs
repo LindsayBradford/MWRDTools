@@ -167,7 +167,7 @@ namespace MWRDTools.Model {
       IQueryFilter filter = new QueryFilter();
       filter.WhereClause = whereClause;
       filter.SubFields = subFields;
-      return table.Search(filter, true);
+      return table.Search(filter, false);
     }
 
     public void DeleteTableContent(string tableName) {
@@ -314,7 +314,7 @@ namespace MWRDTools.Model {
       shape.Simplify();
       filter.Geometry = shape.Buffer(buffer);
 
-      return featureClass.Search(filter, true);
+      return featureClass.Search(filter, false);
     }
 
 

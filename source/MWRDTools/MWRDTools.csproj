@@ -125,6 +125,8 @@
     <Compile Include="Presenter\Administration\IFileImportPresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\CommenceToFillPresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\ICommenceToFillPresenter.cs" />
+    <Compile Include="Presenter\CommenceToFill\InundatedWetlandsEventArgs.cs" />
+    <Compile Include="Presenter\ThreatenedSpecies\ThreatenedSpeciesEventArgs.cs" />
     <Compile Include="Presenter\ThreatenedSpecies\ThreatenedSpeciesPresenter.cs" />
     <Compile Include="Presenter\ThreatenedSpecies\IThreatenedSpeciesPresenter.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

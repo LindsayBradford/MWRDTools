@@ -14,7 +14,6 @@ namespace MWRDTools.Presenter
 
     private int percentComplete = 0;
     
-    private ICARMScenarioImportView view;
     private IFileSystemBridge bridge;
     private ICARMScenarioModel model;
 
@@ -45,11 +44,6 @@ namespace MWRDTools.Presenter
     };
 
     private const char CARM_DELIMITER_CHAR = ',';
-
-    public void setView(ICARMScenarioImportView view)
-    {
-      this.view = view;
-    }
 
     public void setModel(ICARMScenarioModel model)
     {
