@@ -203,7 +203,7 @@ namespace MWRDTools.Model
 
       string mike11OutputId = getGroupId("MIKE11 Output", outputId);
 
-      return getGroupId("Discharge", mike11OutputId);
+      return getGroupId(groupName, mike11OutputId);
     }
 
     private void updateDatabase(DataTable scenarioTable) {
