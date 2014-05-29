@@ -1,4 +1,4 @@
-partial class SpeciesFIlterForm
+partial class SpeciesFilterForm
 {
     /// <summary>
     /// Required designer variable.

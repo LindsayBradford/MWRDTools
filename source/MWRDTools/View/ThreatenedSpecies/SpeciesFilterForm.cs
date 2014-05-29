@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-public partial class SpeciesFIlterForm : Form 
+public partial class SpeciesFilterForm : Form 
 {
     private bool _filterSettingsLoaded = false;
   
-    public SpeciesFIlterForm() {
+    public SpeciesFilterForm() {
       InitializeComponent();
     }
 

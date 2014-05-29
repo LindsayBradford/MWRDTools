@@ -688,7 +688,6 @@ partial class ThreatenedSpeciesForm
       this.Name = "ThreatenedSpeciesForm";
       this.Text = "MWRD Threatened Species";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ThreatenedSpeciesForm_FormClosing);
-      this.Load += new System.EventHandler(this.ThreatenedSpeciesForm_Load);
       this.ThreatenedSpeciesTab.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.splitContainer1.Panel1.ResumeLayout(false);

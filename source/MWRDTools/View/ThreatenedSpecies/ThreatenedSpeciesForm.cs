@@ -13,7 +13,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
     private const string SCIENTIFIC_NAME = "ScientificName";
 
-    private SpeciesFIlterForm speciesFilterForm = new SpeciesFIlterForm();
+    private SpeciesFilterForm speciesFilterForm = new SpeciesFilterForm();
     private DatePickerForm datePickerForm;
     private bool wetlandsLoaded = false;
 
@@ -30,11 +30,11 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       AllWetlandsListView.ListViewItemSorter = new ListViewColumnSorter();
       FilteredSpeciesListView.ListViewItemSorter = new ListViewColumnSorter();
 
-      speciesFilterForm.Load += new EventHandler(_frmFilter_Load);
-      speciesFilterForm.FormClosed += new FormClosedEventHandler(_frmFilter_FormClosed);
+      speciesFilterForm.Load += new EventHandler(speciesFilterForm_Load);
+      speciesFilterForm.FormClosed += new FormClosedEventHandler(speciesFilterForm_FormClosed);
 
       datePickerForm = new DatePickerForm();
-      datePickerForm.FormClosed += new FormClosedEventHandler(_frmDatePicker_FormClosed);
+      datePickerForm.FormClosed += new FormClosedEventHandler(datePickerForm_FormClosed);
     }
 
     public void setPresenter(IThreatenedSpeciesPresenter presenter) {
@@ -86,19 +86,6 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
 
     private void ShowFilter() {
       speciesFilterForm.ShowDialog();
-    }
-
-    private void ThreatenedSpeciesForm_Load(object sender, EventArgs e) {
-      //if (!SetFeatureWorkspace()) {
-      //  MessageBox.Show(
-      //    String.Format(
-      //      "Unable to open the data source. The application was looking for a layer called {0}.", 
-      //      Constants.LayerName.WetLands
-      //    ), 
-      //    Application.ProductName
-      //  );
-      //  this.Dispose();
-      //}
     }
 
     private void ThreatenedSpeciesForm_FormClosing(object sender, FormClosingEventArgs e) {
@@ -171,7 +158,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       ShowFilter();
     }
 
-    void _frmFilter_Load(object sender, EventArgs e) {
+    void speciesFilterForm_Load(object sender, EventArgs e) {
       if (speciesFilterForm.FilterSettingsLoaded) {
         return;
       }
@@ -185,8 +172,7 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       );
     }
 
-    void _frmFilter_FormClosed(object sender, FormClosedEventArgs e)
-    {
+    void speciesFilterForm_FormClosed(object sender, FormClosedEventArgs e) {
       this.Cursor = Cursors.WaitCursor;
 
       if (speciesFilterForm.DialogResult != DialogResult.Cancel) {
@@ -204,34 +190,31 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       datePickerForm.ShowDialog();
     }
 
-    void _frmDatePicker_FormClosed(object sender, FormClosedEventArgs e)
-    {
-        if(datePickerForm.DialogResult != DialogResult.Cancel)
-        {
-            switch (datePickerForm.DateType)
-            {
-                case "After":
-                    {
-                        txtAfterDate.Text = datePickerForm.Result.ToShortDateString();
-                        break;
-                    }
-                case "Before":
-                    {
-                        txtBeforeDate.Text = datePickerForm.Result.ToShortDateString();
-                        break;
-                    }
-                case "After1":
-                    {
-                        txtAfter1.Text = datePickerForm.Result.ToShortDateString();
-                        break;
-                    }
-                case "Before1":
-                    {
-                        txtBefore1.Text = datePickerForm.Result.ToShortDateString();
-                        break;
-                    }
-            }
-        }
+    void datePickerForm_FormClosed(object sender, FormClosedEventArgs e) {
+      if (datePickerForm.DialogResult == DialogResult.Cancel) return;
+
+      switch (datePickerForm.DateType) {
+        case "After":
+          {
+              txtAfterDate.Text = datePickerForm.Result.ToShortDateString();
+              break;
+          }
+        case "Before":
+          {
+              txtBeforeDate.Text = datePickerForm.Result.ToShortDateString();
+              break;
+          }
+        case "After1":
+          {
+              txtAfter1.Text = datePickerForm.Result.ToShortDateString();
+              break;
+          }
+        case "Before1":
+          {
+              txtBefore1.Text = datePickerForm.Result.ToShortDateString();
+              break;
+          }
+      }
     }
 
     private void btnBeforeDate_Click(object sender, EventArgs e) {
@@ -360,4 +343,5 @@ public partial class ThreatenedSpeciesForm : Form, IThreatenedSpeciesView
       AboutDialog frm = new AboutDialog();
       frm.ShowDialog();
     }
+
 }
