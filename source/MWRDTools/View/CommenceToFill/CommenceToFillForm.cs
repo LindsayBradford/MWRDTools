@@ -152,8 +152,10 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
       }
     }
 
-    private void frmCommenceToFill_Load(object sender, EventArgs e) {
-      FillCombos();
+    private void CommenceToFillForm_VisibileChanged(object sender, EventArgs e) {
+      if (this.Visible) {
+        FillCombos();
+      }
     }
 
     private void CommenceToFillForm_FormClosing(object sender, FormClosingEventArgs e) {

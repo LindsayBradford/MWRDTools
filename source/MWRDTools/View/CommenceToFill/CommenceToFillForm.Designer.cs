@@ -640,7 +640,8 @@ partial class CommenceToFillForm
       this.Name = "CommenceToFillForm";
       this.Text = "MWRD Commence to Fill";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CommenceToFillForm_FormClosing);
-      this.Load += new System.EventHandler(this.frmCommenceToFill_Load);
+      this.Load += new System.EventHandler(this.CommenceToFillForm_VisibileChanged);
+      this.VisibleChanged += new System.EventHandler(this.CommenceToFillForm_VisibileChanged);
       this.tab.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.groupBox2.ResumeLayout(false);
