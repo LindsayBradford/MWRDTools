@@ -9,7 +9,7 @@ using ESRI.ArcGIS.Framework;
 namespace MWRDTools.Presenter {
   public interface ICommenceToFillPresenter {
 
-    event EventHandler<InundatedWetlandsEventArgs> InundatedWetlandsChanged;
+    event EventHandler<CommenceToFillEventArgs> CommenceToFillPresenterChanged;
 
     void setFileBridge(IFileSystemBridge fileBridge);
     void setMapUtils(IMapUtils mapUtils);

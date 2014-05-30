@@ -10,6 +10,7 @@ namespace MWRDTools.Model
 {
   class CARMScenarioModel : AbstractMWRDModel, ICARMScenarioModel
   {
+    public event EventHandler<CARMScenarioModelEventArgs> ModelChanged;
 
     private const string DISCHARGE_GROUP_NAME = "Discharge";
 
@@ -68,6 +69,10 @@ namespace MWRDTools.Model
       raiseStatusEvent(" Committing database changes (pleaese wait)...");
 
       bridge.EndTransaction();
+
+      raiseModelEvent(
+        GetScenarios()
+      );
     }
 
     private string[] deriveScenarioNames(DataTable[] scenarioTables) {
@@ -333,5 +338,14 @@ namespace MWRDTools.Model
 
       return wetlandsTable;
     }
+
+    protected void raiseModelEvent(string[] scenarioList) {
+      CARMScenarioModelEventArgs args = new CARMScenarioModelEventArgs(scenarioList);
+
+      if (ModelChanged != null) {
+        ModelChanged(this, args);
+      }
+    }
+
   }
 }

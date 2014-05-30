@@ -109,11 +109,13 @@
   <ItemGroup>
     <Compile Include="Model\AbstractMWRDModel.cs" />
     <Compile Include="Model\CARMScenarios\CARMScenarioModel.cs" />
+    <Compile Include="Model\CARMScenarios\CARMScenarioModelEventArgs.cs" />
     <Compile Include="Model\Geodatabase\FileGeodatabaseBridge.cs" />
     <Compile Include="Model\FileSystem\FileSystemBridge.cs" />
     <Compile Include="Model\CARMScenarios\ICARMScenarioModel.cs" />
     <Compile Include="Model\FileSystem\IFileSystemBridge.cs" />
     <Compile Include="Model\Geodatabase\IGeodatabaseBridge.cs" />
+    <Compile Include="Model\ModelBuilder.cs" />
     <Compile Include="Model\ModelUtils.cs" />
     <Compile Include="Model\ThreatenedSpecies\IThreatenedSpeciesModel.cs" />
     <Compile Include="Model\ThreatenedSpecies\ThreatenedSpeciesModel.cs" />
@@ -125,7 +127,7 @@
     <Compile Include="Presenter\Administration\IFileImportPresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\CommenceToFillPresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\ICommenceToFillPresenter.cs" />
-    <Compile Include="Presenter\CommenceToFill\InundatedWetlandsEventArgs.cs" />
+    <Compile Include="Presenter\CommenceToFill\CommenceToFillEventArgs.cs" />
     <Compile Include="Presenter\ThreatenedSpecies\ThreatenedSpeciesEventArgs.cs" />
     <Compile Include="Presenter\ThreatenedSpecies\ThreatenedSpeciesPresenter.cs" />
     <Compile Include="Presenter\ThreatenedSpecies\IThreatenedSpeciesPresenter.cs" />
@@ -134,7 +136,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="View\AbstractFormBuilder.cs" />
     <Compile Include="View\Administration\AdministrationFormBuilder.cs" />
     <Compile Include="Presenter\IMapUtils.cs" />
     <Compile Include="View\ViewUtilities.cs" />

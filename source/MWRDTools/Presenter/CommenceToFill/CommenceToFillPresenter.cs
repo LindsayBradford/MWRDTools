@@ -6,18 +6,18 @@ using MWRDTools.Model;
 namespace MWRDTools.Presenter {
   public class CommenceToFillPresenter : AbstractMWRDPresenter , ICommenceToFillPresenter {
 
-    public event EventHandler<InundatedWetlandsEventArgs> InundatedWetlandsChanged;
+    public event EventHandler<CommenceToFillEventArgs> CommenceToFillPresenterChanged;
 
     public void CARMScenarioSelected(string scenarioName) {
-      raiseInundatedWetlandsEvent(
-        InundatedWetlandsType.CARMScenario, 
+      raiseEvent(
+        CommenceToFillEventType.CARMScenarioWetlandsChanged, 
         carmScenarioModel.GetWetlandsInundated(scenarioName)
       );
     }
 
     public void GaugeAndFlowSelected(string gaugeName, double flowAtGauge) {
-      raiseInundatedWetlandsEvent(
-        InundatedWetlandsType.FlowAtGauge,
+      raiseEvent(
+        CommenceToFillEventType.FlowAtGaugeWetlandsChanged,
         wetlandsModel.GetInundatedWetlandsByFlowAtGauge(
           gaugeName, 
           flowAtGauge
@@ -26,8 +26,8 @@ namespace MWRDTools.Presenter {
     }
 
     public void WaggaGaugeThresholdSelected(string flowThreshold) {
-      raiseInundatedWetlandsEvent(
-        InundatedWetlandsType.WaggaGaugeThreshold,
+      raiseEvent(
+        CommenceToFillEventType.WaggaGaugeThresholdWetlandsChanged,
         wetlandsModel.GetInundatedWetlandsByWaggaFlowThreshold(
           flowThreshold
          )
@@ -58,6 +58,7 @@ namespace MWRDTools.Presenter {
     
     public void setCARMScenarioModel(ICARMScenarioModel model) {
       this.carmScenarioModel = model;
+      this.carmScenarioModel.ModelChanged += new EventHandler<CARMScenarioModelEventArgs>(this.HandleModelChangedEvent);
     }
 
     public string[] GetScenarios() {
@@ -66,14 +67,27 @@ namespace MWRDTools.Presenter {
 
     #endregion
 
-    private void raiseInundatedWetlandsEvent(InundatedWetlandsType type, DataTable inundatedWetlands) {
-      InundatedWetlandsChanged(
+    private void raiseEvent(CommenceToFillEventType type, DataTable inundatedWetlands) {
+      CommenceToFillPresenterChanged(
         this, 
-        new InundatedWetlandsEventArgs(
+        new CommenceToFillEventArgs(
           type, 
           inundatedWetlands
         )
       );
+    }
+
+    private void raiseEvent(string[] scenarioNames) {
+      CommenceToFillPresenterChanged(
+        this,
+        new CommenceToFillEventArgs(
+          scenarioNames
+        )
+      );
+    }
+
+    private void HandleModelChangedEvent(object sender, CARMScenarioModelEventArgs args) {
+      raiseEvent(args.ScenarioList);
     }
   }
 }

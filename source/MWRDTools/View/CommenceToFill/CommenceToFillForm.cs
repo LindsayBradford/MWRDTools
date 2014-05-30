@@ -21,13 +21,13 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
 
     public void setPresenter(ICommenceToFillPresenter presenter) {
       this.presenter = presenter;
-      this.presenter.InundatedWetlandsChanged += 
-        new EventHandler<InundatedWetlandsEventArgs>(this.HandleInundatedWetlandsEvent);
+      this.presenter.CommenceToFillPresenterChanged += 
+        new EventHandler<CommenceToFillEventArgs>(this.HandleInundatedWetlandsEvent);
     }
 
-    public void HandleInundatedWetlandsEvent(object sender, InundatedWetlandsEventArgs args) {
+    public void HandleInundatedWetlandsEvent(object sender, CommenceToFillEventArgs args) {
       switch (args.Type) {
-        case InundatedWetlandsType.WaggaGaugeThreshold: 
+        case CommenceToFillEventType.WaggaGaugeThresholdWetlandsChanged: 
             this.WaggaWetlands = args.Wetlands;
             ViewUtilities.DataTableToListView(
               args.Wetlands,
@@ -35,7 +35,7 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
               "OID"
             );
             break;
-        case InundatedWetlandsType.FlowAtGauge: 
+        case CommenceToFillEventType.FlowAtGaugeWetlandsChanged: 
           this.GaugeWetlands = args.Wetlands;
           ViewUtilities.DataTableToListView(
             args.Wetlands,
@@ -43,12 +43,18 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
             "OID"
           );
           break;
-        case InundatedWetlandsType.CARMScenario: 
+        case CommenceToFillEventType.CARMScenarioWetlandsChanged: 
           this.CARMWetlands = args.Wetlands;
           ViewUtilities.DataTableToListView(
             args.Wetlands,
             CARMListView,
             "OID"
+          );
+          break;
+        case CommenceToFillEventType.CARMScenarioListChanged:
+          fillComboBox(
+            cboCARMScenario,
+            args.CARMScenarioList
           );
           break;
       }

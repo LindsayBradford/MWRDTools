@@ -5,27 +5,28 @@ using MWRDTools.Model;
 
 namespace MWRDTools.View
 {
-  class ThreatenedSpeciesFormBuilder : AbstractFormBuilder {
+  class ThreatenedSpeciesFormBuilder {
     public static ThreatenedSpeciesForm build(IApplication appHook) {
 
-      ThreatenedSpeciesForm form = new ThreatenedSpeciesForm();
+      ModelBuilder.SetApplication(appHook);
 
-      IGeodatabaseBridge dbBridge = AbstractFormBuilder.buildDatabaseBridge(appHook);
+      ThreatenedSpeciesForm form = new ThreatenedSpeciesForm();
 
       IMapUtils mapUtils = new MapUtils();
       mapUtils.setApplication(appHook);
 
-      IWetlandsModel wetlandsModel = new WetlandsModel();
-      wetlandsModel.setDatabaseBridge(dbBridge);
-
-      IThreatenedSpeciesModel threatenedSpeciesModel = new ThreatenedSpeciesModel();
-      threatenedSpeciesModel.setDatabaseBridge(dbBridge);
-
       IThreatenedSpeciesPresenter presenter = new ThreatenedSpeciesPresenter();
-      presenter.setWetlandsModel(wetlandsModel);
-      presenter.setThreatenedSpeciesModel(threatenedSpeciesModel);
+
+      presenter.setWetlandsModel(
+        ModelBuilder.GetWetlandsModel()
+      );
+
+      presenter.setThreatenedSpeciesModel(
+        ModelBuilder.GetThreatenedSpeciesModel()  
+      );
+
       presenter.setFileBridge(
-        new FileSystemBridge()
+        ModelBuilder.GetFileSystemBridge()
       );
 
       presenter.setMapUtils(mapUtils);
