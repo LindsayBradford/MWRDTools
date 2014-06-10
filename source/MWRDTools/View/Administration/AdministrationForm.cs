@@ -48,10 +48,11 @@ namespace MWRDTools.View
       this.Cursor = Cursors.WaitCursor;
       try {
         carmImportPresenter.ImportDirectory(directoryPath);
-      } catch {
+      } catch (Exception e) {
         MessageBox.Show(
           String.Format("Importing CARM Scenario(s) from {0} failed.", directoryPath)
         );
+        MessageBox.Show(e.Message);
       } finally {
         this.Cursor = Cursors.Default;
         this.AdminStripProgressBar.Value = 0;
@@ -64,10 +65,11 @@ namespace MWRDTools.View
 
       try {
         this.atlasImportPresenter.ImportFiles(files);
-      } catch {
+      } catch (Exception e) {
         MessageBox.Show(
           "Importing Atlas of NSW Wildlife files failed."
         );
+        MessageBox.Show(e.Message);
       } finally {
         this.AdminStripProgressBar.Value = 0;
         this.Cursor = Cursors.Default;

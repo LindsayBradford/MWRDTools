@@ -110,6 +110,8 @@
     <Compile Include="Model\AbstractMWRDModel.cs" />
     <Compile Include="Model\CARMScenarios\CARMScenarioModel.cs" />
     <Compile Include="Model\CARMScenarios\CARMScenarioModelEventArgs.cs" />
+    <Compile Include="Model\Geodatabase\AbstractGeodatabaseBridge.cs" />
+    <Compile Include="Model\Geodatabase\ArcSDEGeodatabaseBridge.cs" />
     <Compile Include="Model\Geodatabase\FileGeodatabaseBridge.cs" />
     <Compile Include="Model\FileSystem\FileSystemBridge.cs" />
     <Compile Include="Model\CARMScenarios\ICARMScenarioModel.cs" />

@@ -97,21 +97,35 @@ namespace MWRDTools.Model {
       DataTable wetlands;
 
       using (ComReleaser comReleaser = new ComReleaser()) {
-
-        ICursor wetlandCursor = bridge.GetCursorForQuery(
-          string.Format(
-            "{0}, {1}",
-            Constants.TableName.CommenceToFill,
-            Constants.TableName.MCMAWetlands
-          ),
-          string.Format(
-            "{0}.WetlandsID = {1}.WetlandsID AND {0}.Flow_mL < {2} AND {0}.GaugeName = '{3}'",
-            Constants.TableName.CommenceToFill,
-            Constants.TableName.MCMAWetlands,
-            flow, gaugeName
-          ),
-          string.Format("{0}.*", Constants.TableName.MCMAWetlands)
+        // This breaks oddly only on ArcSDE connections, supplying the MCMAWetlands
+        // fields qualified with the table-name, despite being the only table (not so 
+        // when called against a file geodatabase). 
+        // Workaround below, relying on a direct SQL connection via a dedicated ArcSDE bridge.
+        // 
+        // ICursor wetlandCursor = bridge.GetCursorForQuery(
+        //   string.Format(
+        //     "{0}, {1}",
+        //     Constants.TableName.CommenceToFill,
+        //     Constants.TableName.MCMAWetlands
+        //   ),
+        //   string.Format(
+        //     "{0}.WetlandsID = {1}.WetlandsID AND {0}.Flow_mL < {2} AND {0}.GaugeName = '{3}'",
+        //     Constants.TableName.CommenceToFill,
+        //     Constants.TableName.MCMAWetlands,
+        //     flow, gaugeName
+        //   ),
+        //   string.Format("{0}.*", Constants.TableName.MCMAWetlands)
+        // );
+        // 
+        string query = string.Format(
+          "SELECT {0}.* FROM {0},{1} WHERE {0}.WetlandsID = {1}.WetlandsID AND {1}.Flow_mL < {2} AND {1}.GaugeName = '{3}'",
+          Constants.TableName.MCMAWetlands,
+          Constants.TableName.CommenceToFill,
+          flow,
+          gaugeName
         );
+
+        ICursor wetlandCursor = bridge.GetCursorForSQLQuery(query);
 
         comReleaser.ManageLifetime(wetlandCursor);
 

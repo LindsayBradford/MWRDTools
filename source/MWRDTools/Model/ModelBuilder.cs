@@ -10,8 +10,8 @@ namespace MWRDTools.Model {
 
     private static IApplication application;
 
-    private static FileSystemBridge fileSystemBridge;
-    private static FileGeodatabaseBridge geodatabaseBridge;
+    private static IFileSystemBridge fileSystemBridge;
+    private static IGeodatabaseBridge geodatabaseBridge;
     
     private static WetlandsModel wetlandsModel;
     private static ThreatenedSpeciesModel threatenedSpeciesModel;
@@ -31,10 +31,14 @@ namespace MWRDTools.Model {
 
     public static IGeodatabaseBridge GetGeodatabaseBridge() {
       if (geodatabaseBridge == null) {
-        geodatabaseBridge = new FileGeodatabaseBridge();
-        string documentPath = Path.GetDirectoryName(getDocumentPath(application));
-        string databasePath = Path.Combine(documentPath, RELATIVE_DB_PATH);
-        geodatabaseBridge.DatabasePath = databasePath;
+        //geodatabaseBridge = new FileGeodatabaseBridge();
+        //string documentPath = Path.GetDirectoryName(getDocumentPath(application));
+        //string databasePath = Path.Combine(documentPath, RELATIVE_DB_PATH);
+        //geodatabaseBridge.DatabasePath = databasePath;
+
+        ArcSDEGeodatabaseBridge bridge = new ArcSDEGeodatabaseBridge();
+        bridge.EstablishConnection();
+        geodatabaseBridge = bridge;
       }
 
       return geodatabaseBridge as IGeodatabaseBridge;

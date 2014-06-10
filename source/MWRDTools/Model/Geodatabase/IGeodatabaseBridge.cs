@@ -13,6 +13,8 @@ namespace MWRDTools.Model {
     void BeginTransaction();
     void EndTransaction();
 
+    ICursor GetCursorForSQLQuery(string query);
+
     int GetIndexForTableColumnName(
       string tableName,
       string columnName
