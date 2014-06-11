@@ -8,12 +8,16 @@ namespace MWRDTools.View
   class ThreatenedSpeciesFormBuilder {
     public static ThreatenedSpeciesForm build(IApplication appHook) {
 
-      ModelBuilder.SetApplication(appHook);
+      IMapUtils mapUtils = new MapUtils();
+      mapUtils.setApplication(appHook);
+
+      ModelBuilder.SetApplication(
+        appHook,
+        mapUtils.GetMapDatabase()
+      );
 
       ThreatenedSpeciesForm form = new ThreatenedSpeciesForm();
 
-      IMapUtils mapUtils = new MapUtils();
-      mapUtils.setApplication(appHook);
 
       IThreatenedSpeciesPresenter presenter = new ThreatenedSpeciesPresenter();
 

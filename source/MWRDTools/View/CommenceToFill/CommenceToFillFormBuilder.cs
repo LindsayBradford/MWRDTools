@@ -11,10 +11,14 @@ namespace MWRDTools.View
 
       CommenceToFillForm form = new CommenceToFillForm();
 
-      ModelBuilder.SetApplication(appHook);
-
       IMapUtils mapUtils = new MapUtils();
       mapUtils.setApplication(appHook);
+
+      ModelBuilder.SetApplication(
+        appHook,
+        mapUtils.GetMapDatabase()
+      );
+
 
       ICommenceToFillPresenter presenter = new CommenceToFillPresenter();
 

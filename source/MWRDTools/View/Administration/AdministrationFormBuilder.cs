@@ -10,13 +10,33 @@ namespace MWRDTools.View
 
     public static AdministrationForm build(IApplication appHook) {
 
-      ModelBuilder.SetApplication(appHook);
-
-      AdministrationForm form = new AdministrationForm();
-
       IMapUtils mapUtils = new MapUtils();
       mapUtils.setApplication(appHook);
 
+      ModelBuilder.SetApplication(
+        appHook,
+        mapUtils.GetMapDatabase()
+      );
+
+      AdministrationForm form = new AdministrationForm();
+
+
+      form.setCarmImportPresenter(
+        buildCARMImportPresenter()
+      );
+
+      form.setAtlasImportPresenter(
+        buildAtlasPresenter(mapUtils)
+      );
+
+      form.setMapDatabasePresenter(
+        buildMapDatabasePresenter(mapUtils)
+      );
+
+      return form;
+    }
+
+    private static CARMImportPresenter buildCARMImportPresenter() {
       CARMImportPresenter carmPresenter = new CARMImportPresenter();
 
       carmPresenter.setFileBridge(
@@ -27,9 +47,10 @@ namespace MWRDTools.View
         ModelBuilder.GetCARMScenarioModel()
       );
 
-      form.setCarmImportPresenter(
-        carmPresenter
-      );
+      return carmPresenter;
+    }
+
+    private static AtlasImportPresenter buildAtlasPresenter(IMapUtils mapUtils) {
 
       AtlasImportPresenter atlasPresenter = new AtlasImportPresenter();
 
@@ -43,11 +64,24 @@ namespace MWRDTools.View
 
       atlasPresenter.setMapUtils(mapUtils);
 
-      form.setAtlasImportPresenter(
-        atlasPresenter
+      return atlasPresenter;
+    }
+
+    private static MapDatabasePresenter buildMapDatabasePresenter(IMapUtils mapUtils) {
+      MapDatabasePresenter presenter = new MapDatabasePresenter();
+
+      presenter.setFileBridge(
+        ModelBuilder.GetFileSystemBridge()
       );
 
-      return form;
+      presenter.setGeodatabaseBridge(
+        ModelBuilder.GetGeodatabaseBridge()
+      );
+
+      presenter.setMapUtils(mapUtils);
+
+      return presenter;
     }
+
   }
 }

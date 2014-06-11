@@ -15,6 +15,8 @@ namespace MWRDTools.Presenter {
   public interface IMapUtils {
     void setApplication(IApplication application);
 
+    string GetMapDatabase();
+
     void RefreshFeatureLayer(string layerName);
     void HighlightFeatures(int[] oid, string layerName);
     void ZoomToFeatures(int[] oid, string layerName);

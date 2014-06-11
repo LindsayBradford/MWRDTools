@@ -10,11 +10,12 @@ using MWRDTools.Presenter;
 namespace MWRDTools.View
 {
   
-  public partial class AdministrationForm : Form, INSWAtlasWildlifeImportView, ICARMScenarioImportView
+  public partial class AdministrationForm : Form, INSWAtlasWildlifeImportView, ICARMScenarioImportView, IMapDatabaseView
   {
 
     private ICARMScenarioImportPresenter carmImportPresenter;
     private INSWAtlasWildlifeImportPresenter atlasImportPresenter;
+    private IMapDatabasePresenter mapDatabasePresenter;
 
 #region Setup
     public AdministrationForm() : base()
@@ -34,6 +35,10 @@ namespace MWRDTools.View
       presenter.StatusChanged += new EventHandler<ProgressChangedEventArgs>(this.StatusChangedHandler);
     }
 
+    public void setMapDatabasePresenter(IMapDatabasePresenter presenter) {
+      mapDatabasePresenter = presenter;
+    }
+
     new public void Show() {
       this.AdminStripProgressBar.Value = 0;
       this.Refresh();
@@ -43,6 +48,23 @@ namespace MWRDTools.View
 #endregion
 
 #region InterfaceMethods
+    void IMapDatabaseView.SetMapDatabase(string databaseServer) {
+      this.Cursor = Cursors.WaitCursor;
+      try {
+        mapDatabasePresenter.SetDatabaseServer(
+          databaseServer  
+        );
+      } catch (Exception e) {
+        MessageBox.Show(
+          String.Format("Setting Database Server to {0} failed.", databaseServer)
+        );
+        MessageBox.Show(e.Message);
+      } finally {
+        this.Cursor = Cursors.Default;
+        this.AdminStripProgressBar.Value = 0;
+      }
+    }
+
     void ICARMScenarioImportView.ImportDirectory(string directoryPath) {
 
       this.Cursor = Cursors.WaitCursor;
@@ -182,6 +204,16 @@ namespace MWRDTools.View
     public void StatusChangedHandler(object sender, ProgressChangedEventArgs args) {
       this.showPercentComplete(args.ProgressPercentage);
       this.showStatusString(args.UserState as string);
+    }
+
+    private void AdminTabControl_Enter(object sender, EventArgs e) {
+      this.DatabaseServerTextBox.Text = this.mapDatabasePresenter.GetDatabaseServer();
+    }
+
+    private void SetDatabaseButton_Click(object sender, EventArgs e) {
+      (this as IMapDatabasePresenter).SetDatabaseServer(
+        this.DatabaseServerTextBox.Text
+      );
     }
   }
 #endregion

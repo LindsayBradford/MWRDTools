@@ -55,6 +55,18 @@ namespace MWRDTools.Presenter {
       return layers;
     }
 
+    public string GetMapDatabase() {
+      IFeatureLayer wetlandLayer = (IFeatureLayer)getFeatureLayer(Constants.LayerName.WetLands);
+      if (wetlandLayer.DataSourceType.Equals("SDE Feature Class")) {
+        IDataLayer2 dataLayer = wetlandLayer as IDataLayer2;
+        IDatasetName dataSetName = dataLayer.DataSourceName as IDatasetName;
+        IWorkspaceName workspaceName = dataSetName.WorkspaceName;
+        IPropertySet properties = workspaceName.ConnectionProperties;
+        return properties.GetProperty("SERVER") as string;
+      }
+      return null;
+    }
+
     public void RefreshFeatureLayer(string layerName) {
       getActiveView().PartialRefresh(
         esriViewDrawPhase.esriViewGeography,

@@ -6,19 +6,21 @@ namespace MWRDTools.Model {
 
   public class ModelBuilder {
 
-    private const string RELATIVE_DB_PATH = "MWRD_File_Geodatabase\\MWRD.gdb";
+    //private const string RELATIVE_DB_PATH = "MWRD_File_Geodatabase\\MWRD.gdb";
 
     private static IApplication application;
+    private static string databaseServer;
 
     private static IFileSystemBridge fileSystemBridge;
     private static IGeodatabaseBridge geodatabaseBridge;
-    
+
     private static WetlandsModel wetlandsModel;
     private static ThreatenedSpeciesModel threatenedSpeciesModel;
     private static CARMScenarioModel carmScenarioModel;
 
-    public static void SetApplication(IApplication application) {
+    public static void SetApplication(IApplication application, string databaseServer) {
       ModelBuilder.application = application;
+      ModelBuilder.databaseServer = databaseServer;
     }
 
     public static IFileSystemBridge GetFileSystemBridge() {
@@ -37,7 +39,9 @@ namespace MWRDTools.Model {
         //geodatabaseBridge.DatabasePath = databasePath;
 
         ArcSDEGeodatabaseBridge bridge = new ArcSDEGeodatabaseBridge();
-        bridge.EstablishConnection();
+        bridge.EstablishConnection(
+          databaseServer
+        );
         geodatabaseBridge = bridge;
       }
 
