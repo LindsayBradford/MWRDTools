@@ -672,8 +672,7 @@ partial class ThreatenedSpeciesForm
       // lblSpeciesFilter
       // 
       this.lblSpeciesFilter.Name = "lblSpeciesFilter";
-      this.lblSpeciesFilter.Size = new System.Drawing.Size(45, 17);
-      this.lblSpeciesFilter.Text = "No filter";
+      this.lblSpeciesFilter.Size = new System.Drawing.Size(0, 17);
       // 
       // ThreatenedSpeciesForm
       // 
