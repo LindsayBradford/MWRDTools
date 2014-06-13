@@ -181,7 +181,11 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void btnWaggaFind_Click(object sender, EventArgs e) {
+      this.Cursor = Cursors.WaitCursor;
+
       RunWaggaFlowQuery();
+
+      this.Cursor = Cursors.Default;
     }
 
     private void WaggaListView_KeyDown(object sender, KeyEventArgs e) {
@@ -221,7 +225,11 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void btnFindGauge_Click(object sender, EventArgs e) {
+      this.Cursor = Cursors.WaitCursor;
+
       RunGaugeQuery();
+
+      this.Cursor = Cursors.Default;
     }
 
     private void btnSelectGauge_Click(object sender, EventArgs e) {
@@ -247,9 +255,13 @@ public partial class CommenceToFillForm : Form, ICommenceToFillView
     }
 
     private void btnFindCarmScenario_Click(object sender, EventArgs e) {
+      this.Cursor = Cursors.WaitCursor;
+
       presenter.CARMScenarioSelected(
         cboCARMScenario.SelectedItem as string
       );
+
+      this.Cursor = Cursors.Default;
     }
 
     private void CARMListView_KeyDown(object sender, KeyEventArgs e) {
