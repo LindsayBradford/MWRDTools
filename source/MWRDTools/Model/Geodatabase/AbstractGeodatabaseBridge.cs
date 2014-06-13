@@ -38,6 +38,8 @@ namespace MWRDTools.Model {
       edit.StopEditing(true);
     }
 
+    public abstract GeodatabaseBridgeType GetBridgeType();
+
     public abstract ICursor GetCursorForSQLQuery(string query);
 
     #region ESRI Table Processing

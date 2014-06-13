@@ -27,6 +27,10 @@ namespace MWRDTools.Model {
     private string databaseHost;
     private string databaseType;
 
+    public override GeodatabaseBridgeType GetBridgeType() {
+      return GeodatabaseBridgeType.ArcSDPPersonalServer;
+    }
+
     public void EstablishConnection(string databaseServer) {
       setDatabaseServer(databaseServer);
       EstablishConnection();

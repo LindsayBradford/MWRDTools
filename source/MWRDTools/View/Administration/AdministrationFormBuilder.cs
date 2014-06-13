@@ -20,17 +20,12 @@ namespace MWRDTools.View
 
       AdministrationForm form = new AdministrationForm();
 
-
       form.setCarmImportPresenter(
         buildCARMImportPresenter()
       );
 
       form.setAtlasImportPresenter(
         buildAtlasPresenter(mapUtils)
-      );
-
-      form.setMapDatabasePresenter(
-        buildMapDatabasePresenter(mapUtils)
       );
 
       return form;
@@ -66,22 +61,5 @@ namespace MWRDTools.View
 
       return atlasPresenter;
     }
-
-    private static MapDatabasePresenter buildMapDatabasePresenter(IMapUtils mapUtils) {
-      MapDatabasePresenter presenter = new MapDatabasePresenter();
-
-      presenter.setFileBridge(
-        ModelBuilder.GetFileSystemBridge()
-      );
-
-      presenter.setGeodatabaseBridge(
-        ModelBuilder.GetGeodatabaseBridge()
-      );
-
-      presenter.setMapUtils(mapUtils);
-
-      return presenter;
-    }
-
   }
 }

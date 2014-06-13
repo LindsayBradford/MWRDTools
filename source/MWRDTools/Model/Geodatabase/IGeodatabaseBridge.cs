@@ -6,12 +6,20 @@ using System.Collections.Generic;
 using ESRI.ArcGIS.Geodatabase;
 
 namespace MWRDTools.Model {
+
+  public enum GeodatabaseBridgeType {
+    FileGeodatabase,
+    ArcSDPPersonalServer
+  }
+
   public interface IGeodatabaseBridge {
 
     event EventHandler<ProgressChangedEventArgs> StatusChanged;
 
     void BeginTransaction();
     void EndTransaction();
+
+    GeodatabaseBridgeType GetBridgeType();
 
     ICursor GetCursorForSQLQuery(string query);
 

@@ -19,6 +19,10 @@ namespace MWRDTools.Model {
       set { this.databasePath = value; deriveWorkspace(); }
     }
 
+    public override GeodatabaseBridgeType GetBridgeType() {
+      return GeodatabaseBridgeType.FileGeodatabase;
+    }
+
     public override ICursor GetCursorForSQLQuery(string query) {
       return null;  //  not something a file-geodatabase can do. 
     }

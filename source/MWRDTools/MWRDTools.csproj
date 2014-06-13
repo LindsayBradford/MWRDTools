@@ -127,7 +127,6 @@
     <Compile Include="Presenter\Administration\AtlasImportPresenter.cs" />
     <Compile Include="Presenter\Administration\CARMImportPresenter.cs" />
     <Compile Include="Presenter\Administration\IFileImportPresenter.cs" />
-    <Compile Include="Presenter\Administration\MapDatabasePresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\CommenceToFillPresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\ICommenceToFillPresenter.cs" />
     <Compile Include="Presenter\CommenceToFill\CommenceToFillEventArgs.cs" />

@@ -97,35 +97,52 @@ namespace MWRDTools.Model {
       DataTable wetlands;
 
       using (ComReleaser comReleaser = new ComReleaser()) {
-        // This breaks oddly only on ArcSDE connections, supplying the MCMAWetlands
-        // fields qualified with the table-name, despite being the only table (not so 
-        // when called against a file geodatabase). 
-        // Workaround below, relying on a direct SQL connection via a dedicated ArcSDE bridge.
-        // 
-        // ICursor wetlandCursor = bridge.GetCursorForQuery(
-        //   string.Format(
-        //     "{0}, {1}",
-        //     Constants.TableName.CommenceToFill,
-        //     Constants.TableName.MCMAWetlands
-        //   ),
-        //   string.Format(
-        //     "{0}.WetlandsID = {1}.WetlandsID AND {0}.Flow_mL < {2} AND {0}.GaugeName = '{3}'",
-        //     Constants.TableName.CommenceToFill,
-        //     Constants.TableName.MCMAWetlands,
-        //     flow, gaugeName
-        //   ),
-        //   string.Format("{0}.*", Constants.TableName.MCMAWetlands)
-        // );
-        // 
-        string query = string.Format(
-          "SELECT {0}.* FROM {0},{1} WHERE {0}.WetlandsID = {1}.WetlandsID AND {1}.Flow_mL < {2} AND {1}.GaugeName = '{3}'",
-          Constants.TableName.MCMAWetlands,
-          Constants.TableName.CommenceToFill,
-          flow,
-          gaugeName
-        );
 
-        ICursor wetlandCursor = bridge.GetCursorForSQLQuery(query);
+        ICursor wetlandCursor = null;
+
+        switch (bridge.GetBridgeType()) {
+          case GeodatabaseBridgeType.FileGeodatabase: {
+
+            // This call works oddly on ArcSDE database connections,
+            // causing the column names to be quialified with the 
+            // Wetlands table name, even though it's the only table.
+            //
+            // We consequently ask the bridge it's type, and use a
+            // direct SQL query if it's not a file geodatabase to achieve
+            // the same result (the other case statement below).
+
+            wetlandCursor = bridge.GetCursorForQuery(
+              string.Format(
+                "{0}, {1}",
+                Constants.TableName.CommenceToFill,
+                Constants.TableName.MCMAWetlands
+              ),
+              string.Format(
+                "{0}.WetlandsID = {1}.WetlandsID AND {0}.Flow_mL < {2} AND {0}.GaugeName = '{3}'",
+                Constants.TableName.CommenceToFill,
+                Constants.TableName.MCMAWetlands,
+                flow, gaugeName
+              ),
+              string.Format("{0}.*", Constants.TableName.MCMAWetlands)
+            );
+
+            break;
+          }
+          case GeodatabaseBridgeType.ArcSDPPersonalServer: {
+
+              string query = string.Format(
+                "SELECT {0}.* FROM {0},{1} WHERE {0}.WetlandsID = {1}.WetlandsID AND {1}.Flow_mL < {2} AND {1}.GaugeName = '{3}'",
+                Constants.TableName.MCMAWetlands,
+                Constants.TableName.CommenceToFill,
+                flow,
+                gaugeName
+              );
+
+              wetlandCursor = bridge.GetCursorForSQLQuery(query);
+
+            break;
+          }
+        }
 
         comReleaser.ManageLifetime(wetlandCursor);
 

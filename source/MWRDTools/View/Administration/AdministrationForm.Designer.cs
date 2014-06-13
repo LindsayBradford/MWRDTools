@@ -43,10 +43,6 @@
       this.CarmScenarioPathTextBox = new System.Windows.Forms.TextBox();
       this.CarmScenarioLabel = new System.Windows.Forms.Label();
       this.CarmImportButton = new System.Windows.Forms.Button();
-      this.DatabaseTabPage = new System.Windows.Forms.TabPage();
-      this.SetDatabaseButton = new System.Windows.Forms.Button();
-      this.DatabaseServerTextBox = new System.Windows.Forms.TextBox();
-      this.DatabaseLabel = new System.Windows.Forms.Label();
       this.CarmScenarioFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
       this.AdministrationstatusStrip = new System.Windows.Forms.StatusStrip();
       this.AdminStripLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -58,7 +54,6 @@
       this.AdminTabControl.SuspendLayout();
       this.AtlasNSWWildlifeTabPage.SuspendLayout();
       this.CarmImportTabPage.SuspendLayout();
-      this.DatabaseTabPage.SuspendLayout();
       this.AdministrationstatusStrip.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -69,7 +64,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
       this.AdminTabControl.Controls.Add(this.AtlasNSWWildlifeTabPage);
       this.AdminTabControl.Controls.Add(this.CarmImportTabPage);
-      this.AdminTabControl.Controls.Add(this.DatabaseTabPage);
       this.AdminTabControl.Location = new System.Drawing.Point(3, 3);
       this.AdminTabControl.Name = "AdminTabControl";
       this.AdminTabControl.Padding = new System.Drawing.Point(3, 3);
@@ -77,7 +71,6 @@
       this.AdminTabControl.ShowToolTips = true;
       this.AdminTabControl.Size = new System.Drawing.Size(408, 166);
       this.AdminTabControl.TabIndex = 0;
-      this.AdminTabControl.Enter += new System.EventHandler(this.AdminTabControl_Enter);
       // 
       // AtlasNSWWildlifeTabPage
       // 
@@ -236,48 +229,6 @@
       this.CarmImportButton.UseVisualStyleBackColor = true;
       this.CarmImportButton.Click += new System.EventHandler(this.CarmImportButton_Click);
       // 
-      // DatabaseTabPage
-      // 
-      this.DatabaseTabPage.Controls.Add(this.SetDatabaseButton);
-      this.DatabaseTabPage.Controls.Add(this.DatabaseServerTextBox);
-      this.DatabaseTabPage.Controls.Add(this.DatabaseLabel);
-      this.DatabaseTabPage.Location = new System.Drawing.Point(4, 22);
-      this.DatabaseTabPage.Name = "DatabaseTabPage";
-      this.DatabaseTabPage.Padding = new System.Windows.Forms.Padding(3);
-      this.DatabaseTabPage.Size = new System.Drawing.Size(400, 140);
-      this.DatabaseTabPage.TabIndex = 2;
-      this.DatabaseTabPage.Text = "Database";
-      this.DatabaseTabPage.UseVisualStyleBackColor = true;
-      // 
-      // SetDatabaseButton
-      // 
-      this.SetDatabaseButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-      this.SetDatabaseButton.Location = new System.Drawing.Point(333, 59);
-      this.SetDatabaseButton.Name = "SetDatabaseButton";
-      this.SetDatabaseButton.Size = new System.Drawing.Size(60, 23);
-      this.SetDatabaseButton.TabIndex = 2;
-      this.SetDatabaseButton.Text = "&Set";
-      this.SetDatabaseButton.UseVisualStyleBackColor = true;
-      this.SetDatabaseButton.Click += new System.EventHandler(this.SetDatabaseButton_Click);
-      // 
-      // DatabaseServerTextBox
-      // 
-      this.DatabaseServerTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-      this.DatabaseServerTextBox.Location = new System.Drawing.Point(114, 60);
-      this.DatabaseServerTextBox.Name = "DatabaseServerTextBox";
-      this.DatabaseServerTextBox.Size = new System.Drawing.Size(213, 20);
-      this.DatabaseServerTextBox.TabIndex = 1;
-      // 
-      // DatabaseLabel
-      // 
-      this.DatabaseLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
-      this.DatabaseLabel.AutoSize = true;
-      this.DatabaseLabel.Location = new System.Drawing.Point(18, 63);
-      this.DatabaseLabel.Name = "DatabaseLabel";
-      this.DatabaseLabel.Size = new System.Drawing.Size(90, 13);
-      this.DatabaseLabel.TabIndex = 0;
-      this.DatabaseLabel.Text = "&Database Server:";
-      // 
       // CarmScenarioFolderDialog
       // 
       this.CarmScenarioFolderDialog.Description = "Select CARM Scenario Direcrtory:";
@@ -301,7 +252,7 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
       this.AdminStripLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
       this.AdminStripLabel.Name = "AdminStripLabel";
-      this.AdminStripLabel.Size = new System.Drawing.Size(295, 17);
+      this.AdminStripLabel.Size = new System.Drawing.Size(264, 17);
       this.AdminStripLabel.Spring = true;
       this.AdminStripLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
@@ -352,8 +303,6 @@
       this.AtlasNSWWildlifeTabPage.PerformLayout();
       this.CarmImportTabPage.ResumeLayout(false);
       this.CarmImportTabPage.PerformLayout();
-      this.DatabaseTabPage.ResumeLayout(false);
-      this.DatabaseTabPage.PerformLayout();
       this.AdministrationstatusStrip.ResumeLayout(false);
       this.AdministrationstatusStrip.PerformLayout();
       this.ResumeLayout(false);
@@ -385,9 +334,5 @@
     private System.Windows.Forms.OpenFileDialog OpenFaunaFileDialog;
     private System.ComponentModel.BackgroundWorker AtlasImportBackgroundWorker;
     private System.ComponentModel.BackgroundWorker CARMImportBackgroundWorker;
-    private System.Windows.Forms.TabPage DatabaseTabPage;
-    private System.Windows.Forms.TextBox DatabaseServerTextBox;
-    private System.Windows.Forms.Label DatabaseLabel;
-    private System.Windows.Forms.Button SetDatabaseButton;
   }
 }

@@ -33,13 +33,4 @@ namespace MWRDTools.Presenter
     void ImportFiles(params String[] files);
     void WriteImportedData(params DataTable[] sightingTables);
   }
-
-  public interface IMapDatabasePresenter {
-    void setFileBridge(IFileSystemBridge bridge);
-    void setGeodatabaseBridge(IGeodatabaseBridge bridge);
-
-    void SetDatabaseServer(string databaseServer);
-    string GetDatabaseServer();
-  }
-
 }

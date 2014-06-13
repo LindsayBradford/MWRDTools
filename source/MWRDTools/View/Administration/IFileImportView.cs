@@ -15,8 +15,4 @@ namespace MWRDTools.View
   public interface INSWAtlasWildlifeImportView {
     void ImportFiles(params string[] files);
   }
-
-  public interface IMapDatabaseView {
-    void SetMapDatabase(string mapDatabaseServer);
-  }
 }

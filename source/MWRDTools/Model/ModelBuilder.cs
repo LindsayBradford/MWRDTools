@@ -6,7 +6,7 @@ namespace MWRDTools.Model {
 
   public class ModelBuilder {
 
-    //private const string RELATIVE_DB_PATH = "MWRD_File_Geodatabase\\MWRD.gdb";
+    private const string RELATIVE_DB_PATH = "MWRD_File_Geodatabase\\MWRD.gdb";
 
     private static IApplication application;
     private static string databaseServer;
@@ -33,19 +33,23 @@ namespace MWRDTools.Model {
 
     public static IGeodatabaseBridge GetGeodatabaseBridge() {
       if (geodatabaseBridge == null) {
-        //geodatabaseBridge = new FileGeodatabaseBridge();
-        //string documentPath = Path.GetDirectoryName(getDocumentPath(application));
-        //string databasePath = Path.Combine(documentPath, RELATIVE_DB_PATH);
-        //geodatabaseBridge.DatabasePath = databasePath;
 
-        ArcSDEGeodatabaseBridge bridge = new ArcSDEGeodatabaseBridge();
-        bridge.EstablishConnection(
-          databaseServer
-        );
-        geodatabaseBridge = bridge;
+        if (databaseServer == null) {
+          FileGeodatabaseBridge fileGeoBridge = new FileGeodatabaseBridge();
+          string documentPath = Path.GetDirectoryName(getDocumentPath(application));
+          string databasePath = Path.Combine(documentPath, RELATIVE_DB_PATH);
+          fileGeoBridge.DatabasePath = databasePath;
+          geodatabaseBridge = fileGeoBridge;
+        } else {
+          ArcSDEGeodatabaseBridge sdeGeoBridge = new ArcSDEGeodatabaseBridge();
+          sdeGeoBridge.EstablishConnection(
+            databaseServer
+          );
+          geodatabaseBridge = sdeGeoBridge;
+        }
       }
 
-      return geodatabaseBridge as IGeodatabaseBridge;
+      return geodatabaseBridge;
     }
 
     public static IWetlandsModel GetWetlandsModel() {
