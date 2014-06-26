@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/*
+  Copyright (c) 2014, Riverina Local Land Services.
 
-using ESRI.ArcGIS.ArcMapUI;
-using ESRI.ArcGIS.Carto;
-using ESRI.ArcGIS.Display;
-using ESRI.ArcGIS.esriSystem;
+  This program and the accompanying materials are made available under the terms of the
+  BSD 3-Clause licence which accompanies this distribution, and is available at
+  http://opensource.org/licenses/BSD-3-Clause
+ */
+
+using System;
+
 using ESRI.ArcGIS.Framework;
-using ESRI.ArcGIS.Geodatabase;
-using ESRI.ArcGIS.Geometry;
 
 namespace MWRDTools.Presenter {
   public interface IMapUtils {
